@@ -1,3 +1,6 @@
+# Tablero Kanban
+https://github.com/orgs/DailyCodingSoft/projects/1
+
 # Git Clone
 usamos pnpm entonces primero instalar pnpm (teniendo ya node 24.13.0 instalado)
 - `corepack enable`
