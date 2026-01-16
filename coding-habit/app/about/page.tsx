@@ -5,7 +5,7 @@ export default function Home() {
         Coding Habit Info
       </h1>
       <div className="mb-6">
-        Pequeño proyecot que nacio con el objetivo de desarrollar destresas y habilidades 
+        Pequeño proyecto que nació con el objetivo de desarrollar destresas y habilidades 
         desarrollando un proyecto que nace de la idea de mmonitorear los cambios  
         y tiempo que realiza cada uno de los integrantes.
       </div>
