@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+  --primary-light-color: (rgb(209, 98, 98));
+}
+
 /* Estilos globales base */
 body {
   margin: 0;
