@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --primary-light-color: (rgb(209, 98, 98));
+  --primary-light-color: rgb(247, 190, 190);
+  --main-light-bg-color: rgb(138, 138, 138);
 }
 
 /* Estilos globales base */
+html,
 body {
-  margin: 0;
-  font-family: var(--font-main);
+  background: var(--main-light-bg-color);
 }

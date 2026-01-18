@@ -10,7 +10,7 @@ export default function Home() {
         y tiempo que realiza cada uno de los integrantes.
       </div>
       <h1>Integrantes</h1>
-      <div className="flex flex-row bg-red-500">
+      <div className="flex flex-row bg-(--primary-light-color)">
         <div className="border p-4 flex-1 text-center">
           <h2 className="text-xl font-semibold">Sebastian Lopez</h2>
           <p>Ingeniero Graduado en agosto de 2026</p>
@@ -18,14 +18,13 @@ export default function Home() {
 
         <div className="border p-4 flex-1 text-center">
           <h2 className="text-xl font-semibold">David Rivera</h2>
-          <p>Ingeniero Graduado en octubre de 2026</p>
+          <p>Ingeniero Graduado en octubre de 2026 que nos debe 5k 🥵🫢</p>
         </div>
 
         <div className="border p-4 flex-1 text-center">
           <h2 className="text-xl font-semibold">Cristian Vargas</h2>
           <p>Ingeniero Graduado en agosto de 2025</p>
         </div>
-
       </div>
     </>
   );
