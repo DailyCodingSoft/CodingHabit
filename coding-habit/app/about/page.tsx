@@ -1,7 +1,4 @@
-import { getUsers } from "@/services/DB_Neon/UserAPi";
-export default async function Home() {
-  const users = await getUsers();
-  console.log(users);
+export default function Home() {
   return (
     <>
       <h1 className="text-2xl font-bold mb-2 text-center">
