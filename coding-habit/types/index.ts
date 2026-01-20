@@ -2,4 +2,4 @@
  * Tipos globales del proyecto
  * Se irán agregando interfaces y types aquí.
  */
-export {};
+export type RedisKeyDict = {santi:string, lpz:string, cris:string}
