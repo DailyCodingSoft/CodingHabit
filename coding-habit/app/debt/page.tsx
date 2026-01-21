@@ -23,9 +23,6 @@ const STREAK_KEYS = {
 type DebtMap = Record<keyof typeof DEBT_KEYS, number>;
 
 export default function Debt() {
-    //TO DO: crear un componente que muestre nombre o foto o ambas
-    //y la deuda de cada uno
-
     //TO DO: usar los endpoints (../api/debt/route.ts)
     //de redis para guardar
     const [debts, setDebts] = useState<DebtMap>({
@@ -63,15 +60,15 @@ export default function Debt() {
     //crear estos con DB @lpzzzzzzz
     const lpzUser: User = {
         username: 'elepezeta',
-        image: '/userpic_placeholder.png'
+        image: '/place_holders/userpicture.png'
     }
     const santiUser: User = {
         username: 'hacktiago',
-        image: '/userpic_placeholder.png'
+        image: '/place_holders/userpicture.png'
     }
     const crisUser: User = {
         username: 'darckronoz',
-        image: '/userpic_placeholder.png'
+        image: '/place_holders/userpicture.png'
     }
 
     return (
@@ -79,6 +76,10 @@ export default function Debt() {
         <h1 className="text-center font-bold text-3xl text-white tracking-widest">Deuda de cada uno 🤑</h1>
         {/*TO DO: Llenar Streak grid dinamicamente a partir del numero de usuarios*/}
         <StreakGrid>
+            {/*TO DO: aqui toca hacer un map y llenar esto con una lista de users*/}
+            <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
+            <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
+            <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
             <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
             <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
             <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
