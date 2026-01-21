@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {RedisKeyDict} from '../../types/index'
+import {RedisKeyDict, User} from '../../types/index'
+import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
+import Streak from "@/components/ui/streak/Streak";
 
 const initialDate = ''//fecha inicial para calcular la racha perfecta.
 //es la fecha del primer commit del reto
@@ -21,9 +23,6 @@ const STREAK_KEYS = {
 type DebtMap = Record<keyof typeof DEBT_KEYS, number>;
 
 export default function Debt() {
-    //TO DO: crear un componente que muestre nombre o foto o ambas
-    //y la deuda de cada uno
-
     //TO DO: usar los endpoints (../api/debt/route.ts)
     //de redis para guardar
     const [debts, setDebts] = useState<DebtMap>({
@@ -58,12 +57,33 @@ export default function Debt() {
         loadInitialDebtAndStreak();
     }, []);
 
+    //crear estos con DB @lpzzzzzzz
+    const lpzUser: User = {
+        username: 'elepezeta',
+        image: '/place_holders/userpicture.png'
+    }
+    const santiUser: User = {
+        username: 'hacktiago',
+        image: '/place_holders/userpicture.png'
+    }
+    const crisUser: User = {
+        username: 'darckronoz',
+        image: '/place_holders/userpicture.png'
+    }
+
     return (
         <>
-        <h1>Deuda de cada uno 🤑</h1>
-        <p>Santi debe: {debts.santi} y tiene una racha de {streaks.santi} dias!</p>
-        <p>Cris debe: {debts.cris} y tiene una racha de {streaks.cris} dias!</p>
-        <p>Lpz debe: {debts.lpz} y tiene una racha de {streaks.lpz} dias!</p>
+        <h1 className="text-center font-bold text-3xl text-white tracking-widest">Deuda de cada uno 🤑</h1>
+        {/*TO DO: Llenar Streak grid dinamicamente a partir del numero de usuarios*/}
+        <StreakGrid>
+            {/*TO DO: aqui toca hacer un map y llenar esto con una lista de users*/}
+            <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
+            <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
+            <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
+            <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
+            <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
+            <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
+        </StreakGrid>
         </>
     );
 }
