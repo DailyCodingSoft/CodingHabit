@@ -17,7 +17,6 @@ export default function LoginPage() {
       return
     } else {
     }
-    router.push('/user/login')
   }
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -64,7 +63,7 @@ export default function LoginPage() {
           type="submit"
           disabled={loading}
           className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          onClick={() => userlogin()}
+          onClick={() =>  router.push('/user')}
         >
           {loading ? 'Ingresando...' : 'Entrar'}
         </button>
