@@ -14,5 +14,5 @@ export type StreakComponentProps = {
 }
 
 export type StreakGridComponentProps = {
-    streaks: React.ReactNode;
+    children: React.ReactNode;
 }

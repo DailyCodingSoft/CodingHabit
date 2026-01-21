@@ -1,6 +1,6 @@
 import { StreakGridComponentProps } from "@/types"
 
-export default function StreakGrid(props: StreakGridComponentProps) {
+export default function StreakGrid({children}: StreakGridComponentProps) {
     //TO DO: grid de usuarios donde el tamano es 
     //responsive dependiendo de la cantidad de
     //usuarios
@@ -13,8 +13,8 @@ export default function StreakGrid(props: StreakGridComponentProps) {
     //8 usuarios cuadro cuatro abajo cuatro arriba
     //esto es para desktop
     return(
-        <div>
-            {props.streaks}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-items-center mt-6">
+            {children}
         </div>
     )
 }

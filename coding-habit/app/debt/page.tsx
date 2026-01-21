@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {RedisKeyDict} from '../../types/index'
+import {RedisKeyDict, User} from '../../types/index'
+import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
+import Streak from "@/components/ui/streak/Streak";
 
 const initialDate = ''//fecha inicial para calcular la racha perfecta.
 //es la fecha del primer commit del reto
@@ -58,12 +60,29 @@ export default function Debt() {
         loadInitialDebtAndStreak();
     }, []);
 
+    //crear estos con DB @lpzzzzzzz
+    const lpzUser: User = {
+        username: 'elepezeta',
+        image: '/userpic_placeholder.png'
+    }
+    const santiUser: User = {
+        username: 'hacktiago',
+        image: '/userpic_placeholder.png'
+    }
+    const crisUser: User = {
+        username: 'darckronoz',
+        image: '/userpic_placeholder.png'
+    }
+
     return (
         <>
-        <h1>Deuda de cada uno 🤑</h1>
-        <p>Santi debe: {debts.santi} y tiene una racha de {streaks.santi} dias!</p>
-        <p>Cris debe: {debts.cris} y tiene una racha de {streaks.cris} dias!</p>
-        <p>Lpz debe: {debts.lpz} y tiene una racha de {streaks.lpz} dias!</p>
+        <h1 className="text-center font-bold text-3xl text-white tracking-widest">Deuda de cada uno 🤑</h1>
+        {/*TO DO: Llenar Streak grid dinamicamente a partir del numero de usuarios*/}
+        <StreakGrid>
+            <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
+            <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
+            <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
+        </StreakGrid>
         </>
     );
 }
