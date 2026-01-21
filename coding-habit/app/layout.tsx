@@ -1,6 +1,5 @@
 
 import "../styles/globals.css";
-import "../lib/db";
 import {Open_Sans} from "next/font/google";
 
 const openSans = Open_Sans({
