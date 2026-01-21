@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,7 +11,14 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-
+  async function  userlogin (){
+    if (!email && !password) {
+      console.log('error')
+      return
+    } else {
+    }
+    router.push('/user/login')
+  }
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
@@ -56,7 +64,7 @@ export default function LoginPage() {
           type="submit"
           disabled={loading}
           className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          onClick={() => router.push('/user')}
+          onClick={() => userlogin()}
         >
           {loading ? 'Ingresando...' : 'Entrar'}
         </button>
