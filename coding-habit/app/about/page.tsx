@@ -1,7 +1,4 @@
-import { neonDB } from "@/infrastructure/db/neondb";
-export default async function Home() {
-  const response = await neonDB`SELECT version()`;
-  console.log(response)
+export default function Home() {
   return (
     <>
       <h1 className="text-2xl font-bold mb-2 text-center">
