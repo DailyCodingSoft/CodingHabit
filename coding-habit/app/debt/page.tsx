@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {RedisKeyDict, User} from '../../types/index'
 import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
 import Streak from "@/components/ui/streak/Streak";
+import PlusButton from "@/components/ui/plus-button/PlusButton";
 
 const initialDate = ''//fecha inicial para calcular la racha perfecta.
 //es la fecha del primer commit del reto
@@ -84,6 +85,7 @@ export default function Debt() {
             <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
             <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
         </StreakGrid>
+        <PlusButton onClick={() => {}}/>
         </>
     );
 }
