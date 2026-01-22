@@ -11,16 +11,28 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  async function  userlogin (){
-    if (!email && !password) {
-      console.log('error')
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();   
+    const emailSend = email.toLowerCase();
+    const res = await fetch('/api/user',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: emailSend, password:password }),
+    })
+    const data = await res.json()
+    if(!res.ok){
+      console.error('Error'+data.messaage)
       return
-    } else {
     }
+    console.log(data[0].user_name)
   }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
+        onSubmit={login}
         className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
       >
         <h1 className="mb-6 text-center text-2xl font-bold">
@@ -63,9 +75,8 @@ export default function LoginPage() {
           type="submit"
           disabled={loading}
           className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          onClick={() =>  router.push('/user')}
         >
-          {loading ? 'Ingresando...' : 'Entrar'}
+          {loading ? "Ingresando..." : "Entrar"}
         </button>
       </form>
     </div>
