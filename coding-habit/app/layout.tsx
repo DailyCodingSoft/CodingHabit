@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.variable}>
       <body className="h-full m-0">
-        <p className="absolute right-0 text-(--light-text-color) text-xs">v0.0.1</p>
+        <p className="absolute right-0 text-(--light-text-color) text-xs">v0.0.2</p>
         {children}
       </body>
     </html>
