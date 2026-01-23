@@ -3,7 +3,11 @@ import { neonDB } from "../db/neondb";
 
 export class userRepository {
     async login(email:string, password:string) {
-        const user = await neonDB`SELECT version()`;
-        return user ?? null
+        try {
+            const user = await neonDB`select * from users u where u.user_email = ${email} and u.user_password = ${password}`;
+            return user ?? null
+        } catch (e) {
+            console.log(e)
+        }
     }
 }

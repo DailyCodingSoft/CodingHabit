@@ -4,7 +4,6 @@ import { userService } from "@/domain/services/userServices";
 export async function POST(req: Request) {
     try {
         const {email, password} = await req.json();
-
         const service = new userService();
         const user = await service.login(email,password);
 
