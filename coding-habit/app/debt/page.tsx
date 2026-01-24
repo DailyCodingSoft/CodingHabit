@@ -5,6 +5,7 @@ import {RedisKeyDict, User} from '../../types/index'
 import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
 import Streak from "@/components/ui/streak/Streak";
 import PlusButton from "@/components/ui/plus-button/PlusButton";
+import DebtUpdatePopup from "@/components/layout/popup/DebtUpdatePopup";
 
 const initialDate = ''//fecha inicial para calcular la racha perfecta.
 //es la fecha del primer commit del reto
@@ -23,6 +24,27 @@ const STREAK_KEYS = {
 
 type DebtMap = Record<keyof typeof DEBT_KEYS, number>;
 
+//crear estos con DB @lpzzzzzzz
+    const lpzUser: User = {
+        username: 'elepezeta',
+        image: '/place_holders/userpicture.png'
+    }
+    const santiUser: User = {
+        username: 'hacktiago',
+        image: '/place_holders/userpicture.png'
+    }
+    const crisUser: User = {
+        username: 'darckronoz',
+        image: '/place_holders/userpicture.png'
+    }
+
+type PersonKey = keyof typeof DEBT_KEYS;
+    const users: { id: PersonKey; user: User }[] = [
+        { id: 'santi', user: santiUser },
+        { id: 'lpz', user: lpzUser },
+        { id: 'cris', user: crisUser },
+    ];
+
 export default function Debt() {
     //TO DO: usar los endpoints (../api/debt/route.ts)
     //de redis para guardar
@@ -37,6 +59,8 @@ export default function Debt() {
         lpz: 0,
         cris: 0,
     });
+
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const loadInitialData = async (keys: RedisKeyDict) => {
         const entries = await Promise.all(
@@ -58,34 +82,26 @@ export default function Debt() {
         loadInitialDebtAndStreak();
     }, []);
 
-    //crear estos con DB @lpzzzzzzz
-    const lpzUser: User = {
-        username: 'elepezeta',
-        image: '/place_holders/userpicture.png'
-    }
-    const santiUser: User = {
-        username: 'hacktiago',
-        image: '/place_holders/userpicture.png'
-    }
-    const crisUser: User = {
-        username: 'darckronoz',
-        image: '/place_holders/userpicture.png'
-    }
+    const handleUpdateDebt = (userId: string, debtAmount: number) => {
+        //TODO: Update logic will be implemented later
+        console.log(`Updating debt for ${userId}: ${debtAmount}`);
+    };
 
     return (
         <>
         <h1 className="text-center font-bold text-3xl text-white tracking-widest">Deuda de cada uno 🤑</h1>
-        {/*TO DO: Llenar Streak grid dinamicamente a partir del numero de usuarios*/}
         <StreakGrid>
-            {/*TO DO: aqui toca hacer un map y llenar esto con una lista de users*/}
-            <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
-            <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
-            <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
-            <Streak user={santiUser} debt={debts.santi} streak={streaks.santi}/>
-            <Streak user={lpzUser} debt={debts.lpz} streak={streaks.lpz}/>
-            <Streak user={crisUser} debt={debts.cris} streak={streaks.cris}/>
+            {users.map(({ id, user }) => (
+                <Streak key={id} user={user} debt={debts[id]} streak={streaks[id]} />
+            ))}
         </StreakGrid>
-        <PlusButton onClick={() => {}}/>
+        <PlusButton onClick={() => setIsPopupOpen(true)}/>
+        <DebtUpdatePopup 
+            isOpen={isPopupOpen}
+            onClose={() => setIsPopupOpen(false)}
+            users={users}
+            onUpdateDebt={handleUpdateDebt}
+        />
         </>
     );
 }
