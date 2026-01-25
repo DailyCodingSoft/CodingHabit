@@ -82,9 +82,40 @@ export default function Debt() {
         loadInitialDebtAndStreak();
     }, []);
 
-    const handleUpdateDebt = (userId: string, debtAmount: number) => {
-        //TODO: Update logic will be implemented later
-        console.log(`Updating debt for ${userId}: ${debtAmount}`);
+    const handleUpdateDebt = async (userId: string, debtAmount: number) => {
+        const person = userId as PersonKey;
+        const debtKey = DEBT_KEYS[person];
+        
+        if (!debtKey) {
+            alert("Usuario no válido");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/debt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    key: debtKey, 
+                    value: String(debtAmount) 
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al actualizar la deuda');
+            }
+
+            // Actualizar el estado local optimistamente
+            setDebts(prev => ({
+                ...prev,
+                [person]: debtAmount
+            }));
+
+            console.log(`Deuda actualizada para ${userId}: ${debtAmount}`);
+        } catch (error) {
+            console.error('Error updating debt:', error);
+            alert('Error al actualizar la deuda. Por favor intenta de nuevo.');
+        }
     };
 
     return (
