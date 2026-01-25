@@ -19,7 +19,7 @@ export default function LoginPage() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: emailSend, password:password }),
+      body: JSON.stringify({ action: 'Login', email: emailSend, password:password }),
     })
     const data = await res.json()
     if(!res.ok){
