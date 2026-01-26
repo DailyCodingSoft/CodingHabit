@@ -7,9 +7,6 @@ import Streak from "@/components/ui/streak/Streak";
 import PlusButton from "@/components/ui/plus-button/PlusButton";
 import DebtUpdatePopup from "@/components/layout/popup/DebtUpdatePopup";
 
-const initialDate = ''//fecha inicial para calcular la racha perfecta.
-//es la fecha del primer commit del reto
-
 const DEBT_KEYS = {
     santi: 'SANTI_DEBT',
     lpz: 'LPZ_DEBT',
@@ -46,8 +43,6 @@ type PersonKey = keyof typeof DEBT_KEYS;
     ];
 
 export default function Debt() {
-    //TO DO: usar los endpoints (../api/debt/route.ts)
-    //de redis para guardar
     const [debts, setDebts] = useState<DebtMap>({
         santi: 0,
         lpz: 0,
@@ -78,7 +73,23 @@ export default function Debt() {
         setStreaks(Object.fromEntries(await loadInitialData(STREAK_KEYS)) as DebtMap);        
     }
 
+    function updateStreakOnPageLoad() {
+        const today = new Date();
+        users.forEach(user => {
+            // TO DO: normalizar el tipo user a lo largo de toda la app
+            // TO DO: 
+            // const lastCommitDate = getLastCommitDate(user.username);
+            // if (lastCommitDate >= today) {
+            //     //Incrementar racha en 1
+            //     //Necesito una manera de no hacer llamados innecesarios 
+            //     //si ya se actualizo la racha de hoy para el usuario
+            //     //no hacer llamado.
+            // }
+        });
+    }
+
     useEffect(()=> {
+        updateStreakOnPageLoad
         loadInitialDebtAndStreak();
     }, []);
 
