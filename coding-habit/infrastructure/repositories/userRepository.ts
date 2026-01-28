@@ -20,4 +20,12 @@ export class userRepository {
             console.log(e)
         }
     }
+    async getUserById(id:string) {
+        try {
+            const user = await neonDB`select * from users where user_id = ${1}`;
+            return user ?? null
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
