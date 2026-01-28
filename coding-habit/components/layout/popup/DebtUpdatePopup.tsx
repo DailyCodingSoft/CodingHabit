@@ -7,7 +7,7 @@ import { User } from "@/types";
 type DebtUpdatePopupProps = {
     isOpen: boolean;
     onClose: () => void;
-    users: { id: string; user: User }[];
+    users: User[];
     onUpdateDebt: (userId: string, debtAmount: number) => void;
 }
 
@@ -43,9 +43,9 @@ export default function DebtUpdatePopup({ isOpen, onClose, users, onUpdateDebt }
                         className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
                     >
                         <option value="">-- Selecciona un usuario --</option>
-                        {users.map(({ id, user }) => (
-                            <option key={id} value={id}>
-                                {user.username}
+                        {users.map(({ username }) => (
+                            <option key={username} value={username}>
+                                {username}
                             </option>
                         ))}
                     </select>

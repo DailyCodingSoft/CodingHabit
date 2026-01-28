@@ -1,82 +1,79 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {RedisKeyDict, User} from '../../types/index'
+import {User, DebtEntry, StreakEntry} from '../../types/index'
 import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
 import Streak from "@/components/ui/streak/Streak";
 import PlusButton from "@/components/ui/plus-button/PlusButton";
 import DebtUpdatePopup from "@/components/layout/popup/DebtUpdatePopup";
-
-const DEBT_KEYS = {
-    santi: 'SANTI_DEBT',
-    lpz: 'LPZ_DEBT',
-    cris: 'CRIS_DEBT',
-} as RedisKeyDict
-
-const STREAK_KEYS = {
-    santi: 'SANTI_STREAK',
-    lpz: 'LPZ_STREAK',
-    cris: 'CRIS_STREAK',
-} as RedisKeyDict;
-
-type DebtMap = Record<keyof typeof DEBT_KEYS, number>;
+import { getDebtByKey, updateDebtByKey } from "@/services/Redis/debtService";
 
 //crear estos con DB @lpzzzzzzz
-    const lpzUser: User = {
-        username: 'elepezeta',
-        image: '/place_holders/userpicture.png'
-    }
-    const santiUser: User = {
-        username: 'hacktiago',
-        image: '/place_holders/userpicture.png'
-    }
-    const crisUser: User = {
-        username: 'darckronoz',
-        image: '/place_holders/userpicture.png'
-    }
-
-type PersonKey = keyof typeof DEBT_KEYS;
-    const users: { id: PersonKey; user: User }[] = [
-        { id: 'santi', user: santiUser },
-        { id: 'lpz', user: lpzUser },
-        { id: 'cris', user: crisUser },
-    ];
+const lpzUser: User = {
+    username: 'elepezeta',
+    image: '/place_holders/userpicture.png',
+    debtkey: 'LPZ_DEBT',
+    streakkey: 'LPZ_STREAK',
+}
+const santiUser: User = {
+    username: 'hacktiago',
+    image: '/place_holders/userpicture.png',
+    debtkey: 'SANTI_DEBT',
+    streakkey: 'SANTI_STREAK',
+}
+const crisUser: User = {
+    username: 'darckronoz',
+    image: '/place_holders/userpicture.png',
+    debtkey: 'CRIS_DEBT',
+    streakkey: 'CRIS_STREAK',
+}
 
 export default function Debt() {
-    const [debts, setDebts] = useState<DebtMap>({
-        santi: 0,
-        lpz: 0,
-        cris: 0,
-    });
+    const users: User[] = [santiUser, lpzUser, crisUser]; //Con el contexto (reto) se sabra cuantos usuarios y cuales.
+    const debtsEntries: DebtEntry[] = users.map(user => ({
+        debtKey: user.debtkey || '',
+        value: 0,
+    }));
+    const streaksEntries: StreakEntry[] = users.map(user => ({
+        streakKey: user.streakkey || '',
+        value: 0,
+    }));
+    const [debts, setDebts] = useState<DebtEntry[]>(debtsEntries);
+    const [streaks, setStreaks] = useState<StreakEntry[]>(streaksEntries);
 
-    const [streaks, setStreaks] = useState<DebtMap>({
-        santi: 0,
-        lpz: 0,
-        cris: 0,
-    });
+    function loadDebts() {
+        users.forEach(async (user) => {
+            if (user.debtkey) {
+                const debtValue = await getDebtByKey(user.debtkey);
+                setDebts((prevDebts) => {
+                    const updatedDebts = prevDebts.map((debt) =>
+                        debt.debtKey === user.debtkey ? { ...debt, value: debtValue } : debt
+                    );
+                    return updatedDebts;
+                });
+            }
+        });
+    }
 
+    function loadStreaks() {
+        users.forEach(async (user) => {
+            if (user.streakkey) {
+                const streakValue = await getDebtByKey(user.streakkey);
+                setStreaks((prevStreaks) => {
+                    const updatedStreaks = prevStreaks.map((streak) =>
+                        streak.streakKey === user.streakkey ? { ...streak, value: streakValue } : streak
+                    );
+                    return updatedStreaks;
+                });
+            }
+        });
+    }
+    
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-    const loadInitialData = async (keys: RedisKeyDict) => {
-        const entries = await Promise.all(
-            Object.entries(keys).map(async ([person, key]) => {
-                const res = await fetch(`/api/debt?key=${key}`);
-                const data = await res.json();
-                return [person, Number(data.value?? 0)];
-            })
-        );
-        return entries;
-    }
-
-    async function loadInitialDebtAndStreak() {
-        setDebts(Object.fromEntries(await loadInitialData(DEBT_KEYS)) as DebtMap);
-        setStreaks(Object.fromEntries(await loadInitialData(STREAK_KEYS)) as DebtMap);        
-    }
 
     function updateStreakOnPageLoad() {
         const today = new Date();
         users.forEach(user => {
-            // TO DO: normalizar el tipo user a lo largo de toda la app
             // TO DO: 
             // const lastCommitDate = getLastCommitDate(user.username);
             // if (lastCommitDate >= today) {
@@ -89,53 +86,30 @@ export default function Debt() {
     }
 
     useEffect(()=> {
-        updateStreakOnPageLoad
-        loadInitialDebtAndStreak();
+        loadDebts();
+        loadStreaks();
+        updateStreakOnPageLoad();
     }, []);
 
     const handleUpdateDebt = async (userId: string, debtAmount: number) => {
-        const person = userId as PersonKey;
-        const debtKey = DEBT_KEYS[person];
-        
-        if (!debtKey) {
-            alert("Usuario no válido");
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/debt', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    key: debtKey, 
-                    value: String(debtAmount) 
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al actualizar la deuda');
-            }
-
-            // Actualizar el estado local optimistamente
-            setDebts(prev => ({
-                ...prev,
-                [person]: debtAmount
-            }));
-
-            console.log(`Deuda actualizada para ${userId}: ${debtAmount}`);
-        } catch (error) {
-            console.error('Error updating debt:', error);
-            alert('Error al actualizar la deuda. Por favor intenta de nuevo.');
-        }
     };
 
     return (
         <>
         <h1 className="text-center font-bold text-3xl text-white tracking-widest">Deuda de cada uno 🤑</h1>
         <StreakGrid>
-            {users.map(({ id, user }) => (
-                <Streak key={id} user={user} debt={debts[id]} streak={streaks[id]} />
-            ))}
+            {users.map((user) => {
+                const debtEntry = debts.find(debt => debt.debtKey === user.debtkey);
+                const streakEntry = streaks.find(streak => streak.streakKey === user.streakkey);
+                return (
+                    <Streak 
+                        key={user.username} 
+                        user={user} 
+                        debt={debtEntry ? debtEntry.value : 0} 
+                        streak={streakEntry ? streakEntry.value : 0} 
+                    />
+                );
+            })}
         </StreakGrid>
         <PlusButton onClick={() => setIsPopupOpen(true)}/>
         <DebtUpdatePopup 
