@@ -11,19 +11,16 @@ import { getDebtByKey, updateDebtByKey } from "@/services/Redis/debtService";
 //crear estos con DB @lpzzzzzzz
 const lpzUser: User = {
     username: 'elepezeta',
-    image: '/place_holders/userpicture.png',
     debtkey: 'LPZ_DEBT',
     streakkey: 'LPZ_STREAK',
 }
 const santiUser: User = {
     username: 'hacktiago',
-    image: '/place_holders/userpicture.png',
     debtkey: 'SANTI_DEBT',
     streakkey: 'SANTI_STREAK',
 }
 const crisUser: User = {
     username: 'darckronoz',
-    image: '/place_holders/userpicture.png',
     debtkey: 'CRIS_DEBT',
     streakkey: 'CRIS_STREAK',
 }
@@ -92,6 +89,7 @@ export default function Debt() {
     }, []);
 
     const handleUpdateDebt = async (userId: string, debtAmount: number) => {
+        //TO DO: implementar esto usando el servicio de redis.
     };
 
     return (
