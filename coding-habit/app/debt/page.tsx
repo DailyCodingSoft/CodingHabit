@@ -88,8 +88,17 @@ export default function Debt() {
         updateStreakOnPageLoad();
     }, []);
 
-    const handleUpdateDebt = async (userId: string, debtAmount: number) => {
-        //TO DO: implementar esto usando el servicio de redis.
+    const handleUpdateDebt = async (username: string, newDebt: number) => {
+        const user = users.find(u => u.username === username);
+        if (user && user.debtkey) {
+            await updateDebtByKey(user.debtkey, newDebt);
+            setDebts((prevDebts) => {
+                const updatedDebts = prevDebts.map((debt) =>
+                    debt.debtKey === user.debtkey ? { ...debt, value: newDebt } : debt
+                );
+                return updatedDebts;
+            });
+        }
     };
 
     return (
