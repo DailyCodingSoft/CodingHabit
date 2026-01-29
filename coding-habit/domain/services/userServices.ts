@@ -11,4 +11,8 @@ export class userService {
         const register = await this.repo.register(user_name,user_biography,github_link,user_email,user_password)
         return register
     }
+    async getById(id:string) {
+        const user = await this.repo.getUserById(id);
+        return user;
+    }
 }
