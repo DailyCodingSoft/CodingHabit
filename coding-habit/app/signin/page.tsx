@@ -18,19 +18,20 @@ export default function LoginPage() {
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();   
     const emailSend = email.toLowerCase();
-    const res = await fetch('/api/user',{
+    const res = await fetch('/api/auth/login',{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: 'Login', email: emailSend, password:password }),
+      body: JSON.stringify({ email: emailSend, password:password }),
     })
     const data = await res.json()
     if(!res.ok){
       console.error('Error'+data.messaage)
       return
+    }else{
+      router.push('/user')
     }
-    console.log(data[0].user_name)
   }
 
   return (
