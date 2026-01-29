@@ -21,7 +21,7 @@ export default function DebtUpdatePopup({ isOpen, onClose, users, onUpdateDebt }
             return;
         }
         
-        onUpdateDebt(selectedUserId, Number(debtAmount));
+        onUpdateDebt(selectedUserId, Number(debtAmount) || 0);
         setSelectedUserId("");
         setDebtAmount("");
         onClose();
@@ -60,7 +60,7 @@ export default function DebtUpdatePopup({ isOpen, onClose, users, onUpdateDebt }
                         type="number"
                         value={debtAmount}
                         onChange={(e) => setDebtAmount(e.target.value)}
-                        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+                        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="0"
                     />
                 </div>
