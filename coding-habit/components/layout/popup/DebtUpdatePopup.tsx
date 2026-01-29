@@ -13,7 +13,7 @@ type DebtUpdatePopupProps = {
 
 export default function DebtUpdatePopup({ isOpen, onClose, users, onUpdateDebt }: DebtUpdatePopupProps) {
     const [selectedUserId, setSelectedUserId] = useState<string>("");
-    const [debtAmount, setDebtAmount] = useState<number>(0);
+    const [debtAmount, setDebtAmount] = useState<string>("");
 
     const handleSubmit = () => {
         if (!selectedUserId) {
@@ -21,9 +21,9 @@ export default function DebtUpdatePopup({ isOpen, onClose, users, onUpdateDebt }
             return;
         }
         
-        onUpdateDebt(selectedUserId, debtAmount);
+        onUpdateDebt(selectedUserId, Number(debtAmount));
         setSelectedUserId("");
-        setDebtAmount(0);
+        setDebtAmount("");
         onClose();
     };
 
@@ -59,9 +59,9 @@ export default function DebtUpdatePopup({ isOpen, onClose, users, onUpdateDebt }
                         id="debt-input"
                         type="number"
                         value={debtAmount}
-                        onChange={(e) => setDebtAmount(Number(e.target.value))}
+                        onChange={(e) => setDebtAmount(e.target.value)}
                         className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
-                        placeholder="Ingresa la cantidad"
+                        placeholder="0"
                     />
                 </div>
 

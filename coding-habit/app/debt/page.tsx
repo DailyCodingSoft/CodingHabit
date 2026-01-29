@@ -7,6 +7,7 @@ import Streak from "@/components/ui/streak/Streak";
 import PlusButton from "@/components/ui/plus-button/PlusButton";
 import DebtUpdatePopup from "@/components/layout/popup/DebtUpdatePopup";
 import { getDebtByKey, updateDebtByKey } from "@/services/Redis/debtService";
+import { getStreakByKey, updateStreakByKey } from "@/services/Redis/streakService";
 
 //crear estos con DB @lpzzzzzzz
 const lpzUser: User = {
@@ -55,7 +56,7 @@ export default function Debt() {
     function loadStreaks() {
         users.forEach(async (user) => {
             if (user.streakkey) {
-                const streakValue = await getDebtByKey(user.streakkey);
+                const streakValue = await getStreakByKey(user.streakkey);
                 setStreaks((prevStreaks) => {
                     const updatedStreaks = prevStreaks.map((streak) =>
                         streak.streakKey === user.streakkey ? { ...streak, value: streakValue } : streak
@@ -98,6 +99,17 @@ export default function Debt() {
                 );
                 return updatedDebts;
             });
+            
+            // Reset streak to 0 when debt increases (user failed)
+            if (user.streakkey) {
+                await updateStreakByKey(user.streakkey, 0);
+                setStreaks((prevStreaks) => {
+                    const updatedStreaks = prevStreaks.map((streak) =>
+                        streak.streakKey === user.streakkey ? { ...streak, value: 0 } : streak
+                    );
+                    return updatedStreaks;
+                });
+            }
         }
     };
 
