@@ -8,14 +8,10 @@ export class AuthService {
         const user:any = await service.login(email);
          console.log(password,user.user_password)
         if (!user) throw new Error("Credenciales inválidas");
-        console.log(user)
         const valid = await comparePassword(password, user.user_password);
-        console.log(valid)
         if (!valid) throw new Error("Credenciales inválidas");
-        console.log(user)
 
         const token = signToken({ userId: user.id });
-            console.log(user)
         return {
         token,
         user: {
