@@ -2,10 +2,10 @@ import 'server-only'
 import { neonDB } from "../db/neondb";
 
 export class userRepository {
-    async login(email:string, password:string) {
+    async login(email:string) {
         try {
-            const user = await neonDB`select * from users u where u.user_email = ${email} and u.user_password = ${password}`;
-            return user ?? null
+            const user = await neonDB`select * from users u where u.user_email = ${email}`;
+            return user[0] ?? null
         } catch (e) {
             console.log(e)
         }

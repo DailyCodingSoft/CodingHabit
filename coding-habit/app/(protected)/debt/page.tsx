@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {User, DebtEntry, StreakEntry} from '../../types/index'
+import {User, DebtEntry, StreakEntry} from '../../../types/index'
 import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
 import Streak from "@/components/ui/streak/Streak";
 import PlusButton from "@/components/ui/plus-button/PlusButton";

@@ -5,10 +5,10 @@ import { AuthService } from "@/domain/services/authService";
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
-
+    
     const authService = new AuthService();
     const { token, user } = await authService.login(email, password);
-
+    console.log(user);
     (await cookies()).set("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
