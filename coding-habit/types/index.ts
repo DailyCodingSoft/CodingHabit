@@ -18,6 +18,7 @@ export type StreakComponentProps = {
     user: User,
     streak?: number,
     debt?: number,
+    onUpdateClick?: () => void,
 }
 
 export type StreakGridComponentProps = {

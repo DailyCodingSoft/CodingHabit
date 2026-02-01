@@ -130,7 +130,6 @@ export default function Debt() {
                 );
             })}
         </StreakGrid>
-        <PlusButton onClick={() => setIsPopupOpen(true)}/>
         <DebtUpdatePopup 
             isOpen={isPopupOpen}
             onClose={() => setIsPopupOpen(false)}
