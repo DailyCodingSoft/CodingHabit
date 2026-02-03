@@ -16,7 +16,7 @@ export default function Streak(props: StreakComponentProps) {
                 <p>Racha: {streak}</p>
             </div>
         </div>
-        <div className="absolute bottom-2 right-2">
+        <div className="absolute top-2 right-2">
             <PlusButton onClick={props.onUpdateClick || (() => {})} isFixed={false} />
         </div>
         </div>
