@@ -67,7 +67,7 @@ export default function Debt() {
         });
     }
     
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
     function updateStreakOnPageLoad() {
         const today = new Date();
@@ -88,6 +88,10 @@ export default function Debt() {
         loadStreaks();
         updateStreakOnPageLoad();
     }, []);
+
+    function updateUserDebt(user: User) {
+        setSelectedUser(user);
+    }
 
     const handleUpdateDebt = async (username: string, newDebt: number) => {
         const user = users.find(u => u.username === username);
@@ -125,17 +129,20 @@ export default function Debt() {
                         key={user.username} 
                         user={user} 
                         debt={debtEntry ? debtEntry.value : 0} 
-                        streak={streakEntry ? streakEntry.value : 0} 
+                        streak={streakEntry ? streakEntry.value : 0}
+                        onUpdateClick={() => updateUserDebt(user)}
                     />
                 );
             })}
         </StreakGrid>
-        <DebtUpdatePopup 
-            isOpen={isPopupOpen}
-            onClose={() => setIsPopupOpen(false)}
-            users={users}
-            onUpdateDebt={handleUpdateDebt}
-        />
+        {selectedUser && (
+            <DebtUpdatePopup 
+                isOpen={true}
+                onClose={() => setSelectedUser(null)}
+                user={selectedUser}
+                onUpdateDebt={handleUpdateDebt}
+            />
+        )}
         </>
     );
 }
