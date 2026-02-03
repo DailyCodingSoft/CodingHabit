@@ -3,7 +3,9 @@ import { userRepository } from '@/infrastructure/repositories/userRepository'
 export class userService {
     private  repo = new  userRepository()
 
-    async login(email:string){
+    //agregue la contraseña para que no muera el deploy
+    //pero queda pendiente revisar la logica.
+    async login(email:string, password?:string){
         const user = await this.repo.login(email)
         return user
     }
