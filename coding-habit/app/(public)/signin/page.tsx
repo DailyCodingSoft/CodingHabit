@@ -7,9 +7,6 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username,etUsername]= useState('');
-  const [github, setGithub] = useState('');
-  const [biography, setBiography] = useState('')
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -75,19 +72,24 @@ export default function LoginPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Ingresando..." : "Entrar"}
-        </button>
-        <button
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          onClick={() => router.push('/register') }
-        >
-          Registrar
-        </button>
+        <div className="mb-5">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? "Ingresando..." : "Entrar"}
+          </button>
+        </div>
+
+        <div className="mb-5">
+          <button
+            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+            onClick={() => router.push('/register') }
+          >
+            Registrar
+          </button>
+        </div>
       </form> 
     </div>
   );
