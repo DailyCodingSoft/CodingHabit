@@ -21,4 +21,13 @@ export class AuthService {
         }
         };
     }
+
+    async register(email:string, password:string, username:string){
+        const service = new userService();
+        const  user:any = await service.login(email);
+        if(user) throw new Error("Usuario ya registrado");
+        const newPassword = await hashPassword(password);
+        const  result = await service.register(username,"","",email,password);
+        return result;
+    }
 }
