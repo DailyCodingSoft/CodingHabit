@@ -1,31 +1,104 @@
+import { FormEvent } from "react";
 
 
 export default function HabitForm() {
-        
+    function onSubmitForm(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        console.log(Object.fromEntries(formData));
+    }
+    // isCumulative: boolean;
+    // creator: User;
     return (
-        <div>
+        <div className="flex justify-center">
+            <form
+                onSubmit={onSubmitForm}
+                className="bg-[var(--surface-color)] border border-[var(--surface-border-color)] rounded-xl p-6 w-full max-w-xl shadow-2xl"
+            >
+                <h2 className="text-[var(--text-primary-color)] text-2xl font-semibold tracking-tight text-center mb-6">
+                    Crear hábito
+                </h2>
 
-            <form>
-                <label>Titulo del habito</label>
-                <input type="text" placeholder="Mi Habito"/>
-                
-                <label>Fecha inicial</label>
-                <input type="text" placeholder="hoy"/>
+                <div className="space-y-5">
+                    <div>
+                        <label className="block text-[var(--text-muted-color)] mb-2">Titulo del habito</label>
+                        <input
+                            name="title"
+                            type="text"
+                            placeholder="Mi Habito"
+                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                        />
+                    </div>
 
-                <label>Fecha Final</label>
-                <input type="text" placeholder="en 6 meses"/>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-[var(--text-muted-color)] mb-2">Fecha inicial</label>
+                            <input
+                                name="initialDate"
+                                type="text"
+                                placeholder="hoy"
+                                className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            />
+                        </div>
 
-                <label>Valor de la deuda</label>
-                <input type="text" placeholder="$5000"/>
+                        <div>
+                            <label className="block text-[var(--text-muted-color)] mb-2">Fecha Final</label>
+                            <input
+                                name="endDate"
+                                type="text"
+                                placeholder="en 6 meses"
+                                className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            />
+                        </div>
+                    </div>
 
-                <label>Es deuda acumulativa?:</label>
-                <input type="text" placeholder="si *checkbox*"/>
+                    <div>
+                        <label className="block text-[var(--text-muted-color)] mb-2">Valor de la deuda</label>
+                        <input
+                            name="debtValue"
+                            type="text"
+                            placeholder="$5000"
+                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                        />
+                    </div>
 
-                <label>Usuarios</label>
-                {/**aqui va un creador de usuarios con un mas donde 
-                 * un click crea un usuario pide un nombre
-                 * y depronto un icono
-                 */}
+                    <div>
+                        <label className="block text-[var(--text-muted-color)] mb-2">Es deuda acumulativa?:</label>
+                        <input
+                            name="isCumulative"
+                            type="text"
+                            placeholder="si *checkbox*"
+                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-[var(--text-muted-color)] mb-2">Usuarios</label>
+                        <div className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-muted-color)] border border-[var(--input-border-color)]">
+                            {/**aqui va un creador de usuarios con un mas donde 
+                             * un click crea un usuario pide un nombre
+                             * y depronto un icono
+                             */}
+                            Añade usuarios desde aquí
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex w-full gap-3 pt-6">
+                    <button
+                        type="submit"
+                        className="flex-1 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] font-semibold py-2.5 px-4 rounded-lg transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button
+                        type="button"
+                        className="flex-1 bg-[var(--surface-border-color)] hover:bg-[var(--input-border-color)] text-[var(--text-primary-color)] font-semibold py-2.5 px-4 rounded-lg transition-colors"
+                    >
+                        Cancelar
+                    </button>
+                </div>
             </form>
         </div>
     )
