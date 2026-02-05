@@ -14,11 +14,26 @@ export default function Register(){
     const register = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const emailSend = email.toLowerCase();
-      
+      const res = await fetch('/api/auth/register',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: emailSend, password:password, username:username})
+      })
+      const data = await res.json();
+      console.log('Respuesta: ',data)
+      if(!res.ok){
+        console.error('Error'+data.messaage)
+        return
+      }else{
+        router.push('/signin')
+      }
     };
     return(
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
         <form
+        onSubmit={register}
         className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
       >
         <h1 className="mb-6 text-center text-2xl font-bold">
@@ -38,7 +53,7 @@ export default function Register(){
           <input
             type="username"
             required
-            value={email}
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
           />
