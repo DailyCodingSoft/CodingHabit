@@ -1,9 +1,11 @@
 "use client"
 import { Habit, User } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HabitForm from "@/components/layout/habit/HabitForm";
 import { FormEvent } from "react";
+import { mapFormDataToHabit } from "@/utils/mappers/habitMapper";
 
+//const user = context.getuser() //hacer algo asi para obtener el usuario de la sesion.
 
 export default function HabitPage(){
 
@@ -24,17 +26,18 @@ export default function HabitPage(){
         debtValue: 1000,
         isCumulative: false,
         initialDate: Date.now().toString(),
-        creator: userCreator,
+        creator: userCreator.username,
     });
     
     //get the title out of the user name
-    const title = `Hi ${habit.creator.username} Create your new Habit!`
+    const title = `Hi ${habit.creator} Create your new Habit!`
    
     function onSubmitForm(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        console.log(Object.fromEntries(formData));
+        const submitedHabit = mapFormDataToHabit(formData, habit.creator);
+        setHabit(submitedHabit);
     }
 
     return (

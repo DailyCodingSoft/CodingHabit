@@ -58,9 +58,9 @@ export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormEle
                         <label className="block text-[var(--text-muted-color)] mb-2">Es deuda acumulativa?:</label>
                         <input
                             name="isCumulative"
-                            type="text"
-                            placeholder="si *checkbox*"
-                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            type="checkbox"
+                            value="yes"
+                            className="h-5 w-5 rounded border border-[var(--input-border-color)] bg-[var(--surface-muted-color)] text-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
                         />
                     </div>
                 </div>
