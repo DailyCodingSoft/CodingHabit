@@ -2,8 +2,11 @@
 import { Habit, User } from "@/types";
 import { useState } from "react";
 import HabitForm from "@/components/layout/habit/HabitForm";
+import { FormEvent } from "react";
+
 
 export default function HabitPage(){
+
     //intended flow
     //1. user logins or register for the first time
     //2. the first page they see is the habit creation page
@@ -26,13 +29,18 @@ export default function HabitPage(){
     
     //get the title out of the user name
     const title = `Hi ${habit.creator.username} Create your new Habit!`
-    
+   
+    function onSubmitForm(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
 
+        const formData = new FormData(event.currentTarget);
+        console.log(Object.fromEntries(formData));
+    }
 
     return (
         <div>
             <h1>{title}</h1>
-            <HabitForm />
+            <HabitForm onSubmit={onSubmitForm}/>
         </div>
     )
 }

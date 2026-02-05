@@ -1,19 +1,10 @@
 import { FormEvent } from "react";
 
-
-export default function HabitForm() {
-    function onSubmitForm(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        const formData = new FormData(event.currentTarget);
-        console.log(Object.fromEntries(formData));
-    }
-    // isCumulative: boolean;
-    // creator: User;
+export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormElement>) => void}) {
     return (
         <div className="flex justify-center">
             <form
-                onSubmit={onSubmitForm}
+                onSubmit={props.onSubmit}
                 className="bg-[var(--surface-color)] border border-[var(--surface-border-color)] rounded-xl p-6 w-full max-w-xl shadow-2xl"
             >
                 <h2 className="text-[var(--text-primary-color)] text-2xl font-semibold tracking-tight text-center mb-6">
@@ -71,17 +62,6 @@ export default function HabitForm() {
                             placeholder="si *checkbox*"
                             className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
                         />
-                    </div>
-
-                    <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Usuarios</label>
-                        <div className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-muted-color)] border border-[var(--input-border-color)]">
-                            {/**aqui va un creador de usuarios con un mas donde 
-                             * un click crea un usuario pide un nombre
-                             * y depronto un icono
-                             */}
-                            Añade usuarios desde aquí
-                        </div>
                     </div>
                 </div>
 
