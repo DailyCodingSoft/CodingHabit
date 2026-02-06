@@ -8,14 +8,6 @@ import { mapFormDataToHabit } from "@/utils/mappers/habitMapper";
 //const user = context.getuser() //hacer algo asi para obtener el usuario de la sesion.
 
 export default function HabitPage(){
-
-    //intended flow
-    //1. user logins or register for the first time
-    //2. the first page they see is the habit creation page
-    //3. the page asks for a new title for the habit
-    //4. asks for the initial date
-    //5. ask for end date (optional)
-
     //this has to be done trought a initializar
     const userCreator: User = {
         username:'Usuario creador',

@@ -1,6 +1,14 @@
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { formatNumberToCurrency } from "@/utils/helpers";
 
 export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormElement>) => void}) {
+    const [debtInput, setDebtInput] = useState('');
+
+    function applyFormatToNumber(value:string){
+        const formatNumber = value.replaceAll('$','').replaceAll('.','');
+        setDebtInput(formatNumberToCurrency(formatNumber));
+    }
+
     return (
         <div className="flex justify-center">
             <form
@@ -47,10 +55,12 @@ export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormEle
                     <div>
                         <label className="block text-[var(--text-muted-color)] mb-2">Valor de la deuda</label>
                         <input
+                            onChange={e => applyFormatToNumber(e.target.value)}
+                            value={debtInput}
                             name="debtValue"
                             type="text"
                             placeholder="$5000"
-                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         />
                     </div>
 
