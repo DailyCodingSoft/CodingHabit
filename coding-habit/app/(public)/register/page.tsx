@@ -9,7 +9,9 @@ export default function Register(){
     const [username,setUsername]= useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState('')
     const router = useRouter();
+
 
     const register = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -23,6 +25,8 @@ export default function Register(){
       })
       const data = await res.json();
       console.log('Respuesta: ',data)
+      setResult( data.Respuesta);
+      console.log(result)
       if(!res.ok){
         console.error('Error'+data.messaage)
         return
