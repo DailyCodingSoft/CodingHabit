@@ -25,6 +25,7 @@ export class AuthService {
     async register(email:string, password:string, username:string){
         const service = new userService();
         const  user:any = await service.login(email);
+        //Se debe de retornar un codigo de estado para saber que retornar al otro lado :G
         if(user) return("Usuario ya registrado");
         const newPassword = await hashPassword(password);
         const  result = await service.register(username,"","",email,newPassword);

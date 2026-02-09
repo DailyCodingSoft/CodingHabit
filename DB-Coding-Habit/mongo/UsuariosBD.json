@@ -1,0 +1,26 @@
+{
+  "_id": "ObjectId",
+  "username": "sebasdev",
+  "descripcion": "Backend dev enfocado en retos",
+  "accounts": [
+    {
+      "provider": "github",
+      "username": "sebasdev",
+      "profileUrl": "https://github.com/sebasdev",
+      "desciption": "Repositorio de ideas de proyectos",
+      "linkedAt": "2026-02-01T10:00:00Z"
+    }
+  ],
+  "preferences": [
+    {
+      "favoriteLanguages": ["TypeScript", "Go", "Python"],
+      "challengeLevel": "intermediate",
+      "challengeTypes": ["algorithms", "backend"]
+    }
+  ],
+  "settings": {
+    "profilePublic": true
+  },
+  "createdAt": "2026-02-01T09:00:00Z",
+  "lastUpdate": "2026-02-01T09:00:00Z" 
+}
