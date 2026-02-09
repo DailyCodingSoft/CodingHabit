@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { formatNumberToCurrency } from "@/utils/helpers";
+import DatePicker from "@/components/ui/date-picker/DatePicker";
 
 export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormElement>) => void}) {
     const [debtInput, setDebtInput] = useState('');
@@ -31,25 +32,17 @@ export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormEle
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-[var(--text-muted-color)] mb-2">Fecha inicial</label>
-                            <input
-                                name="initialDate"
-                                type="text"
-                                placeholder="hoy"
-                                className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
-                            />
-                        </div>
+                        <DatePicker
+                            name="initialDate"
+                            label="Fecha inicial"
+                            placeholder="hoy"
+                        />
 
-                        <div>
-                            <label className="block text-[var(--text-muted-color)] mb-2">Fecha Final</label>
-                            <input
-                                name="endDate"
-                                type="text"
-                                placeholder="en 6 meses"
-                                className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
-                            />
-                        </div>
+                        <DatePicker
+                            name="endDate"
+                            label="Fecha Final"
+                            placeholder="en 6 meses"
+                        />
                     </div>
 
                     <div>
