@@ -2,12 +2,20 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import  ConfirmModal  from '@/components/ui/alert/alertLoginAndRegister';
+
+type AlertState = {
+  message: string;
+  type: "error" | "success" | "info";
+};
 
 export default function Register(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username,setUsername]= useState('');
+    const [alert, setAlert] = useState(false);
     const [error, setError] = useState('');
+    const [messageAlert, setMessageAlert] = useState<AlertState|null>(null)
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState('')
     const router = useRouter();
@@ -27,11 +35,19 @@ export default function Register(){
       console.log('Respuesta: ',data)
       setResult( data.Respuesta);
       console.log(result)
-      if(!res.ok){
-        console.error('Error'+data.messaage)
+      if(!res.ok || data.status == '401'){
+        setAlert(true)
+        setMessageAlert({
+          message: data.message,
+          type: "error"
+        })
         return
       }else{
-        router.push('/signin')
+        setAlert(true)
+        setMessageAlert({
+          message: "Registro Exitoso",
+          type: "success"
+        })
       }
     };
     return(
@@ -107,6 +123,17 @@ export default function Register(){
         </button>
         </div>
       </form>
+      <ConfirmModal
+        open={alert}
+        message={messageAlert?.message ?? ""}
+        type={messageAlert?.type}
+        onAccept={() => {
+          setAlert(false);
+          if (messageAlert?.type === "success") {
+            router.push("/signin");
+          }
+        }}
+      />
     </div>
     );
 }
