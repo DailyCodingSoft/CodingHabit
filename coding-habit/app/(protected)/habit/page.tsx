@@ -28,8 +28,11 @@ export default function HabitPage(){
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
+        //To Do: la data del form no esta quedando guardada en el habit.
         const submitedHabit = mapFormDataToHabit(formData, habit.creator);
         setHabit(submitedHabit);
+        console.log('Habito listo para guardar en DB: ');
+        console.log(habit);
     }
 
     return (
