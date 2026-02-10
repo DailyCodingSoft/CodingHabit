@@ -29,6 +29,8 @@ export default function HabitPage(){
 
         const formData = new FormData(event.currentTarget);
         //To Do: la data del form no esta quedando guardada en el habit.
+        //Update: queda pero en la segunda llamada al submit, 
+        //debe ser problema con el handlind del state.
         const submitedHabit = mapFormDataToHabit(formData, habit.creator);
         setHabit(submitedHabit);
         console.log('Habito listo para guardar en DB: ');
