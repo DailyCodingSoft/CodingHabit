@@ -13,20 +13,21 @@ export function getLastCommitDate(username: string): Date {
 }
 
 export function formatNumberToCurrency(number:string):string {
-  console.log('enter: ', number)
-  const splitNumber = number.split('');
+  if(number.length <= 3) {
+    return '$'+number;
+  }
+  const splitNumber = number.split('').reverse();
   let counter = 1;
   const currencyNumber: string[] = [];
   splitNumber.forEach(n => {
-    if(counter == 3) {
-      counter = 1;
-      currencyNumber.push('.')
+    if(counter%3 == 0 && counter!=splitNumber.length) {
+      counter++;
       currencyNumber.push(n);
+      currencyNumber.push('.')
     }else {
       counter++
       currencyNumber.push(n);
     }
   })
-  console.log('comesout: ', currencyNumber.join(''))
-  return currencyNumber.join('');
+  return '$'+currencyNumber.reverse().join('');
 }
