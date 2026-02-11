@@ -30,17 +30,24 @@ export default function HabitPage(){
         const formData = new FormData(event.currentTarget);
         //To Do: la data del form no esta quedando guardada en el habit.
         //Update: queda pero en la segunda llamada al submit, 
-        //debe ser problema con el handlind del state.
+        //debe ser problema con el handling del state.
+        //usar el habit despues del set hace que salga el state anterior
+        //creo que para eso se usa el usestate.
         const submitedHabit = mapFormDataToHabit(formData, habit.creator);
         setHabit(submitedHabit);
-        console.log('Habito listo para guardar en DB: ');
-        console.log(habit);
+    }
+
+    function showHabit() {
+        //si llamo despues el habit se soluciona el problema
+        console.log('probando: ')
+        console.log(habit)
     }
 
     return (
         <div>
             <h1>{title}</h1>
             <HabitForm onSubmit={onSubmitForm}/>
+            <button onClick={showHabit}>PRESIONAME</button>
         </div>
     )
 }
