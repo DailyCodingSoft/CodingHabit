@@ -1,9 +1,0 @@
-{
-  "disable-copilot-comment-completions.textMateRules": [
-    {
-      "type": "string",
-      "value": "comment",
-      "mode": "includes"
-    }
-  ]
-}

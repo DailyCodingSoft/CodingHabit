@@ -21,3 +21,14 @@ html,
 body {
   background: var(--main-light-bg-color);
 }
+
+/* Titulos globales */
+.page-title {
+  color: var(--light-text-color);
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
