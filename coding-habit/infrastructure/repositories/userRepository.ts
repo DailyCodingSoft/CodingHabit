@@ -1,5 +1,6 @@
 import 'server-only'
 import { neonDB } from "../db/neondb";
+import { error } from 'console';
 
 export class userRepository {
     async login(email:string) {
@@ -16,8 +17,10 @@ export class userRepository {
             insert into users 
             (user_name, user_biography, github_link ,user_email, user_password, created_at) 
             values (${user_name}, ${user_biography}, ${github_link},${user_email}, ${user_password}, NOW()); `
+            return user ?? null
         } catch(e) {
             console.log(e)
+            return null
         }
     }
     async getUserById(id:string) {
@@ -26,6 +29,7 @@ export class userRepository {
             return user ?? null
         } catch (e) {
             console.log(e)
+            return null
         }
     }
 }

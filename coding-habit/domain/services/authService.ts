@@ -32,6 +32,7 @@ export class AuthService {
         };
         const newPassword = await hashPassword(password);
         const  result = await service.register(username,"","",email,newPassword);
+        console.log(result)
         return result;
     }
 }

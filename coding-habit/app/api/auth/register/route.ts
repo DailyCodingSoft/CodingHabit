@@ -7,6 +7,10 @@ export async function POST(req: Request){
         console.log(email, password, username)
         const authService = new AuthService();
         const result = await authService.register(email, password, username);
+        if (result == null)  return NextResponse.json(
+            { message: "Eror en el sistema cominicarse con el Administradr" },
+            { status: 401 }
+        );
         return NextResponse.json(result)
     }catch (e) {
         return NextResponse.json(
