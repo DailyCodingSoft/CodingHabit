@@ -1,10 +1,21 @@
 --Base De Datos CodingHabit 
 ---Se crea el Script base para los usuarios 
 ---Credo el 18-01-2026 por Sebastian Lopez 
----Modificado por
+---Modificado 14-02-2626 por Sebastian Lopez
 --Favor Seguir este formato para poder seguir el rastro sin depender de los comits
 
 CREATE TABLE IF NOT EXISTS users (
+  user_id SERIAL PRIMARY KEY,
+  user_name VARCHAR(100) NOT NULL,
+  user_email VARCHAR(150) NOT NULL UNIQUE,
+  user_password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+  Mongo_userId VARCHAR(150)
+);
+
+-- Se deja comentado el anterior desarollo de la base de datos 
+
+/*CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   user_name VARCHAR(100) NOT NULL,
   user_biography TEXT,
@@ -47,4 +58,5 @@ CREATE TABLE IF NOT EXISTS user_languages (
     FOREIGN KEY (language_id) REFERENCES programing_languages(PL_ID) ON DELETE CASCADE,
   CONSTRAINT uq_user_language
     UNIQUE (user_id, language_id)
-  );
+  );*/
+
