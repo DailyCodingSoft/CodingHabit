@@ -1,4 +1,4 @@
-#Correo de la empres 
+#Correo de la empresa
 dailycoding48@gmail.com
 
 # Vercel Server
