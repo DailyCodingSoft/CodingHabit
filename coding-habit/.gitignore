@@ -67,3 +67,8 @@ next-env.d.ts
 # ignore all github files
 .github/*
 ../.github/*
+
+### Session files ###
+# Personal task tracking - not part of repo
+../todo.md
+../agentcontext.md

@@ -43,9 +43,11 @@ export type StreakEntry = {
 export type Habit = {
     debtValue: number;
     isCumulative: boolean;
-    creator: string; //como la llave de usuario va a ser el username, el reto puede tener unicamente el username
+    creator: string; //considerar poner aqui la lista de usuarios.
     initialDate: string;
     title: string;
     endDate?: string;
+    repoName?: string;
+    participants?: User[]; //opcional para no romper nada. Cambiar a required.
 }
 
