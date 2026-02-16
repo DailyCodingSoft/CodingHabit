@@ -1,4 +1,5 @@
-import { useState, KeyboardEvent } from "react";
+import { useState } from "react";
+import { HABIT_CONFIG } from "@/utils/constants";
 
 type UsernameInputProps = {
     usernames: string[];
@@ -20,6 +21,9 @@ export default function UsernameInput({
     const [inputValue, setInputValue] = useState('');
     const [inputError, setInputError] = useState('');
 
+    const totalParticipants = usernames.length + 1;
+    const canAddMore = totalParticipants < HABIT_CONFIG.MAX_PARTICIPANTS;
+
     function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -28,6 +32,11 @@ export default function UsernameInput({
     }
 
     function addUsername() {
+        if (!canAddMore) {
+            setInputError(`Máximo ${HABIT_CONFIG.MAX_PARTICIPANTS} participantes permitidos`);
+            return;
+        }
+
         const trimmedValue = inputValue.trim();
         
         if (!trimmedValue) {
@@ -61,7 +70,9 @@ export default function UsernameInput({
 
     return (
         <div>
-            <label className="block text-[var(--text-muted-color)] mb-2">{label}</label>
+            <label className="block text-[var(--text-muted-color)] mb-2">
+                {label} ({totalParticipants}/{HABIT_CONFIG.MAX_PARTICIPANTS})
+            </label>
             
             <div className="flex gap-2">
                 <input
@@ -73,12 +84,14 @@ export default function UsernameInput({
                     }}
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
-                    className="flex-1 p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                    disabled={!canAddMore}
+                    className="flex-1 p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3] disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button
                     type="button"
                     onClick={addUsername}
-                    className="px-4 py-2 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] rounded-lg transition-colors font-semibold"
+                    disabled={!canAddMore}
+                    className="px-4 py-2 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] rounded-lg transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Agregar
                 </button>
