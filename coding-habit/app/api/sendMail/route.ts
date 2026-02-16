@@ -1,4 +1,4 @@
-/*import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { sendEmail } from "@/infrastructure/mail/resend";
 
 export async function POST(req: Request) {
@@ -15,4 +15,4 @@ export async function POST(req: Request) {
   } catch (error) {
     return NextResponse.json({ error: "Error enviando correo" }, { status: 500 });
   }
-}*/
+}

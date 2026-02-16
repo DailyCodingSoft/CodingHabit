@@ -7,10 +7,21 @@ export default function recoverypassword(){
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const recovery = async(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();   
+        const res = await fetch('/api/sendMail',{
+            method: 'POST',
+            body: JSON.stringify({email: email})
+        })
+        console.log(res)
+    }
+
+
     const router = useRouter();
     return(
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <form
+                onSubmit={recovery}
                 className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
             >
                 <h1 className="mb-6 text-center text-2xl font-bold">
