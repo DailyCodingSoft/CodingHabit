@@ -33,7 +33,7 @@ export default function HabitPage(){
     return (
         <div>
             <h1 className="page-title">{title}</h1>
-            <HabitForm onSubmit={onSubmitForm}/>
+            <HabitForm onSubmit={onSubmitForm} creatorUsername={userCreator.username}/>
         </div>
     )
 }

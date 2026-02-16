@@ -3,13 +3,16 @@ import { formatNumberToCurrency } from "@/utils/helpers";
 import DatePicker from "@/components/ui/date-picker/DatePicker";
 import UsernameInput from "@/components/ui/username-input/UsernameInput";
 
-export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormElement>) => void}) {
+export default function HabitForm(props: {
+    onSubmit: (event:FormEvent<HTMLFormElement>) => void;
+    creatorUsername: string;
+}) {
     const [debtInput, setDebtInput] = useState('');
     const [title, setTitle] = useState('');
     const [initialDate, setInitialDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [participants, setParticipants] = useState<string[]>([]);
-    const [errors, setErrors] = useState<{ title?: string; initialDate?: string; endDate?: string; debtValue?: string; participants?: string }>({});
+    const [errors, setErrors] = useState<{ title?: string; initialDate?: string; endDate?: string; debtValue?: string }>({});
     const debounceTimers = useRef<Record<string, ReturnType<typeof setTimeout> | null>>({});
 
     const today = new Date();
@@ -126,10 +129,6 @@ export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormEle
             validationErrors.debtValue = "El valor de la deuda debe ser mayor a 0.";
         }
 
-        if (participants.length === 0) {
-            validationErrors.participants = "Debe agregar al menos un participante.";
-        }
-
         setErrors(validationErrors);
         if (Object.keys(validationErrors).length > 0) {
             event.preventDefault();
@@ -244,9 +243,9 @@ export default function HabitForm(props: {onSubmit: (event:FormEvent<HTMLFormEle
                     <UsernameInput
                         usernames={participants}
                         onUsernamesChange={setParticipants}
+                        creatorUsername={props.creatorUsername}
                         label="Participantes del hábito"
                         placeholder="Ingresa username de GitHub"
-                        error={errors.participants}
                     />
                     <input type="hidden" name="participants" value={JSON.stringify(participants)} />
                 </div>
