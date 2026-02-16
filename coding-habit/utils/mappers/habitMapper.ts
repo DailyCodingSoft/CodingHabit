@@ -2,12 +2,16 @@ import { Habit } from "@/types";
 
 export function mapFormDataToHabit(formData: FormData, username: string): Habit {
     const debtValue = formData.get('debtValue');
+    const participantsJson = formData.get('participants');
     
-    // Clean currency formatting ($5.000 → 5000) before parsing
     const cleanDebtValue = typeof debtValue === 'string' 
         ? debtValue.replaceAll('$', '').replaceAll('.', '')
         : '0';
     const parsedDebtValue = Number(cleanDebtValue) || 0;
+
+    const participants = participantsJson 
+        ? JSON.parse(participantsJson as string) 
+        : [];
 
     return {
         title: formData.get('title') as string,
@@ -16,5 +20,6 @@ export function mapFormDataToHabit(formData: FormData, username: string): Habit 
         initialDate: formData.get('initialDate') as string,
         endDate: formData.get('endDate') != null ? formData.get('endDate') as string : undefined,
         creator: username,
+        participants: participants.map((username: string) => ({ username })),
     };
 }
