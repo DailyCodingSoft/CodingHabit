@@ -16,18 +16,24 @@ export async function checkContributorsCommitsFromYesterday(
   repo: string,
   contributors: { username: string }[]
 ): Promise<void> {
+  const OFFSET = 5; // Colombia UTC-5
   const now = new Date();
 
   // Yesterday 00:00:00 UTC
-  const sinceDate = new Date(now);
-  sinceDate.setUTCDate(sinceDate.getUTCDate() - 1);
-  sinceDate.setUTCHours(0, 0, 0, 0);
+  const sinceDate = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() - 1,
+    0, 0, 0, 0
+  ));
 
   // Today 00:00:00 UTC
-  const untilDate = new Date(now);
-  untilDate.setUTCHours(0, 0, 0, 0);
-  console.log("sinceDate", sinceDate);
-  console.log("untilDate", untilDate);
+  const untilDate = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    0, 0, 0, 0
+  ));
   for (const contributor of contributors) {
     try {
       const response = await octokit.request(
