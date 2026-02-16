@@ -23,12 +23,18 @@
   - Ensure user is logged in before accessing habit creation page
 
 ## Current Session Tasks
-- [ ] **Add username input for habit participants**
-  - Create text input component for typing GitHub usernames
-  - Implement visual list to display added usernames
-  - Allow adding multiple users to the habit (beyond the creator)
-  - Add ability to remove users from the list before submitting
-  - Add "Validate Usernames" button to check if usernames exist on GitHub
+- [x] **Add username input for habit participants** ✅
+  - Created UsernameInput component with text input
+  - Visual list displays added usernames
+  - Users can add/remove participants
+  - Validation for GitHub username format
+  - Integrated into HabitForm with validation
+
+- [ ] **Handle creator username in participant list**
+  - Creator should be automatically included in participants (can't be removed)
+  - Prevent creator from manually adding themselves
+  - Display creator in the participant list with visual indicator
+  - Ensure creator is included when saving habit to DB
 
 - [ ] **Add repository selection input**
   - Create input field for GitHub repository URL
