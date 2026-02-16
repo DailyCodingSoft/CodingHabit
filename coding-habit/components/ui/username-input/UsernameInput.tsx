@@ -3,6 +3,7 @@ import { useState, KeyboardEvent } from "react";
 type UsernameInputProps = {
     usernames: string[];
     onUsernamesChange: (usernames: string[]) => void;
+    creatorUsername: string;
     label?: string;
     placeholder?: string;
     error?: string;
@@ -10,7 +11,8 @@ type UsernameInputProps = {
 
 export default function UsernameInput({ 
     usernames, 
-    onUsernamesChange, 
+    onUsernamesChange,
+    creatorUsername,
     label = "Participantes", 
     placeholder = "Ingresa un username de GitHub",
     error 
@@ -35,6 +37,11 @@ export default function UsernameInput({
 
         if (!/^[a-zA-Z0-9-]+$/.test(trimmedValue)) {
             setInputError('Username inválido. Solo letras, números y guiones');
+            return;
+        }
+
+        if (trimmedValue === creatorUsername) {
+            setInputError('Ya eres parte del hábito');
             return;
         }
 
@@ -81,26 +88,28 @@ export default function UsernameInput({
                 <p className="mt-1 text-sm text-red-400">{inputError || error}</p>
             )}
 
-            {usernames.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                    {usernames.map((username) => (
-                        <div
-                            key={username}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-border-color)] rounded-full text-sm"
-                        >
-                            <span className="text-[var(--text-primary-color)]">{username}</span>
-                            <button
-                                type="button"
-                                onClick={() => removeUsername(username)}
-                                className="text-[var(--text-muted-color)] hover:text-red-400 font-bold"
-                                aria-label={`Remover ${username}`}
-                            >
-                                ×
-                            </button>
-                        </div>
-                    ))}
+            <div className="mt-3 flex flex-wrap gap-2">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--primary-color)] rounded-full text-sm">
+                    <span className="text-[var(--text-primary-color)] font-semibold">{creatorUsername}</span>
+                    <span className="text-[var(--text-primary-color)] text-xs">(Tú)</span>
                 </div>
-            )}
+                {usernames.map((username) => (
+                    <div
+                        key={username}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-border-color)] rounded-full text-sm"
+                    >
+                        <span className="text-[var(--text-primary-color)]">{username}</span>
+                        <button
+                            type="button"
+                            onClick={() => removeUsername(username)}
+                            className="text-[var(--text-muted-color)] hover:text-red-400 font-bold"
+                            aria-label={`Remover ${username}`}
+                        >
+                            ×
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
