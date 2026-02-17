@@ -4,6 +4,7 @@
 ---Modificado 14-02-2626 por Sebastian Lopez
 --Favor Seguir este formato para poder seguir el rastro sin depender de los comits
 
+--Tabla usuarios 
 CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   user_name VARCHAR(100) NOT NULL,
@@ -11,6 +12,17 @@ CREATE TABLE IF NOT EXISTS users (
   user_password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
   Mongo_userId VARCHAR(150)
+);
+
+--Tabla para recuoerar contraseña
+
+CREATE TABLE password_resets (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- Se deja comentado el anterior desarollo de la base de datos 
