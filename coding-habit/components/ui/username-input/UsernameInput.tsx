@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, KeyboardEvent } from "react";
 import { HABIT_CONFIG } from "@/utils/constants";
 
 type UsernameInputProps = {
