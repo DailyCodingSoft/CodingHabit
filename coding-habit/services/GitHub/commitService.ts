@@ -44,21 +44,33 @@ export async function checkContributorsCommitsFromYesterday(
           author: contributor.username,
           since: sinceDate.toISOString(),
           until: untilDate.toISOString(),
-          per_page: 1,
+          per_page: 100,
           headers: {
             "X-GitHub-Api-Version": "2022-11-28",
           },
         }
       );
+      const commits = response.data;
 
-      const didCommitYesterday = response.data.length > 0;
+      // 1️⃣ Filtrar merge commits
+      const realCommits = commits.filter(
+        (commit) => !commit.commit.message.startsWith("Merge")
+      );
+
+      const commitCount = realCommits.length;
+
+      const lastRealCommit = realCommits[0] ?? null;
+
+      const lastCommitMessage = lastRealCommit?.commit.message ?? null;
 
       // To do ...
       // Actualización de base de datos
       // await updateContributorStreak(contributor.id, didCommitYesterday);
 
       console.log(
-        `${contributor.username}: ${didCommitYesterday ? "🔥 commit" : "❌ no commit"
+        `${contributor.username}: ${commitCount > 0
+          ? `🔥 ${commitCount} commit(s) - último commit: "${lastCommitMessage}"`
+          : "❌ no commit"
         }`
       );
     } catch (error) {
