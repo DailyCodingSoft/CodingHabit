@@ -31,3 +31,13 @@ export function formatNumberToCurrency(number:string):string {
   })
   return '$'+currencyNumber.reverse().join('');
 }
+
+export function generateAccessCode(): string {
+  const uuid1 = crypto.randomUUID();
+  const uuid2 = crypto.randomUUID();
+  
+  const part1 = uuid1.slice(-4);
+  const part2 = uuid2.slice(0, 4);
+  
+  return `${part1}-${part2}`.toUpperCase();
+}
