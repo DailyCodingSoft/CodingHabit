@@ -1,20 +1,29 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
+import { Habit } from "@/types";
 
 interface SharePageProps {
-    params: {
-        habitId: string;
-    };
+    params: Promise<{
+        accessCode: string;
+    }>;
 }
 
 export default function SharePage({ params }: SharePageProps) {
     const [copySuccess, setCopySuccess] = useState(false);
+    const [habit, setHabit] = useState<Habit | null>(null);
     const router = useRouter();
     
-    const accessCode = "A2E3-4F7B";
-    const participants = ["usuario1", "usuario2", "usuario3"];
-    const shareableLink = `https://estoesunaprueba/cambiarestelink/${accessCode}`;
+    const { accessCode } = use(params);
+    const shareableLink = `https://codinghabit.app/join/${accessCode}`;
+
+    useEffect(() => {
+        const storedHabit = sessionStorage.getItem('createdHabit');
+        if (storedHabit) {
+            setHabit(JSON.parse(storedHabit));
+            sessionStorage.removeItem('createdHabit');
+        }
+    }, []);
 
     async function handleCopyCode() {
         try {
@@ -27,7 +36,11 @@ export default function SharePage({ params }: SharePageProps) {
     }
 
     function handleGoToPlayers() {
-        router.push(`/habit/${params.habitId}/players`);
+        router.push(`/habit/${accessCode}/players`);
+    }
+
+    if (!habit) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -79,10 +92,10 @@ export default function SharePage({ params }: SharePageProps) {
                 <div className="mb-8">
                     <h3 className="text-lg font-semibold mb-3">Participants</h3>
                     <ul className="space-y-2">
-                        {participants.map((username, index) => (
+                        {habit.participants?.map((participant, index) => (
                             <li key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
                                 <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
-                                <span>{username}</span>
+                                <span>{participant.username}</span>
                             </li>
                         ))}
                     </ul>

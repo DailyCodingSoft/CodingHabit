@@ -4,6 +4,7 @@ import HabitForm from "@/components/layout/habit/HabitForm";
 import SuccessModal from "@/components/ui/success-modal/SuccessModal";
 import { FormEvent, useState } from "react";
 import { mapFormDataToHabit } from "@/utils/mappers/habitMapper";
+import { generateAccessCode } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 
 async function saveHabit(habit: Habit): Promise<boolean> {
@@ -12,7 +13,7 @@ async function saveHabit(habit: Habit): Promise<boolean> {
     console.log('==========================');
     
     // TODO: Implement actual DB persistence
-    // When implemented, return true only if backend returns 200/201
+    // Backend will store habitId as primary key and accessCode as unique field
     // Example:
     // const response = await fetch('/api/habit', { method: 'POST', body: JSON.stringify(habit) });
     // return response.ok;
@@ -22,6 +23,7 @@ async function saveHabit(habit: Habit): Promise<boolean> {
 
 export default function HabitPage(){
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [createdAccessCode, setCreatedAccessCode] = useState<string>("");
     const router = useRouter();
 
     const userCreator: User = {
@@ -36,15 +38,20 @@ export default function HabitPage(){
         const formData = new FormData(event.currentTarget);
         const submitedHabit = mapFormDataToHabit(formData, userCreator.username);
         
+        const accessCode = generateAccessCode();
+        submitedHabit.accessCode = accessCode;
+        
         const success = await saveHabit(submitedHabit);
         
         if (success) {
+            setCreatedAccessCode(accessCode);
+            sessionStorage.setItem('createdHabit', JSON.stringify(submitedHabit));
             setShowSuccessModal(true);
         }
     }
 
     function handleGoToShare() {
-        router.push('/habit/share');
+        router.push(`/habit/${createdAccessCode}/share`);
     }
 
     return (

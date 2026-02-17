@@ -41,13 +41,15 @@ export type StreakEntry = {
 //cuando inicio el reto y cuanto termina
 //tambien tiene la lista de usuarios pero puede ser opcional.
 export type Habit = {
+    id?: string;
+    accessCode?: string;
     debtValue: number;
     isCumulative: boolean;
-    creator: string; //considerar poner aqui la lista de usuarios.
+    creator: string;
     initialDate: string;
     title: string;
     endDate?: string;
     repoName?: string;
-    participants?: User[]; //opcional para no romper nada. Cambiar a required.
+    participants?: User[];
 }
 
