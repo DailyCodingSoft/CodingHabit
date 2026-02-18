@@ -6,11 +6,10 @@ import { FormEvent, useState } from "react";
 import { mapFormDataToHabit } from "@/utils/mappers/habitMapper";
 import { generateAccessCode } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
+import { validateHabitParticipants } from "@/domain/services/habitValidationService";
 
 async function saveHabit(habit: Habit): Promise<boolean> {
-    console.log('=== Saving Habit to DB ===');
-    console.log('Habit object ready for persistence:', habit);
-    console.log('==========================');
+    console.log('Habit object ready for db:', habit);
     
     // TODO: Implement actual DB persistence
     // Backend will store habitId as primary key and accessCode as unique field
@@ -47,6 +46,25 @@ export default function HabitPage(){
             setCreatedAccessCode(accessCode);
             sessionStorage.setItem('createdHabit', JSON.stringify(submitedHabit));
             setShowSuccessModal(true);
+
+            if (submitedHabit.repoName && submitedHabit.participants) {
+                const [owner, repo] = submitedHabit.repoName.split('/');
+                const participantUsernames = submitedHabit.participants.map(p => p.username);
+                
+                validateHabitParticipants(owner, repo, participantUsernames)
+                    .then(result => {
+                        if (result.allValidated) {
+                            submitedHabit.status = 'active';
+                            console.log('All participants validated! Habit is now active. ', result);
+                            // TODO: Update habit status in database
+                        } else {
+                            console.log('Validation result:', result);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Validation error:', error);
+                    });
+            }
         }
     }
 

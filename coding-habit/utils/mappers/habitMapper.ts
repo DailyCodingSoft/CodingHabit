@@ -26,5 +26,6 @@ export function mapFormDataToHabit(formData: FormData, username: string): Habit 
         creator: username,
         participants: allParticipants.map((username: string) => ({ username })),
         repoName: repoOwner && repoName ? `${repoOwner}/${repoName}` : undefined,
+        status: 'pending_validation',
     };
 }
