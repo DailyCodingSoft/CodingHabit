@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {User, DebtEntry, StreakEntry} from '../../../types/index'
+import {User, DebtEntry, StreakEntry} from '../../../../../types/index'
 import StreakGrid from "@/components/layout/streak_grid/StreakGrid";
 import Streak from "@/components/ui/streak/Streak";
-import PlusButton from "@/components/ui/plus-button/PlusButton";
 import DebtUpdatePopup from "@/components/layout/popup/DebtUpdatePopup";
 import { getDebtByKey, updateDebtByKey } from "@/services/Redis/debtService";
 import { getStreakByKey, updateStreakByKey } from "@/services/Redis/streakService";
@@ -26,7 +25,8 @@ const crisUser: User = {
     streakkey: 'CRIS_STREAK',
 }
 
-export default function Debt() {
+export default function ActiveHabitPage() {
+    
     const users: User[] = [santiUser, lpzUser, crisUser]; //Con el contexto (reto) se sabra cuantos usuarios y cuales.
     const debtsEntries: DebtEntry[] = users.map(user => ({
         debtKey: user.debtkey || '',
