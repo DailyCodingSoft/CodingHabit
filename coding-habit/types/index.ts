@@ -51,5 +51,6 @@ export type Habit = {
     endDate?: string;
     repoName?: string;
     participants?: User[];
+    status?: 'pending_validation' | 'active' | 'completed';
 }
 
