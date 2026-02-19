@@ -1,6 +1,5 @@
 import 'server-only'
 import { neonDB } from "../db/neondb";
-import { error } from 'console';
 
 export class userRepository {
     async login(email:string) {
