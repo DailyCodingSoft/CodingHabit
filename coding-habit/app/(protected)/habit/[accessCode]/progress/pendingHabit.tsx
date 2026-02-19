@@ -7,9 +7,10 @@ import { validateHabitParticipants } from '@/domain/services/habitValidationServ
 interface PendingHabitPageProps {
     habit: Habit
     currentUser: string
+    onHabitActivated: (updatedHabit: Habit) => void
 }
 
-export default function PendingHabitPage({ habit, currentUser }: PendingHabitPageProps) {
+export default function PendingHabitPage({ habit, currentUser, onHabitActivated }: PendingHabitPageProps) {
     const isCreator = currentUser === habit.creator
     const [localHabit, setLocalHabit] = useState(habit)
     const [editingIndex, setEditingIndex] = useState<number | null>(null)
@@ -18,6 +19,7 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
     
     const validatedCount = localHabit.participants?.filter(user => user.validationStatus === 'validated').length || 0
     const totalParticipants = localHabit.participants?.length || 0
+    const allValidated = validatedCount === totalParticipants && totalParticipants > 0
 
     function handleEditClick(index: number, currentUsername: string) {
         setEditingIndex(index)
@@ -84,7 +86,6 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
             if (result.allValidated) {
                 console.log('All participants validated! Habit is now active.')
                 // TODO: Update habit status to 'active' in database
-                // TODO: Redirect to ActiveHabitPage or auto-transition
             } else {
                 console.log('Validation result:', result)
                 // TODO: Update habit participants validation status in database
@@ -96,6 +97,20 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
         } finally {
             setIsValidating(false)
         }
+    }
+
+    function handleStartHabit() {
+        if (!allValidated) return
+
+        const activeHabit = {
+            ...localHabit,
+            status: 'active' as const
+        }
+
+        console.log('Starting habit - updating status to active:', activeHabit)
+        // TODO: Update habit status to 'active' in database
+        
+        onHabitActivated(activeHabit)
     }
 
     return (
@@ -216,14 +231,22 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
                 </ul>
             </div>
 
-            {/* Revalidate Button */}
-            <div className="flex justify-center">
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-4 items-center">
                 <button 
                     onClick={handleRevalidate}
                     disabled={isValidating}
                     className="px-6 py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
                 >
                     {isValidating ? 'Checking...' : 'Check Validation Status'}
+                </button>
+
+                <button 
+                    onClick={handleStartHabit}
+                    disabled={!allValidated}
+                    className="px-8 py-3 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors text-lg"
+                >
+                    {allValidated ? 'Start Habit 🚀' : 'Start Habit (Waiting for validation...)'}
                 </button>
             </div>
         </div>

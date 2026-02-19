@@ -55,8 +55,12 @@ export default function ProgressPage() {
     
     const isPendingValidation = habit.status === "pending_validation";
     
+    function handleHabitActivated(updatedHabit: Habit) {
+        setHabit(updatedHabit)
+    }
+    
     return isPendingValidation ? (
-        <PendingHabitPage habit={habit} currentUser={currentUser} />
+        <PendingHabitPage habit={habit} currentUser={currentUser} onHabitActivated={handleHabitActivated} />
     ) : (
         <ActiveHabitPage />
     );
