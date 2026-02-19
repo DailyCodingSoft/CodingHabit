@@ -40,31 +40,34 @@ export default function HabitPage(){
         const accessCode = generateAccessCode();
         submitedHabit.accessCode = accessCode;
         
+        if (submitedHabit.repoName && submitedHabit.participants) {
+            const [owner, repo] = submitedHabit.repoName.split('/');
+            const participantUsernames = submitedHabit.participants.map(p => p.username);
+            
+            try {
+                const result = await validateHabitParticipants(owner, repo, participantUsernames);
+                
+                submitedHabit.participants = submitedHabit.participants?.map(user => ({
+                    ...user,
+                    validationStatus: result.validatedUsers.includes(user.username) ? 'validated' : 'pending'
+                }));
+
+                if (result.allValidated) {
+                    submitedHabit.status = 'active';
+                    console.log('All participants validated! Habit is now active.', result);
+                }
+            } catch (error) {
+                console.error('Validation error:', error);
+            }
+        }
+        
         const success = await saveHabit(submitedHabit);
         
         if (success) {
             setCreatedAccessCode(accessCode);
             sessionStorage.setItem('createdHabit', JSON.stringify(submitedHabit));
             setShowSuccessModal(true);
-
-            if (submitedHabit.repoName && submitedHabit.participants) {
-                const [owner, repo] = submitedHabit.repoName.split('/');
-                const participantUsernames = submitedHabit.participants.map(p => p.username);
-                
-                validateHabitParticipants(owner, repo, participantUsernames)
-                    .then(result => {
-                        if (result.allValidated) {
-                            submitedHabit.status = 'active';
-                            console.log('All participants validated! Habit is now active. ', result);
-                            // TODO: Update habit status in database
-                        } else {
-                            console.log('Validation result:', result);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Validation error:', error);
-                    });
-            }
+            // TODO: Update habit status in database
         }
     }
 

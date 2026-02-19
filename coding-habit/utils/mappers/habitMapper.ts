@@ -29,3 +29,13 @@ export function mapFormDataToHabit(formData: FormData, username: string): Habit 
         status: 'pending_validation',
     };
 }
+
+export function mapSessionStorageToHabit(storedData: string): Habit | null {
+    try {
+        const parsed = JSON.parse(storedData);
+        return parsed as Habit;
+    } catch (error) {
+        console.error('Failed to parse habit from sessionStorage:', error);
+        return null;
+    }
+}

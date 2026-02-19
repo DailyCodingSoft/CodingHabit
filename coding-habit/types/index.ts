@@ -11,6 +11,7 @@ export type User = {
     streakkey?:string,
     debt?: number,
     streak?: number,
+    validationStatus?: 'pending' | 'validated';
 }
 
 //props
