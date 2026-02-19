@@ -1,6 +1,7 @@
 "use client"
 
 import { Habit } from '@/types'
+import { useState } from 'react'
 
 interface PendingHabitPageProps {
     habit: Habit
@@ -9,15 +10,53 @@ interface PendingHabitPageProps {
 
 export default function PendingHabitPage({ habit, currentUser }: PendingHabitPageProps) {
     const isCreator = currentUser === habit.creator
-    const validatedCount = habit.participants?.filter(user => user.validationStatus === 'validated').length || 0
-    const totalParticipants = habit.participants?.length || 0
-    console.log('aqui esta llegando esta madre: ', habit)
+    const [localHabit, setLocalHabit] = useState(habit)
+    const [editingIndex, setEditingIndex] = useState<number | null>(null)
+    const [editingUsername, setEditingUsername] = useState('')
+    
+    const validatedCount = localHabit.participants?.filter(user => user.validationStatus === 'validated').length || 0
+    const totalParticipants = localHabit.participants?.length || 0
+
+    function handleEditClick(index: number, currentUsername: string) {
+        setEditingIndex(index)
+        setEditingUsername(currentUsername)
+    }
+
+    function handleCancelEdit() {
+        setEditingIndex(null)
+        setEditingUsername('')
+    }
+
+    function handleSaveEdit(index: number) {
+        if (!editingUsername.trim()) {
+            alert('Username cannot be empty')
+            return
+        }
+
+        const updatedParticipants = localHabit.participants?.map((user, i) => 
+            i === index ? { ...user, username: editingUsername.trim(), validationStatus: 'pending' as const } : user
+        )
+
+        const updatedHabit = {
+            ...localHabit,
+            participants: updatedParticipants
+        }
+
+        setLocalHabit(updatedHabit)
+        setEditingIndex(null)
+        setEditingUsername('')
+
+        console.log('Updated habit to save to DB:', updatedHabit)
+        // TODO: Save updated habit participants to database
+        // NOTE: This only updates participant usernames (non-authenticated users)
+        // TODO: Re-run validation after username update to check if new username is a contributor
+    }
 
     return (
         <div className="max-w-4xl mx-auto p-6">
             {/* Header Section */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2">{habit.title}</h1>
+                <h1 className="text-3xl font-bold text-white mb-2">{localHabit.title}</h1>
                 <div className="flex items-center gap-2">
                     <span className="px-3 py-1 bg-yellow-500/20 text-yellow-500 rounded-md text-sm font-medium">
                         Pending Validation
@@ -32,12 +71,12 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
             <div className="bg-gray-800/50 rounded-lg p-4 mb-6">
                 <h2 className="text-lg font-semibold text-white mb-2">Repository</h2>
                 <a 
-                    href={`https://github.com/${habit.repoName}`}
+                    href={`https://github.com/${localHabit.repoName}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 hover:text-blue-300 underline"
                 >
-                    {habit.repoName}
+                    {localHabit.repoName}
                 </a>
                 <p className="text-gray-400 text-sm mt-2">
                     Make sure you're a contributor to this repository
@@ -64,30 +103,66 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
             <div className="bg-gray-800/50 rounded-lg p-4 mb-6">
                 <h2 className="text-lg font-semibold text-white mb-4">Participants</h2>
                 <ul className="space-y-3">
-                    {habit.participants?.map((user, index) => {
+                    {localHabit.participants?.map((user, index) => {
                         const isValidated = user.validationStatus === 'validated'
+                        const isEditing = editingIndex === index
                         
                         return (
                             <li key={index} className="flex items-center justify-between p-3 bg-gray-700/50 rounded-md">
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-3 flex-1">
                                     <span className="text-2xl">
                                         {isValidated ? '✅' : '⏳'}
                                     </span>
                                     
-                                    <span className="text-white">
-                                        {user.username}
-                                        {user.username === habit.creator && (
-                                            <span className="ml-2 text-sm text-blue-400">(Creator)</span>
-                                        )}
-                                    </span>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            value={editingUsername}
+                                            onChange={(e) => setEditingUsername(e.target.value)}
+                                            className="px-3 py-1 bg-gray-600 text-white rounded-md border border-gray-500 focus:border-blue-400 outline-none"
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <span className="text-white">
+                                            {user.username}
+                                            {user.username === localHabit.creator && (
+                                                <span className="ml-2 text-sm text-blue-400">(Creator)</span>
+                                            )}
+                                        </span>
+                                    )}
                                 </div>
 
                                 {isCreator && (
-                                    <button 
-                                        className="px-3 py-1 text-sm bg-gray-600 hover:bg-gray-500 text-white rounded-md transition-colors"
-                                    >
-                                        Edit
-                                    </button>
+                                    <div className="flex gap-2">
+                                        {isEditing ? (
+                                            <>
+                                                <button 
+                                                    onClick={() => handleSaveEdit(index)}
+                                                    className="px-3 py-1 text-sm bg-green-600 hover:bg-green-500 text-white rounded-md transition-colors"
+                                                >
+                                                    Save
+                                                </button>
+                                                <button 
+                                                    onClick={handleCancelEdit}
+                                                    className="px-3 py-1 text-sm bg-gray-600 hover:bg-gray-500 text-white rounded-md transition-colors"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {/* Don't allow editing creator's username - creator is an authenticated user with an account */}
+                                                {user.username !== localHabit.creator && (
+                                                    <button 
+                                                        onClick={() => handleEditClick(index, user.username)}
+                                                        className="px-3 py-1 text-sm bg-gray-600 hover:bg-gray-500 text-white rounded-md transition-colors"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
                                 )}
                             </li>
                         )
