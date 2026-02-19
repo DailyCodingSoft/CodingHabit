@@ -8,7 +8,8 @@ import PendingHabitPage from "./pendingHabit";
 
 export default function ProgressPage() {
     const [habit, setHabit] = useState<Habit | null>(null);
-    const currentUser = "john_doe"; // TODO: Get from auth context
+    // TODO: Get from auth context
+    const currentUser = habit?.creator || "john_doe";
     
     useEffect(() => {
         const storedHabit = sessionStorage.getItem('createdHabit');

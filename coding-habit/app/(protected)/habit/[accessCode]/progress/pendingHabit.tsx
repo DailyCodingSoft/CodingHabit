@@ -2,6 +2,7 @@
 
 import { Habit } from '@/types'
 import { useState } from 'react'
+import { validateHabitParticipants } from '@/domain/services/habitValidationService'
 
 interface PendingHabitPageProps {
     habit: Habit
@@ -13,6 +14,7 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
     const [localHabit, setLocalHabit] = useState(habit)
     const [editingIndex, setEditingIndex] = useState<number | null>(null)
     const [editingUsername, setEditingUsername] = useState('')
+    const [isValidating, setIsValidating] = useState(false)
     
     const validatedCount = localHabit.participants?.filter(user => user.validationStatus === 'validated').length || 0
     const totalParticipants = localHabit.participants?.length || 0
@@ -50,6 +52,50 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
         // TODO: Save updated habit participants to database
         // NOTE: This only updates participant usernames (non-authenticated users)
         // TODO: Re-run validation after username update to check if new username is a contributor
+    }
+
+    async function handleRevalidate() {
+        if (!localHabit.repoName || !localHabit.participants) {
+            alert('Missing repository or participants information')
+            return
+        }
+
+        setIsValidating(true)
+
+        try {
+            const [owner, repo] = localHabit.repoName.split('/')
+            const participantUsernames = localHabit.participants.map(p => p.username)
+            
+            const result = await validateHabitParticipants(owner, repo, participantUsernames)
+            
+            const updatedParticipants = localHabit.participants.map(user => ({
+                ...user,
+                validationStatus: result.validatedUsers.includes(user.username) ? 'validated' as const : 'pending' as const
+            }))
+
+            const updatedHabit = {
+                ...localHabit,
+                participants: updatedParticipants,
+                status: result.allValidated ? 'active' as const : 'pending_validation' as const
+            }
+
+            setLocalHabit(updatedHabit)
+
+            if (result.allValidated) {
+                console.log('All participants validated! Habit is now active.')
+                // TODO: Update habit status to 'active' in database
+                // TODO: Redirect to ActiveHabitPage or auto-transition
+            } else {
+                console.log('Validation result:', result)
+                // TODO: Update habit participants validation status in database
+            }
+
+        } catch (error) {
+            console.error('Validation error:', error)
+            alert('Failed to validate participants. Please try again.')
+        } finally {
+            setIsValidating(false)
+        }
     }
 
     return (
@@ -173,9 +219,11 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
             {/* Revalidate Button */}
             <div className="flex justify-center">
                 <button 
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-colors"
+                    onClick={handleRevalidate}
+                    disabled={isValidating}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
                 >
-                    Check Validation Status
+                    {isValidating ? 'Checking...' : 'Check Validation Status'}
                 </button>
             </div>
         </div>
