@@ -3,7 +3,8 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
-export default function recoverypassword(){
+export default function ResetPasswordPage( {params }: { params: { token: string } }
+){
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -37,7 +38,18 @@ export default function recoverypassword(){
 
                 <div className="mb-4">
                 <label className="mb-1 block text-sm font-medium">
-                    Nombre de usuario 
+                    Ingresa nueva contaraseña
+                </label>
+                <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                />
+                <div className="mb-6"></div>
+                <label className="mb-1 block text-sm font-medium">
+                    Vuelve a ingresar la contraseña
                 </label>
                 <input
                     type="email"
@@ -47,6 +59,7 @@ export default function recoverypassword(){
                     className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
                 />
                 </div>
+                
                 <div className="mb-6">
         <button
         type="submit"
@@ -67,4 +80,4 @@ export default function recoverypassword(){
             </form>
         </div>
     );
-}
+    }
