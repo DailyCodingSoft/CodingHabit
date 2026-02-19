@@ -9,7 +9,7 @@ interface PendingHabitPageProps {
 
 export default function PendingHabitPage({ habit, currentUser }: PendingHabitPageProps) {
     const isCreator = currentUser === habit.creator
-    const validatedCount = 0
+    const validatedCount = habit.participants?.filter(user => user.validationStatus === 'validated').length || 0
     const totalParticipants = habit.participants?.length || 0
     console.log('aqui esta llegando esta madre: ', habit)
 
@@ -64,28 +64,34 @@ export default function PendingHabitPage({ habit, currentUser }: PendingHabitPag
             <div className="bg-gray-800/50 rounded-lg p-4 mb-6">
                 <h2 className="text-lg font-semibold text-white mb-4">Participants</h2>
                 <ul className="space-y-3">
-                    {habit.participants?.map((user, index) => (
-                        <li key={index} className="flex items-center justify-between p-3 bg-gray-700/50 rounded-md">
-                            <div className="flex items-center gap-3">
-                                <span className="text-2xl">⏳</span>
-                                
-                                <span className="text-white">
-                                    {user.username}
-                                    {user.username === habit.creator && (
-                                        <span className="ml-2 text-sm text-blue-400">(Creator)</span>
-                                    )}
-                                </span>
-                            </div>
+                    {habit.participants?.map((user, index) => {
+                        const isValidated = user.validationStatus === 'validated'
+                        
+                        return (
+                            <li key={index} className="flex items-center justify-between p-3 bg-gray-700/50 rounded-md">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-2xl">
+                                        {isValidated ? '✅' : '⏳'}
+                                    </span>
+                                    
+                                    <span className="text-white">
+                                        {user.username}
+                                        {user.username === habit.creator && (
+                                            <span className="ml-2 text-sm text-blue-400">(Creator)</span>
+                                        )}
+                                    </span>
+                                </div>
 
-                            {isCreator && (
-                                <button 
-                                    className="px-3 py-1 text-sm bg-gray-600 hover:bg-gray-500 text-white rounded-md transition-colors"
-                                >
-                                    Edit
-                                </button>
-                            )}
-                        </li>
-                    ))}
+                                {isCreator && (
+                                    <button 
+                                        className="px-3 py-1 text-sm bg-gray-600 hover:bg-gray-500 text-white rounded-md transition-colors"
+                                    >
+                                        Edit
+                                    </button>
+                                )}
+                            </li>
+                        )
+                    })}
                 </ul>
             </div>
 
