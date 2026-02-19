@@ -26,7 +26,7 @@ export default function HabitPage(){
     const router = useRouter();
 
     const userCreator: User = {
-        username:'Usuario creador',
+        username:'ISCSantIa',
     }
 
     const title = `Hi ${userCreator.username} Create your new Habit!`
