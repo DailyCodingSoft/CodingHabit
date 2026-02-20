@@ -2,7 +2,7 @@
 dailycoding48@gmail.com
 
 # Vercel Server
-[CodingHabit PROD](https://coding-habit.vercel.app/signin)
+[CodingHabit PROD](https://coding-habit.vercel.app)
 
 # Tablero Kanban
 https://github.com/orgs/DailyCodingSoft/projects/1
