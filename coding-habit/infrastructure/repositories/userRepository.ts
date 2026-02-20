@@ -49,4 +49,16 @@ export class userRepository {
             return null
         }
     }
+    async validateTokenRecovery(token: string) {
+        try {
+            const result = await neonDB`SELECT * FROM password_resets
+            WHERE token_hash = ${token}
+            AND expires_at > NOW()
+            AND used = false;`
+        return result[0] ?? null
+        } catch(e) {
+            console.log(e)
+            return null
+        }
+    }
 }

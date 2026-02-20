@@ -20,4 +20,9 @@ export class userService {
         const result = await this.repo.createRecoveryToken(user_id, token);
         return result;
     }
+
+    async validateTokenRecovery(token: string) {
+        const result = await this.repo.validateTokenRecovery(token);
+        return result;
+    }
 }

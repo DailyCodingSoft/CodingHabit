@@ -65,4 +65,10 @@ export class AuthService {
         }
         return "Correo de recuperación enviado";
     }
+
+    async validateTokenRecovery(token: string) {
+        const service = new userService();
+        const result = await service.validateTokenRecovery(token);
+        return result;
+    }
 }

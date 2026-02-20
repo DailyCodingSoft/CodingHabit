@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { sendEmail } from "@/infrastructure/mail/resend";
 import { AuthService } from "@/domain/services/authService";
 
 export async function POST(req: Request) {
