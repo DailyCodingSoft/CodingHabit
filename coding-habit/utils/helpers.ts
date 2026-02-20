@@ -41,3 +41,8 @@ export function generateAccessCode(): string {
   
   return `${part1}-${part2}`.toUpperCase();
 }
+
+export function validateAccessCodeFormat(code: string): boolean {
+  const pattern = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+  return pattern.test(code);
+}
