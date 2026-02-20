@@ -16,4 +16,8 @@ export class userService {
         const user = await this.repo.getUserById(id);
         return user;
     }
+    async createRecoveryToken(user_id: string, token: string) {
+        const result = await this.repo.createRecoveryToken(user_id, token);
+        return result;
+    }
 }
