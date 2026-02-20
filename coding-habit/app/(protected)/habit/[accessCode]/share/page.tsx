@@ -21,7 +21,6 @@ export default function SharePage({ params }: SharePageProps) {
         const storedHabit = sessionStorage.getItem('createdHabit');
         if (storedHabit) {
             setHabit(JSON.parse(storedHabit));
-            sessionStorage.removeItem('createdHabit');
         }
     }, []);
 
@@ -36,7 +35,7 @@ export default function SharePage({ params }: SharePageProps) {
     }
 
     function handleGoToPlayers() {
-        router.push(`/habit/${accessCode}/players`);
+        router.push(`/habit/${accessCode}/progress`);
     }
 
     if (!habit) {
