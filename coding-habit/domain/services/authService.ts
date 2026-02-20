@@ -1,6 +1,8 @@
 import {signToken} from "@/infrastructure/auth/jwt";
 import { comparePassword, hashPassword } from "@/infrastructure/auth/password";
 import { userService } from "./userServices";
+import crypto from "crypto";
+import { sendEmail } from "@/infrastructure/mail/resend";
 
 export class AuthService {
     async login(email: string, password: string) {
@@ -34,5 +36,33 @@ export class AuthService {
         const  result = await service.register(username,"","",email,newPassword);
         console.log(result)
         return result;
+    }
+
+    async sendRecoveryEmail(email: string) {
+        const service = new userService();
+        const user:any = await service.login(email);
+        if (!user) return ("Usuario no encontrado");
+        const token = crypto.randomBytes(32).toString("hex");
+        const tokenBash = await hashPassword(token);
+        const createToken = await service.createRecoveryToken(user.user_id, tokenBash);
+        console.log(createToken)
+        if (!createToken) return ("Error al crear token de recuperación");
+        const url = `${process.env.BASE_URL}/ResetPassword/${token}`;
+        try {
+            await sendEmail({
+                to: email,
+                subject: "Recuperación de contraseña",
+                html: `
+                    <p>Hola,</p>
+                    <p>Has solicitado recuperar tu contraseña. Haz clic en el siguiente enlace:</p>
+                    <a href="${url}">Recuperar contraseña</a>
+                    <p>Este enlace expirará en 15 minutos.</p>
+                `
+            });
+        } catch (error) {
+            console.error("Error al enviar correo de recuperación:", error);
+            return "Error al enviar correo de recuperación";
+        }
+        return "Correo de recuperación enviado";
     }
 }
