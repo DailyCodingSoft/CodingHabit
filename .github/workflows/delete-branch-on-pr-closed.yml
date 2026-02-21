@@ -20,7 +20,7 @@ jobs:
       - name: Get branch name
         id: branch
         run: |
-          echo "branch=${{ github.head_ref }}"
+          echo "branch=${{ github.head_ref }}" >> $GITHUB_OUTPUT
 
       - name: Validate branch
         run: |
