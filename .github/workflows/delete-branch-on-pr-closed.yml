@@ -20,11 +20,11 @@ jobs:
       - name: Get branch name
         id: branch
         run: |
-          echo "branch=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          echo "branch=${{ github.head_ref }}"
 
       - name: Validate branch
         run: |
-          if [[ "${{ steps.branch.outputs.branch }}" == "main" ]]; then
+          if [[ "${{ steps.branch.outputs.branch }}" == "main" || "${{ steps.branch.outputs.branch }}" == "dev" ]]; then
             echo "❌ Cannot delete main branch"
             exit 1
           fi
