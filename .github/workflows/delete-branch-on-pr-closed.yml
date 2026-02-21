@@ -14,14 +14,22 @@ jobs:
       contents: write
     
     steps:
-      - name: Delete branch
+      - name: Checkout repository
         uses: actions/checkout@v4
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          echo "Deleting branch: ${{ github.head_ref }}"
-          
-          git branch -D ${{ github.head_ref }}
 
-          echo "Branch deleted: ${{ github.head_ref }}"
+      - name: Get branch name
+        id: branch
+        run: |
+          echo "branch=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Validate branch
+        run: |
+          if [[ "${{ steps.branch.outputs.branch }}" == "main" ]]; then
+            echo "❌ Cannot delete main branch"
+            exit 1
+          fi
+
+      - name: Delete branch
+        run: |
+          git push origin --delete ${{ steps.branch.outputs.branch }}
 
