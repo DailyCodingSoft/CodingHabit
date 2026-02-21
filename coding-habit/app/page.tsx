@@ -17,7 +17,7 @@ export default function Home() {
           href="/habit"
           className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg"
         >
-          Start Now
+          DEV start!
         </Link>
       </div>
     </div>
