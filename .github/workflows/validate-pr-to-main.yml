@@ -9,6 +9,7 @@ on:
 jobs:
   check-source-branch:
     name: Only allow PRs from dev
+    if: github.base_ref == 'main'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -18,6 +19,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          echo "BASE: ${{ github.base_ref }}"
+          echo "HEAD: ${{ github.head_ref }}"
+          echo "EVENT: ${{ github.event_name }}"
           echo "Source branch: ${{ github.head_ref }}"
           if [ "${{ github.head_ref }}" != "dev" ]; then
             echo "❌ Source branch is '${{ github.head_ref }}'. Closing PR..."
