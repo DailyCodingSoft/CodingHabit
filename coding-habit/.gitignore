@@ -65,8 +65,6 @@ next-env.d.ts
 
 ### github files ###
 # ignore all github files
-.github/*
-../.github/*
 
 ### Session files ###
 # Personal task tracking - not part of repo
