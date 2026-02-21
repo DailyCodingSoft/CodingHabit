@@ -15,12 +15,13 @@ jobs:
     
     steps:
       - name: Delete branch
+        uses: actions/checkout@v4
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           echo "Deleting branch: ${{ github.head_ref }}"
           
           git branch -D ${{ github.head_ref }}
-          
+
           echo "Branch deleted: ${{ github.head_ref }}"
 
