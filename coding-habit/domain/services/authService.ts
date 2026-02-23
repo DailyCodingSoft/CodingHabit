@@ -45,9 +45,8 @@ export class AuthService {
         const token = crypto.randomBytes(32).toString("hex");
         const tokenBash = await hashPassword(token);
         const createToken = await service.createRecoveryToken(user.user_id, tokenBash);
-        console.log(createToken)
         if (!createToken) return ("Error al crear token de recuperación");
-        const url = `${process.env.BASE_URL}/ResetPassword/${token}`;
+        const url = `${process.env.BASE_URL}/ResetPassword/${tokenBash}`;
         try {
             await sendEmail({
                 to: email,

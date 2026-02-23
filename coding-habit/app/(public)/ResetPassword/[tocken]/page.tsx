@@ -1,10 +1,14 @@
 'use client'
 export const dynamic = "force-dynamic";
 import { useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
-export default function ResetPasswordPage( {params }: { params: { token: string } }
+export default function ResetPasswordPage(
 ){
+    const params = useParams();
+    const rawtoken = params?.tocken as string || '';
+    const token = decodeURIComponent(rawtoken);
+
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
