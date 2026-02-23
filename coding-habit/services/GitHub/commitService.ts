@@ -106,10 +106,9 @@ export async function checkContributorsCommitsFromYesterday(
     if (result.status === "fulfilled") {
       const { commitCount, lastCommitMessage, didCommitYesterday } = result.value;
       console.log(
-        `${username}: ${
-          didCommitYesterday
-            ? `🔥 ${commitCount} commit(s) — last commit: "${lastCommitMessage}"`
-            : "❌ no commits yesterday"
+        `${username}: ${didCommitYesterday
+          ? `🔥 ${commitCount} commit(s) — last commit: "${lastCommitMessage}"`
+          : "❌ no commits yesterday"
         }`
       );
       return result.value;
@@ -123,4 +122,65 @@ export async function checkContributorsCommitsFromYesterday(
       };
     }
   });
+}
+
+export async function checkContributorsCommitsFromToday(
+  owner: string,
+  repo: string,
+  contributors: Contributor[]
+): Promise<ContributorResult[]> {
+  const [since, until] = getTodayRangeUTC();
+
+  const results = await Promise.allSettled(
+    contributors.map(async ({ username }): Promise<ContributorResult> => {
+      const commits = await fetchRealCommits(owner, repo, username, since, until);
+      return {
+        username,
+        commitCount: commits.length,
+        lastCommitMessage: commits[0]?.message ?? null,
+        didCommitYesterday: commits.length > 0,
+      };
+    })
+  );
+
+  return results.map((result, i) => {
+    const username = contributors[i].username;
+
+    if (result.status === "fulfilled") {
+      const { commitCount, lastCommitMessage, didCommitYesterday } = result.value;
+      console.log(
+        `${username}: ${didCommitYesterday
+          ? `🔥 ${commitCount} commit(s) — last commit: "${lastCommitMessage}"`
+          : "❌ no commits today"
+        }`
+      );
+      return result.value;
+    } else {
+      console.error(`Error checking commits for ${username}:`, result.reason);
+      return {
+        username,
+        commitCount: 0,
+        lastCommitMessage: null,
+        didCommitYesterday: false,
+      };
+    }
+  });
+}
+
+/** Returns [since, until] covering "today" in UTC. */
+function getTodayRangeUTC(): [Date, Date] {
+  const now = new Date();
+  const since = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    0, 0, 0, 0
+  ));
+  const until = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    23, 59, 59, 999
+  ));
+  return [since, until];
 }
