@@ -1,14 +1,16 @@
 'use client'
 export const dynamic = "force-dynamic";
 import { useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
+import { useParams } from "next/navigation";
 
-export default function ResetPasswordPage( {params }: { params: { token: string } }
+export default function ResetPasswordPage(
 ){
+    const params = useParams();
+    const token = params?.tocken as string || '';
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
     const recovery = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();   
         const res = await fetch('/api/sendMail',{
@@ -22,6 +24,7 @@ export default function ResetPasswordPage( {params }: { params: { token: string 
     const router = useRouter();
     return(
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
+            <h1> {token}</h1>
             <form
                 onSubmit={recovery}
                 className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
