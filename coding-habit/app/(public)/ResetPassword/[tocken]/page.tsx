@@ -7,7 +7,9 @@ import { useParams } from "next/navigation";
 export default function ResetPasswordPage(
 ){
     const params = useParams();
-    const token = params?.tocken as string || '';
+    const rawtoken = params?.tocken as string || '';
+    const token = decodeURIComponent(rawtoken);
+
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
