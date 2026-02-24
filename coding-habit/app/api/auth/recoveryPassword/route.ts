@@ -6,13 +6,14 @@ export async function POST(req: Request) {
     const { password, token } = await req.json();
     const service = new AuthService();
     console.log(token)
-    if (!password && !token) {
-      return NextResponse.json({ error: "Faltan datos requeridos" }, { status: 200 });
+    if (!password || !token) {
+      return NextResponse.json({ error: "Faltan datos requeridos" }, { status: 400 });
     }
+    console.log("Recibiendo solicitud de recuperación de contraseña");
     if (!password){
         const result = await service.validateTokenRecovery(token);
         if (!result) {
-            return NextResponse.json({ error: "Token inválido o expirado" }, { status: 200 });
+            return NextResponse.json({ error: "Token inválido o expirado" }, { status: 400 });
         } 
         return NextResponse.json({ message: "Token válido" }, { status: 200 });
     }

@@ -1,6 +1,6 @@
 'use client'
 export const dynamic = "force-dynamic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import { useParams } from "next/navigation";
 
@@ -11,26 +11,6 @@ export default function ResetPasswordPage(
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-     useEffect(() => {
-
-        const sendToken = async () => {
-            if (!token) return;
-
-            const res = await fetch('/api/auth/recoveryPassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ token })
-            });
-
-            const data = await res.json();
-            console.log(data);
-        };
-
-        sendToken();
-
-    }, [token]); // depende del token
     const recovery = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();   
         const res = await fetch('/api/sendMail',{
@@ -44,6 +24,7 @@ export default function ResetPasswordPage(
     const router = useRouter();
     return(
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
+            <h1> {token}</h1>
             <form
                 onSubmit={recovery}
                 className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"

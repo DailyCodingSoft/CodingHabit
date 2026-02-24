@@ -32,8 +32,8 @@ export class userRepository {
         }
     }
     async createRecoveryToken(user_id: string, token: string) {
-        console.log(user_id, token)
         try {
+            const dateExpires = new Date(Date.now() + 1000 * 60 * 15); // 15 minutos
         const result = await neonDB`INSERT INTO password_resets
             (user_id, token_hash, expires_at, used, created_at)
             VALUES (
