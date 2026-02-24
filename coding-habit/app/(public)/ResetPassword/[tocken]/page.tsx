@@ -11,6 +11,7 @@ export default function ResetPasswordPage(
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    console.log(token)
     const recovery = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();   
         const res = await fetch('/api/sendMail',{
