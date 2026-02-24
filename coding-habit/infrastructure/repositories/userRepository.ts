@@ -43,6 +43,7 @@ export class userRepository {
                 false,
                 NOW()
             );`
+        console.log(result)
         return result ?? null
         }catch(e) {
             console.log(e)

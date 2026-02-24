@@ -46,7 +46,7 @@ export class AuthService {
         const tokenBash = await hashPassword(token);
         const createToken = await service.createRecoveryToken(user.user_id, tokenBash);
         if (!createToken) return ("Error al crear token de recuperación");
-        const url = `${process.env.BASE_URL}/ResetPassword/${token}`;
+        const url = `${process.env.BASE_URL}/ResetPassword/${user.user_id}/${token}`;
         try {
             await sendEmail({
                 to: email,
@@ -68,6 +68,7 @@ export class AuthService {
     async validateTokenRecovery(token: string) {
         const service = new userService();
         const tokenBash = await hashPassword(token);
+        console.log('tokenBash:', tokenBash);
         const result = await service.validateTokenRecovery(tokenBash);
         return result;
     }
