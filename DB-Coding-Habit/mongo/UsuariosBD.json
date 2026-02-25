@@ -13,14 +13,21 @@
   ],
   "preferences": [
     {
-      "favoriteLanguages": ["TypeScript", "Go", "Python"],
+      "favoriteLanguages": [
+        "TypeScript",
+        "Go",
+        "Python"
+      ],
       "challengeLevel": "intermediate",
-      "challengeTypes": ["algorithms", "backend"]
+      "challengeTypes": [
+        "algorithms",
+        "backend"
+      ]
     }
   ],
   "settings": {
     "profilePublic": true
   },
   "createdAt": "2026-02-01T09:00:00Z",
-  "lastUpdate": "2026-02-01T09:00:00Z" 
+  "lastUpdate": "2026-02-01T09:00:00Z"
 }
