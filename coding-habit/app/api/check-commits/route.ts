@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { GitHubCommitService } from "@/services/GitHub/GitHubCommitService";
-import type { Contributor } from "@/services/GitHub/GitHubCommitService";
+import { GitHubCommitService } from "@/services/GitHub/commitService";
+import type { Contributor } from "@/services/GitHub/commitService";
 
 export async function POST(request: Request) {
   try {
@@ -11,43 +11,21 @@ export async function POST(request: Request) {
       contributors: Contributor[];
     };
 
-    // Validación básica
-    if (
-      !owner ||
-      !repo ||
-      !contributors ||
-      !Array.isArray(contributors)
-    ) {
+    if (!owner || !repo || !Array.isArray(contributors)) {
       return NextResponse.json(
-        {
-          error:
-            "Invalid request body. 'owner', 'repo', and 'contributors' array are required.",
-        },
+        { error: "owner, repo y contributors son requeridos." },
         { status: 400 }
       );
     }
 
-    const gitHubService = new GitHubCommitService(
-      process.env.GITHUB_TOKEN
-    );
+    const service = new GitHubCommitService(process.env.GITHUB_TOKEN);
+    const results = await service.checkStreak(owner, repo, contributors);
 
-    const results = await gitHubService.checkContributorsCommits(
-      owner,
-      repo,
-      contributors,
-      "yesterday"
-    );
+    // 👉 await saveStreakResults(results)
 
-    return NextResponse.json({
-      success: true,
-      data: results,
-    });
+    return NextResponse.json({ success: true, data: results });
   } catch (error) {
-    console.error("Error in check-commits endpoint:", error);
-
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("[check-streak]", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
