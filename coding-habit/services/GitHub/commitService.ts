@@ -1,8 +1,171 @@
 import { Octokit } from "octokit";
 
-const octokit = new Octokit();
+/**
+ * Servicio para consultar commits de contribuyentes en un repositorio.
+ * Compatible con GitHub REST API v3.
+ */
+export class GitHubCommitService {
+  private octokit: Octokit;
 
-// ── Types ────────────────────────────────────────────────────────────────────
+  constructor(token?: string) {
+    this.octokit = new Octokit(
+      token
+        ? { auth: token }
+        : undefined
+    );
+  }
+
+  // ────────────────────────────────────────────────────────────────
+  // Types
+  // ────────────────────────────────────────────────────────────────
+
+  public static DateRanges = {
+    TODAY: "today",
+    YESTERDAY: "yesterday",
+  } as const;
+
+  public typeDateRange = typeof GitHubCommitService.DateRanges[keyof typeof GitHubCommitService.DateRanges];
+
+  public interfaceContributor = {} as unknown as Contributor;
+  public interfaceResult = {} as unknown as ContributorResult;
+
+  // ────────────────────────────────────────────────────────────────
+  // Public API
+  // ────────────────────────────────────────────────────────────────
+
+  /**
+   * Verifica commits de múltiples contribuyentes en un rango UTC.
+   */
+  async checkContributorsCommits(
+    owner: string,
+    repo: string,
+    contributors: Contributor[],
+    range: "today" | "yesterday"
+  ): Promise<ContributorResult[]> {
+
+    const [since, until] = this.getUTCDateRange(range);
+
+    const results = await Promise.allSettled(
+      contributors.map(({ username }) =>
+        this.checkSingleContributor(owner, repo, username, since, until)
+      )
+    );
+
+    return results.map((result, index) => {
+      if (result.status === "fulfilled") {
+        return result.value;
+      }
+
+      return {
+        username: contributors[index].username,
+        commitCount: 0,
+        lastCommitMessage: null,
+        lastCommitDate: null,
+        didCommit: false,
+      };
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────────
+  // Core logic
+  // ────────────────────────────────────────────────────────────────
+
+  private async checkSingleContributor(
+    owner: string,
+    repo: string,
+    username: string,
+    since: Date,
+    until: Date
+  ): Promise<ContributorResult> {
+
+    const commits = await this.fetchUserCommitsInRange(
+      owner,
+      repo,
+      username,
+      since,
+      until
+    );
+
+    if (commits.length === 0) {
+      return {
+        username,
+        commitCount: 0,
+        lastCommitMessage: null,
+        lastCommitDate: null,
+        didCommit: false,
+      };
+    }
+
+    const latest = commits[0]; // GitHub devuelve orden descendente
+
+    return {
+      username,
+      commitCount: commits.length,
+      lastCommitMessage: latest.commit.message,
+      lastCommitDate: latest.commit.author?.date ?? null,
+      didCommit: true,
+    };
+  }
+
+  /**
+   * Obtiene commits de un usuario dentro de un rango UTC.
+   * Excluye merges correctamente (más de 1 parent).
+   */
+  private async fetchUserCommitsInRange(
+    owner: string,
+    repo: string,
+    username: string,
+    since: Date,
+    until: Date
+  ) {
+    const { data } = await this.octokit.request(
+      "GET /repos/{owner}/{repo}/commits",
+      {
+        owner,
+        repo,
+        author: username,
+        since: since.toISOString(),
+        until: until.toISOString(),
+        per_page: 100,
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
+    );
+
+    // Excluir merges correctamente
+    return data.filter(commit => commit.parents.length === 1);
+  }
+
+  /**
+   * Devuelve el rango UTC para "today" o "yesterday".
+   */
+  private getUTCDateRange(type: "today" | "yesterday"): [Date, Date] {
+    const now = new Date();
+
+    const dayOffset = type === "yesterday" ? -1 : 0;
+
+    const start = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + dayOffset,
+      0, 0, 0, 0
+    ));
+
+    const end = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + dayOffset,
+      23, 59, 59, 999
+    ));
+
+    return [start, end];
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// Types externos
+// ────────────────────────────────────────────────────────────────
 
 export interface Contributor {
   username: string;
@@ -12,175 +175,6 @@ export interface ContributorResult {
   username: string;
   commitCount: number;
   lastCommitMessage: string | null;
-  didCommitYesterday: boolean;
-}
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-/** Returns [since, until] covering "yesterday" in UTC. */
-function getYesterdayRangeUTC(): [Date, Date] {
-  const now = new Date();
-  const since = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate() - 1,
-    0, 0, 0, 0
-  ));
-  const until = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate(),
-    0, 0, 0, 0
-  ));
-  return [since, until];
-}
-
-/** Fetches all non-merge commits for a contributor, handling pagination. */
-async function fetchRealCommits(
-  owner: string,
-  repo: string,
-  username: string,
-  since: Date,
-  until: Date
-): Promise<{ message: string }[]> {
-  const commits: { message: string }[] = [];
-  let page = 1;
-
-  while (true) {
-    const { data } = await octokit.request("GET /repos/{owner}/{repo}/commits", {
-      owner,
-      repo,
-      author: username,
-      since: since.toISOString(),
-      until: until.toISOString(),
-      per_page: 100,
-      page,
-      headers: { "X-GitHub-Api-Version": "2022-11-28" },
-    });
-
-    const real = data.filter(
-      (c) => !c.commit.message.startsWith("Merge")
-    );
-    commits.push(...real.map((c) => ({ message: c.commit.message })));
-
-    // Stop if this is the last page
-    if (data.length < 100) break;
-    page++;
-  }
-
-  return commits;
-}
-
-// ── Core function ────────────────────────────────────────────────────────────
-
-/**
- * Returns the commits made by specific contributors on a given repo from yesterday (UTC).
- * Useful to check if users broke their coding streak.
- *
- * @param owner        - The organization or repo owner (e.g. "facebook")
- * @param repo         - The repository name (e.g. "react")
- * @param contributors - The GitHub usernames to check
- */
-export async function checkContributorsCommitsFromYesterday(
-  owner: string,
-  repo: string,
-  contributors: Contributor[]
-): Promise<ContributorResult[]> {
-  const [since, until] = getYesterdayRangeUTC();
-
-  const results = await Promise.allSettled(
-    contributors.map(async ({ username }): Promise<ContributorResult> => {
-      const commits = await fetchRealCommits(owner, repo, username, since, until);
-      return {
-        username,
-        commitCount: commits.length,
-        lastCommitMessage: commits[0]?.message ?? null,
-        didCommitYesterday: commits.length > 0,
-      };
-    })
-  );
-
-  return results.map((result, i) => {
-    const username = contributors[i].username;
-
-    if (result.status === "fulfilled") {
-      const { commitCount, lastCommitMessage, didCommitYesterday } = result.value;
-      console.log(
-        `${username}: ${didCommitYesterday
-          ? `🔥 ${commitCount} commit(s) — last commit: "${lastCommitMessage}"`
-          : "❌ no commits yesterday"
-        }`
-      );
-      return result.value;
-    } else {
-      console.error(`Error checking commits for ${username}:`, result.reason);
-      return {
-        username,
-        commitCount: 0,
-        lastCommitMessage: null,
-        didCommitYesterday: false,
-      };
-    }
-  });
-}
-
-export async function checkContributorsCommitsFromToday(
-  owner: string,
-  repo: string,
-  contributors: Contributor[]
-): Promise<ContributorResult[]> {
-  const [since, until] = getTodayRangeUTC();
-
-  const results = await Promise.allSettled(
-    contributors.map(async ({ username }): Promise<ContributorResult> => {
-      const commits = await fetchRealCommits(owner, repo, username, since, until);
-      return {
-        username,
-        commitCount: commits.length,
-        lastCommitMessage: commits[0]?.message ?? null,
-        didCommitYesterday: commits.length > 0,
-      };
-    })
-  );
-
-  return results.map((result, i) => {
-    const username = contributors[i].username;
-
-    if (result.status === "fulfilled") {
-      const { commitCount, lastCommitMessage, didCommitYesterday } = result.value;
-      console.log(
-        `${username}: ${didCommitYesterday
-          ? `🔥 ${commitCount} commit(s) — last commit: "${lastCommitMessage}"`
-          : "❌ no commits today"
-        }`
-      );
-      return result.value;
-    } else {
-      console.error(`Error checking commits for ${username}:`, result.reason);
-      return {
-        username,
-        commitCount: 0,
-        lastCommitMessage: null,
-        didCommitYesterday: false,
-      };
-    }
-  });
-}
-
-/** Returns [since, until] covering "today" in UTC. */
-function getTodayRangeUTC(): [Date, Date] {
-  const now = new Date();
-  const since = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate(),
-    0, 0, 0, 0
-  ));
-  const until = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate(),
-    23, 59, 59, 999
-  ));
-  return [since, until];
+  lastCommitDate: string | null;
+  didCommit: boolean;
 }

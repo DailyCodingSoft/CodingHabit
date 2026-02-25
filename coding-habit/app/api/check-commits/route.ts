@@ -1,25 +1,53 @@
 import { NextResponse } from "next/server";
-import { checkContributorsCommitsFromYesterday } from "@/services/GitHub/commitService";
+import { GitHubCommitService } from "@/services/GitHub/GitHubCommitService";
+import type { Contributor } from "@/services/GitHub/GitHubCommitService";
 
 export async function POST(request: Request) {
-    try {
-        const { owner, repo, contributors } = await request.json();
+  try {
+    const body = await request.json();
+    const { owner, repo, contributors } = body as {
+      owner: string;
+      repo: string;
+      contributors: Contributor[];
+    };
 
-        if (!owner || !repo || !contributors || !Array.isArray(contributors)) {
-            return NextResponse.json(
-                { error: "Invalid request body. 'owner', 'repo', and 'contributors' array are required." },
-                { status: 400 }
-            );
-        }
-
-        await checkContributorsCommitsFromYesterday(owner, repo, contributors);
-
-        return NextResponse.json({ message: "Check process initiated successfully" });
-    } catch (error) {
-        console.error("Error in check-commits endpoint:", error);
-        return NextResponse.json(
-            { error: "Internal Server Error" },
-            { status: 500 }
-        );
+    // Validación básica
+    if (
+      !owner ||
+      !repo ||
+      !contributors ||
+      !Array.isArray(contributors)
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Invalid request body. 'owner', 'repo', and 'contributors' array are required.",
+        },
+        { status: 400 }
+      );
     }
+
+    const gitHubService = new GitHubCommitService(
+      process.env.GITHUB_TOKEN
+    );
+
+    const results = await gitHubService.checkContributorsCommits(
+      owner,
+      repo,
+      contributors,
+      "yesterday"
+    );
+
+    return NextResponse.json({
+      success: true,
+      data: results,
+    });
+  } catch (error) {
+    console.error("Error in check-commits endpoint:", error);
+
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }
