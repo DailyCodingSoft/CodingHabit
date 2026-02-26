@@ -67,8 +67,10 @@ export default function HabitPage(){
     }
 
     return (
-        <div>
-            <h1 className="page-title">{title}</h1>
+        <div className="min-h-screen bg-[var(--landing-bg)] py-8">
+            <h1 className="text-[var(--neon-green)] text-center text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wide mb-8 px-4">
+                {title}
+            </h1>
             <HabitForm onSubmit={onSubmitForm} creatorUsername={userCreator.username}/>
         </div>
     )

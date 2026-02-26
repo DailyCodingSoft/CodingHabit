@@ -29,7 +29,7 @@ export default function DatePicker({
         <div>
             <label
                 htmlFor={id ?? name}
-                className="block text-[var(--text-muted-color)] mb-2"
+                className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider"
             >
                 {label}
             </label>
@@ -44,7 +44,7 @@ export default function DatePicker({
                 max={max}
                 disabled={disabled}
                 required={required}
-                className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono [color-scheme:dark]"
             />
         </div>
     );
