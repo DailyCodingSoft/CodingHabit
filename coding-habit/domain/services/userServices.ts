@@ -21,8 +21,8 @@ export class userService {
         return result;
     }
 
-    async validateTokenRecovery(token: string) {
-        const result = await this.repo.validateTokenRecovery(token);
+    async validateTokenRecovery(id: string) {
+        const result = await this.repo.validateTokenRecovery(id);
         return result;
     }
 }

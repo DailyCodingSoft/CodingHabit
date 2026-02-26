@@ -8,7 +8,6 @@ export class AuthService {
     async login(email: string, password: string) {
         const service = new userService();
         const user:any = await service.login(email);
-         console.log(password,user.user_password)
         if (!user) throw new Error("Credenciales inválidas");
         const valid = await comparePassword(password, user.user_password);
         if (!valid) throw new Error("Credenciales inválidas");
@@ -65,11 +64,11 @@ export class AuthService {
         return "Correo de recuperación enviado";
     }
 
-    async validateTokenRecovery(token: string) {
+    async validateTokenRecovery(token: string, id: string) {
         const service = new userService();
-        const tokenBash = await hashPassword(token);
-        console.log('tokenBash:', tokenBash);
-        const result = await service.validateTokenRecovery(tokenBash);
-        return result;
+        const result = await service.validateTokenRecovery(id);
+        if (!result) return false;
+        const resultValid = await comparePassword(token, result);
+        return resultValid;
     }
 }

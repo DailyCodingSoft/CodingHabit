@@ -3,32 +3,39 @@ export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'
 import { useParams } from "next/navigation";
+import ConfirmModal from "@/components/ui/alert/alertLoginAndRegister"
 
 export default function ResetPasswordPage(
 ){
     const params = useParams();
     const rawtoken = params?.tocken as string || '';
-    const userId = params?.userId as string || '';
+    const id = params?.userId as string || '';
     const token = decodeURIComponent(rawtoken);
 
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [LoadingPage, setLoadingPage] = useState(true);
+    const [showErrorModal, setShowErrorModal] = useState(false);
      useEffect(() => {
 
         const sendToken = async () => {
             if (!token) return;
-
             const res = await fetch('/api/auth/recoveryPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ token })
+                body: JSON.stringify({ token, id })
             });
 
             const data = await res.json();
             console.log(data);
+            if (data.error) {
+                setError(data.error);
+                setShowErrorModal(true);
+            }
+            setLoadingPage(false);
         };
 
         sendToken();
@@ -103,6 +110,12 @@ export default function ResetPasswordPage(
         </button>
         </div>
             </form>
+            <ConfirmModal
+                 open={showErrorModal}
+                    message={error || "Token inválido o expirado"}
+                    type="error"
+                    onAccept={() => router.push('/signin')}
+                />
         </div>
     );
     }

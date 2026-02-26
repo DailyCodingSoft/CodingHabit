@@ -50,13 +50,17 @@ export class userRepository {
             return null
         }
     }
-    async validateTokenRecovery(token: string) {
+    async validateTokenRecovery(id: string) {
         try {
-            const result = await neonDB`SELECT * FROM password_resets
-            WHERE token_hash = ${token}
+            const userId = parseInt(id, 10);
+            if (isNaN(userId)) {
+            return null;
+            }
+            const result = await neonDB`SELECT token_hash FROM password_resets
+            WHERE user_id = ${userId}
             AND expires_at > NOW()
             AND used = false;`
-        return result[0] ?? null
+            return result[0]?.token_hash ?? null
         } catch(e) {
             console.log(e)
             return null

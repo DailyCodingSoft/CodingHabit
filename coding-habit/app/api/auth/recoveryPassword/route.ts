@@ -3,14 +3,13 @@ import { AuthService } from "@/domain/services/authService";
 
 export async function POST(req: Request) {
   try {
-    const { password, token } = await req.json();
+    const { password, token, id } = await req.json();
     const service = new AuthService();
-    console.log(token)
     if (!password && !token) {
       return NextResponse.json({ error: "Faltan datos requeridos" }, { status: 200 });
     }
     if (!password){
-        const result = await service.validateTokenRecovery(token);
+        const result = await service.validateTokenRecovery(token, id);
         if (!result) {
             return NextResponse.json({ error: "Token inválido o expirado" }, { status: 200 });
         } 
