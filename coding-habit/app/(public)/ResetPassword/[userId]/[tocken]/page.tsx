@@ -16,6 +16,7 @@ export default function ResetPasswordPage(
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [LoadingPage, setLoadingPage] = useState(true);
+    const [errorModal, setErrorModal] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
      useEffect(() => {
 
@@ -32,7 +33,7 @@ export default function ResetPasswordPage(
             const data = await res.json();
             console.log(data);
             if (data.error) {
-                setError(data.error);
+                setErrorModal(data.error);
                 setShowErrorModal(true);
             }
             setLoadingPage(false);
