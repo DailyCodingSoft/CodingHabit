@@ -12,6 +12,11 @@ export interface StreakResult {
   lastCommitDate: string | null;
 }
 
+export interface StreakCheckResult {
+  username: string;
+  didCommit: boolean;
+}
+
 export interface LatestCommitResult {
   username: string;
   found: boolean;
@@ -29,7 +34,7 @@ export class GitHubCommitService {
 
   // ── Public ───────────────────────────────────────────────────────────────────
 
-  async checkStreak(
+  async getStreakDetails(
     owner: string,
     repo: string,
     contributors: Contributor[]
@@ -78,6 +83,19 @@ export class GitHubCommitService {
         lastCommitDate: sorted[0].date,
       };
     });
+  }
+
+  async checkStreak(
+    owner: string,
+    repo: string,
+    contributors: Contributor[]
+  ): Promise<StreakCheckResult[]> {
+    const fullResults = await this.getStreakDetails(owner, repo, contributors);
+
+    return fullResults.map(({ username, didCommitYesterday }) => ({
+      username,
+      didCommit: didCommitYesterday,
+    }));
   }
 
   async getLatestCommit(
