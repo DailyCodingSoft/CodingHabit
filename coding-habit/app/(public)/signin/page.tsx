@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NeonInput from '@/components/ui/NeonInput';
+import NeonFormContainer from '@/components/ui/NeonFormContainer';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -31,19 +32,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)] px-4">
-      <form
-        onSubmit={login}
-        className="relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full max-w-md shadow-[0_0_40px_var(--neon-glow-soft)]"
-      >
-        <div className="absolute -top-3 left-8 bg-[var(--landing-bg)] px-3 text-[var(--neon-green)] text-xs font-mono tracking-widest">
-          &gt; LOGIN PROTOCOL
-        </div>
-        
-        <h1 className="text-[var(--neon-green)] text-3xl font-bold tracking-wide text-center mb-8 font-mono uppercase">
-          Iniciar sesión
-        </h1>
-
+    <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)]">
+      <NeonFormContainer protocol="LOGIN PROTOCOL" title="Iniciar sesión" onSubmit={login}>
         {error && (
           <p className="mb-4 rounded-sm bg-red-900/30 border border-red-500 p-3 text-sm text-red-400 font-mono">
             {error}
@@ -87,7 +77,7 @@ export default function LoginPage() {
             Registrar
           </button>
         </div>
-      </form> 
+      </NeonFormContainer>
     </div>
   );
 }

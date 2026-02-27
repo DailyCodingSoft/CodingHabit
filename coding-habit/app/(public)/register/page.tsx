@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import  ConfirmModal  from '@/components/ui/alert/alertLoginAndRegister';
 import NeonInput from '@/components/ui/NeonInput';
+import NeonFormContainer from '@/components/ui/NeonFormContainer';
 
 type AlertState = {
   message: string;
@@ -52,83 +53,72 @@ export default function Register(){
       }
     };
     return(
-      <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)] px-4">
-        <form
-        onSubmit={register}
-        className="relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full max-w-md shadow-[0_0_40px_var(--neon-glow-soft)]"
-      >
-        <div className="absolute -top-3 left-8 bg-[var(--landing-bg)] px-3 text-[var(--neon-green)] text-xs font-mono tracking-widest">
-          &gt; REGISTER PROTOCOL
-        </div>
-        
-        <h1 className="text-[var(--neon-green)] text-3xl font-bold tracking-wide text-center mb-8 font-mono uppercase">
-          Registrar Usuario
-        </h1>
+      <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)]">
+        <NeonFormContainer protocol="REGISTER PROTOCOL" title="Registrar Usuario" onSubmit={register}>
+          {error && (
+            <p className="mb-4 rounded-sm bg-red-900/30 border border-red-500 p-3 text-sm text-red-400 font-mono">
+              {error}
+            </p>
+          )}
 
-        {error && (
-          <p className="mb-4 rounded-sm bg-red-900/30 border border-red-500 p-3 text-sm text-red-400 font-mono">
-            {error}
-          </p>
-        )}
+          <div className="space-y-6">
+            <NeonInput
+              name="username"
+              type="text"
+              label="Nombre de usuario"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
 
-        <div className="space-y-6">
-          <NeonInput
-            name="username"
-            type="text"
-            label="Nombre de usuario"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+            <NeonInput
+              name="email"
+              type="email"
+              label="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-          <NeonInput
-            name="email"
-            type="email"
-            label="Correo electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+            <NeonInput
+              name="password"
+              type="password"
+              label="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-          <NeonInput
-            name="password"
-            type="password"
-            label="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="flex flex-col gap-4 pt-8">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)] disabled:opacity-50"
+            >
+              {loading ? "Registrando..." : "Registrar"}
+            </button>
 
-        <div className="flex flex-col gap-4 pt-8">
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)] disabled:opacity-50"
-          >
-            {loading ? "Registrando..." : "Registrar"}
-          </button>
-
-          <button
-            type="button"
-            onClick={()=>router.push('/signin')}
-            className="w-full bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
-          >
-            Atrás
-          </button>
-        </div>
-      </form>
-      <ConfirmModal
-        open={alert}
-        message={messageAlert?.message ?? ""}
-        type={messageAlert?.type}
-        onAccept={() => {
-          setAlert(false);
-          if (messageAlert?.type === "success") {
-            router.push("/signin");
-          }
-        }}
-      />
-    </div>
+            <button
+              type="button"
+              onClick={()=>router.push('/signin')}
+              className="w-full bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
+            >
+              Atrás
+            </button>
+          </div>
+        </NeonFormContainer>
+        <ConfirmModal
+          open={alert}
+          message={messageAlert?.message ?? ""}
+          type={messageAlert?.type}
+          onAccept={() => {
+            setAlert(false);
+            if (messageAlert?.type === "success") {
+              router.push("/signin");
+            }
+          }}
+        />
+      </div>
     );
 }
