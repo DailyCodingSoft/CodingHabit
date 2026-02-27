@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import NeonInput from '@/components/ui/NeonInput';
 import NeonFormContainer from '@/components/ui/NeonFormContainer';
 import NeonButton from '@/components/ui/NeonButton';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -35,11 +36,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)]">
       <NeonFormContainer protocol="LOGIN PROTOCOL" title="Iniciar sesión" onSubmit={login}>
-        {error && (
-          <p className="mb-4 rounded-sm bg-red-900/30 border border-red-500 p-3 text-sm text-red-400 font-mono">
-            {error}
-          </p>
-        )}
+        {error && <ErrorMessage message={error} />}
 
         <div className="space-y-6">
           <NeonInput
