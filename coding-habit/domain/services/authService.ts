@@ -71,4 +71,16 @@ export class AuthService {
         const resultValid = await comparePassword(token, result);
         return resultValid;
     }
+    async resetPassword(userId: string, newPassword: string) {
+    const service = new userService();
+    const hashedPassword = await hashPassword(newPassword);
+    const result = await service.updatePassword(userId, hashedPassword);
+    return result;
+}
+
+async invalidateRecoveryToken(token: string, userId: string) {
+    const service = new userService();
+    const result = await service.deleteRecoveryToken(userId);
+    return result;
+}
 }

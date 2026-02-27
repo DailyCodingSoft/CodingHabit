@@ -66,4 +66,33 @@ export class userRepository {
             return null
         }
     }
+
+    async updatePassword(userId: string, hashedPassword: string) {
+        try {
+            const result = await neonDB`
+                UPDATE users 
+                SET user_password = ${hashedPassword}
+                WHERE user_id = ${userId}
+            `;
+            return result;
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    async deleteRecoveryToken(userId: string) {
+        try {
+            const result = await neonDB`
+                UPDATE password_resets 
+                SET used = true
+                WHERE user_id = ${userId}
+                AND used = false
+            `;
+            return result;
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
 }
