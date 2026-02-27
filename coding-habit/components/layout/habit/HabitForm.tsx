@@ -156,24 +156,20 @@ export default function HabitForm(props: {
     return (
         <NeonFormContainer protocol="NEW HABIT PROTOCOL" title="Crear Hábito" onSubmit={handleSubmit} maxWidth="2xl">
             <div className="space-y-6">
-                <div>
-                    <NeonInput
-                        name="title"
-                        type="text"
-                        label="Título del hábito"
-                        placeholder="Mi Habito"
-                        value={title}
-                        onChange={(event) => {
-                            const value = event.target.value;
-                            setTitle(value);
-                            scheduleValidation("title", value);
-                        }}
-                        required
-                    />
-                    {errors.title && (
-                        <p className="mt-1 text-sm text-red-400">{errors.title}</p>
-                    )}
-                </div>
+                <NeonInput
+                    name="title"
+                    type="text"
+                    label="Título del hábito"
+                    placeholder="Mi Habito"
+                    value={title}
+                    onChange={(event) => {
+                        const value = event.target.value;
+                        setTitle(value);
+                        scheduleValidation("title", value);
+                    }}
+                    required
+                    error={errors.title}
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
