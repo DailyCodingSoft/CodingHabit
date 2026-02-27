@@ -70,7 +70,7 @@ export default function UsernameInput({
 
     return (
         <div>
-            <label className="block text-[var(--text-muted-color)] mb-2">
+            <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">
                 {label} ({totalParticipants}/{HABIT_CONFIG.MAX_PARTICIPANTS})
             </label>
             
@@ -85,13 +85,13 @@ export default function UsernameInput({
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
                     disabled={!canAddMore}
-                    className="flex-1 p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button
                     type="button"
                     onClick={addUsername}
                     disabled={!canAddMore}
-                    className="px-4 py-2 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] rounded-lg transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] rounded-sm transition-all font-mono font-bold uppercase text-sm shadow-[0_0_15px_var(--neon-glow-soft)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Agregar
                 </button>
@@ -102,20 +102,20 @@ export default function UsernameInput({
             )}
 
             <div className="mt-3 flex flex-wrap gap-2">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--primary-color)] rounded-full text-sm">
-                    <span className="text-[var(--text-primary-color)] font-semibold">{creatorUsername}</span>
-                    <span className="text-[var(--text-primary-color)] text-xs">(Tú)</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--neon-green)] rounded-sm text-sm">
+                    <span className="text-[var(--landing-bg)] font-bold font-mono">{creatorUsername}</span>
+                    <span className="text-[var(--landing-bg)] text-xs font-mono">(Tú)</span>
                 </div>
                 {usernames.map((username) => (
                     <div
                         key={username}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-border-color)] rounded-full text-sm"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-[var(--landing-card-bg)] border border-[var(--neon-green-dark)] rounded-sm text-sm"
                     >
-                        <span className="text-[var(--text-primary-color)]">{username}</span>
+                        <span className="text-[var(--neon-green-muted)] font-mono">{username}</span>
                         <button
                             type="button"
                             onClick={() => removeUsername(username)}
-                            className="text-[var(--text-muted-color)] hover:text-red-400 font-bold"
+                            className="text-[var(--neon-green-muted)] hover:text-red-400 font-bold"
                             aria-label={`Remover ${username}`}
                         >
                             ×

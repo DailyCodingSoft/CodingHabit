@@ -151,18 +151,22 @@ export default function HabitForm(props: {
     }
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center px-4">
             <form
                 onSubmit={handleSubmit}
-                className="bg-[var(--surface-color)] border border-[var(--surface-border-color)] rounded-xl p-6 w-full max-w-xl shadow-2xl"
+                className="relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full max-w-2xl shadow-[0_0_40px_var(--neon-glow-soft)]"
             >
-                <h2 className="text-[var(--text-primary-color)] text-2xl font-semibold tracking-tight text-center mb-6">
-                    Crear hábito
+                <div className="absolute -top-3 left-8 bg-[var(--landing-bg)] px-3 text-[var(--neon-green)] text-xs font-mono tracking-widest">
+                    &gt; NEW HABIT PROTOCOL
+                </div>
+                
+                <h2 className="text-[var(--neon-green)] text-3xl font-bold tracking-wide text-center mb-8 font-mono uppercase">
+                    Crear Hábito
                 </h2>
 
-                <div className="space-y-5">
+                <div className="space-y-6">
                     <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Titulo del habito</label>
+                        <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Título del hábito</label>
                         <input
                             name="title"
                             type="text"
@@ -177,53 +181,57 @@ export default function HabitForm(props: {
                             maxLength={30}
                             pattern="[A-Za-z0-9]{3,30}"
                             required
-                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600"
                         />
                         {errors.title && (
                             <p className="mt-1 text-sm text-red-400">{errors.title}</p>
                         )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <DatePicker
-                            name="initialDate"
-                            label="Fecha inicial"
-                            placeholder="hoy"
-                            value={initialDate}
-                            onChange={(event) => {
-                                const value = event.target.value;
-                                setInitialDate(value);
-                                scheduleValidation("initialDate", value);
-                                if (endDate) {
-                                    scheduleValidation("endDate", endDate);
-                                }
-                            }}
-                            min={todayString}
-                            required
-                        />
-                        {errors.initialDate && (
-                            <p className="text-sm text-red-400 md:col-span-2">{errors.initialDate}</p>
-                        )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <DatePicker
+                                name="initialDate"
+                                label="Fecha inicial"
+                                placeholder="hoy"
+                                value={initialDate}
+                                onChange={(event) => {
+                                    const value = event.target.value;
+                                    setInitialDate(value);
+                                    scheduleValidation("initialDate", value);
+                                    if (endDate) {
+                                        scheduleValidation("endDate", endDate);
+                                    }
+                                }}
+                                min={todayString}
+                                required
+                            />
+                            {errors.initialDate && (
+                                <p className="text-sm text-red-400 mt-1">{errors.initialDate}</p>
+                            )}
+                        </div>
 
-                        <DatePicker
-                            name="endDate"
-                            label="Fecha Final"
-                            placeholder="en 6 meses"
-                            value={endDate}
-                            onChange={(event) => {
-                                const value = event.target.value;
-                                setEndDate(value);
-                                scheduleValidation("endDate", value);
-                            }}
-                            min={getNextDayString(initialDate) || todayString}
-                        />
-                        {errors.endDate && (
-                            <p className="text-sm text-red-400 md:col-span-2">{errors.endDate}</p>
-                        )}
+                        <div>
+                            <DatePicker
+                                name="endDate"
+                                label="Fecha Final"
+                                placeholder="en 6 meses"
+                                value={endDate}
+                                onChange={(event) => {
+                                    const value = event.target.value;
+                                    setEndDate(value);
+                                    scheduleValidation("endDate", value);
+                                }}
+                                min={getNextDayString(initialDate) || todayString}
+                            />
+                            {errors.endDate && (
+                                <p className="text-sm text-red-400 mt-1">{errors.endDate}</p>
+                            )}
+                        </div>
                     </div>
 
                     <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Valor de la deuda</label>
+                        <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Valor de la deuda</label>
                         <input
                             onChange={e => {
                                 const formatted = applyFormatToNumber(e.target.value);
@@ -235,7 +243,7 @@ export default function HabitForm(props: {
                             placeholder="$5000"
                             inputMode="numeric"
                             required
-                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         />
                         {errors.debtValue && (
                             <p className="mt-1 text-sm text-red-400">{errors.debtValue}</p>
@@ -243,13 +251,18 @@ export default function HabitForm(props: {
                     </div>
 
                     <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Es deuda acumulativa?:</label>
-                        <input
-                            name="isCumulative"
-                            type="checkbox"
-                            value="yes"
-                            className="h-5 w-5 rounded border border-[var(--input-border-color)] bg-[var(--surface-muted-color)] text-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
-                        />
+                        <label className="flex items-center gap-3 text-[var(--neon-green)] text-sm font-mono uppercase tracking-wider cursor-pointer">
+                            <span>Es deuda acumulativa?:</span>
+                            <input
+                                name="isCumulative"
+                                type="checkbox"
+                                value="yes"
+                                className="h-5 w-5 rounded-sm border-2 border-[var(--neon-green-dark)] bg-[var(--landing-card-bg)] text-[var(--neon-green)] focus:outline-none focus:ring-2 focus:ring-[var(--neon-glow-soft)] accent-[var(--neon-green)] cursor-pointer"
+                            />
+                            <span className="text-xs text-[var(--neon-green-muted)] normal-case tracking-normal">
+                                Sí, acumular deuda por días no cumplidos
+                            </span>
+                        </label>
                     </div>
 
                     <UsernameInput
@@ -271,16 +284,16 @@ export default function HabitForm(props: {
                     <input type="hidden" name="repoName" value={repoName} />
                 </div>
 
-                <div className="flex w-full gap-3 pt-6">
+                <div className="flex flex-col sm:flex-row w-full gap-4 pt-8">
                     <button
                         type="submit"
-                        className="flex-1 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] font-semibold py-2.5 px-4 rounded-lg transition-colors"
+                        className="flex-1 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)]"
                     >
                         Guardar
                     </button>
                     <button
                         type="button"
-                        className="flex-1 bg-[var(--surface-border-color)] hover:bg-[var(--input-border-color)] text-[var(--text-primary-color)] font-semibold py-2.5 px-4 rounded-lg transition-colors"
+                        className="flex-1 bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
                     >
                         Cancelar
                     </button>
