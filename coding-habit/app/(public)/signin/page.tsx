@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NeonInput from '@/components/ui/NeonInput';
 import NeonFormContainer from '@/components/ui/NeonFormContainer';
+import NeonButton from '@/components/ui/NeonButton';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -61,21 +62,13 @@ export default function LoginPage() {
         </div>
 
         <div className="flex flex-col gap-4 pt-8">
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)] disabled:opacity-50"
-          >
+          <NeonButton type="submit" disabled={loading}>
             {loading ? "Ingresando..." : "Entrar"}
-          </button>
+          </NeonButton>
 
-          <button
-            type="button"
-            onClick={() => router.push('/register')}
-            className="w-full bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
-          >
+          <NeonButton variant="secondary" onClick={() => router.push('/register')}>
             Registrar
-          </button>
+          </NeonButton>
         </div>
       </NeonFormContainer>
     </div>

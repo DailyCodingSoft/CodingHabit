@@ -5,6 +5,7 @@ import UsernameInput from "@/components/ui/username-input/UsernameInput";
 import RepoInput from "@/components/ui/repo-input/RepoInput";
 import NeonInput from "@/components/ui/NeonInput";
 import NeonFormContainer from "@/components/ui/NeonFormContainer";
+import NeonButton from "@/components/ui/NeonButton";
 
 export default function HabitForm(props: {
     onSubmit: (event:FormEvent<HTMLFormElement>) => void;
@@ -271,18 +272,12 @@ export default function HabitForm(props: {
             </div>
 
             <div className="flex flex-col sm:flex-row w-full gap-4 pt-8">
-                <button
-                    type="submit"
-                    className="flex-1 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)]"
-                >
+                <NeonButton type="submit">
                     Guardar
-                </button>
-                <button
-                    type="button"
-                    className="flex-1 bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
-                >
+                </NeonButton>
+                <NeonButton variant="secondary">
                     Cancelar
-                </button>
+                </NeonButton>
             </div>
         </NeonFormContainer>
     )
