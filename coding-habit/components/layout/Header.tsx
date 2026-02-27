@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <header className="h-16 bg-[var(--landing-bg)] border-b border-[var(--neon-green-dark)] flex items-center justify-between px-6">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-[var(--landing-bg)]/80 backdrop-blur-md border-b border-[var(--neon-green-dark)] flex items-center justify-between px-6">
       <div className="flex items-center gap-3">
         <span className="text-[var(--neon-green)] font-bold text-xl font-mono">Mi App</span>
       </div>
