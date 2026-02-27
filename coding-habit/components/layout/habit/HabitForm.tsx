@@ -3,6 +3,7 @@ import { formatNumberToCurrency } from "@/utils/helpers";
 import DatePicker from "@/components/ui/date-picker/DatePicker";
 import UsernameInput from "@/components/ui/username-input/UsernameInput";
 import RepoInput from "@/components/ui/repo-input/RepoInput";
+import NeonInput from "@/components/ui/NeonInput";
 
 export default function HabitForm(props: {
     onSubmit: (event:FormEvent<HTMLFormElement>) => void;
@@ -166,10 +167,10 @@ export default function HabitForm(props: {
 
                 <div className="space-y-6">
                     <div>
-                        <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Título del hábito</label>
-                        <input
+                        <NeonInput
                             name="title"
                             type="text"
+                            label="Título del hábito"
                             placeholder="Mi Habito"
                             value={title}
                             onChange={(event) => {
@@ -177,11 +178,7 @@ export default function HabitForm(props: {
                                 setTitle(value);
                                 scheduleValidation("title", value);
                             }}
-                            minLength={3}
-                            maxLength={30}
-                            pattern="[A-Za-z0-9]{3,30}"
                             required
-                            className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600"
                         />
                         {errors.title && (
                             <p className="mt-1 text-sm text-red-400">{errors.title}</p>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import NeonInput from '@/components/ui/NeonInput';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -31,61 +31,58 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)] px-4">
       <form
         onSubmit={login}
-        className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
+        className="relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full max-w-md shadow-[0_0_40px_var(--neon-glow-soft)]"
       >
-        <h1 className="mb-6 text-center text-2xl font-bold">
+        <div className="absolute -top-3 left-8 bg-[var(--landing-bg)] px-3 text-[var(--neon-green)] text-xs font-mono tracking-widest">
+          &gt; LOGIN PROTOCOL
+        </div>
+        
+        <h1 className="text-[var(--neon-green)] text-3xl font-bold tracking-wide text-center mb-8 font-mono uppercase">
           Iniciar sesión
         </h1>
 
         {error && (
-          <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
+          <p className="mb-4 rounded-sm bg-red-900/30 border border-red-500 p-3 text-sm text-red-400 font-mono">
             {error}
           </p>
         )}
 
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">
-            Correo electrónico
-          </label>
-          <input
+        <div className="space-y-6">
+          <NeonInput
+            name="email"
             type="email"
-            required
+            label="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="mb-1 block text-sm font-medium">
-            Contraseña
-          </label>
-          <input
-            type="password"
             required
+          />
+
+          <NeonInput
+            name="password"
+            type="password"
+            label="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            required
           />
         </div>
 
-        <div className="mb-5">
+        <div className="flex flex-col gap-4 pt-8">
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+            className="w-full bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)] disabled:opacity-50"
           >
             {loading ? "Ingresando..." : "Entrar"}
           </button>
-        </div>
 
-        <div className="mb-5">
           <button
-            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-            onClick={() => router.push('/register') }
+            type="button"
+            onClick={() => router.push('/register')}
+            className="w-full bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
           >
             Registrar
           </button>
