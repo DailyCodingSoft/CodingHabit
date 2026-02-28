@@ -3,8 +3,11 @@ import FeatureCard from '@/components/layout/landing/FeatureCard';
 import StatItem from '@/components/layout/landing/StatItem';
 import NeonButton from '@/components/ui/NeonButton';
 import Footer from '@/components/layout/landing/Footer';
+import curiousPhrases from '@/data/curious-phrases.json';
 
 export default function Home() {
+  const randomPhrase = curiousPhrases[Math.floor(Math.random() * curiousPhrases.length)];
+  
   return (
     <div className="landing-scanlines font-mono bg-[var(--landing-bg)] text-white overflow-x-hidden">
 
@@ -16,7 +19,7 @@ export default function Home() {
           </h1>
 
           <p className="text-[var(--neon-green-light)] text-sm md:text-base mb-15 leading-relaxed opacity-90 tracking-wide">
-            ¿Existirán más commits en GitHub que videos de YouTube?
+            {randomPhrase}
           </p>
 
           <div className="mb-8">
