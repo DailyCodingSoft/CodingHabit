@@ -1,58 +1,109 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import  ConfirmModal  from '@/components/ui/alert/alertLoginAndRegister';
+import ConfirmModal from '@/components/ui/alert/alertLoginAndRegister';
 
 type AlertState = {
   message: string;
   type: "error" | "success" | "info";
 };
 
-export default function Register(){
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username,setUsername]= useState('');
-    const [alert, setAlert] = useState(false);
-    const [error, setError] = useState('');
-    const [messageAlert, setMessageAlert] = useState<AlertState|null>(null)
-    const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState('')
-    const router = useRouter();
+const PASSWORD_RULES = {
+  minLength: 8,
+  requireUppercase: true,
+  requireLowercase: true,
+  requireNumber: true,
+  requireSpecialChar: true,
+}
+export default function Register() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [alert, setAlert] = useState(false);
+  const [error, setError] = useState('');
+  const [messageAlert, setMessageAlert] = useState<AlertState | null>(null)
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState('')
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const router = useRouter();
+
+  const validatePassword = (pwd: string) => {
+    const errors: string[] = [];
+    if (pwd.length < PASSWORD_RULES.minLength) {
+      errors.push(`Mínimo ${PASSWORD_RULES.minLength} caracteres`);
+    }
+    if (PASSWORD_RULES.requireUppercase && !/[A-Z]/.test(pwd)) {
+      errors.push('Debe incluir al menos una mayúscula');
+    }
+    if (PASSWORD_RULES.requireLowercase && !/[a-z]/.test(pwd)) {
+      errors.push('Debe incluir al menos una minúscula');
+    }
+    if (PASSWORD_RULES.requireNumber && !/\d/.test(pwd)) {
+      errors.push('Debe incluir al menos un número');
+    }
+    if (PASSWORD_RULES.requireSpecialChar && !/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) {
+      errors.push('Debe incluir al menos un carácter especial');
+    }
+    return errors;
+  };
+
+  useEffect(() => {
+    if (password) {
+      const validationErrors = validatePassword(password);
+    } else {
+      setValidationErrors([]);
+    }
+  }, [password]);
 
 
-    const register = async(e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const emailSend = email.toLowerCase();
-      const res = await fetch('/api/auth/register',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: emailSend, password:password, username:username})
+  const register = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Por favor ingresa un correo válido');
+      return;
+    }
+    if (password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+    setLoading(true);
+    const emailSend = email.toLowerCase();
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: emailSend, password: password, username: username })
+    })
+    const data = await res.json();
+    setLoading(false);
+    setResult(data.Respuesta);
+    if (!res.ok || data.status == '401') {
+      setAlert(true)
+      setMessageAlert({
+        message: data.message,
+        type: "error"
       })
-      const data = await res.json();
-      console.log('Respuesta: ',data)
-      setResult( data.Respuesta);
-      console.log(result)
-      if(!res.ok || data.status == '401'){
-        setAlert(true)
-        setMessageAlert({
-          message: data.message,
-          type: "error"
-        })
-        return
-      }else{
-        setAlert(true)
-        setMessageAlert({
-          message: "Registro Exitoso",
-          type: "success"
-        })
-      }
-    };
-    return(
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <form
+      return
+    } else {
+      setAlert(true)
+      setMessageAlert({
+        message: "Registro Exitoso",
+        type: "success"
+      })
+    }
+  };
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <form
         onSubmit={register}
         className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
       >
@@ -68,7 +119,7 @@ export default function Register(){
 
         <div className="mb-4">
           <label className="mb-1 block text-sm font-medium">
-            Nombre de usuario 
+            Nombre de usuario
           </label>
           <input
             type="username"
@@ -106,21 +157,34 @@ export default function Register(){
         </div>
 
         <div className="mb-6">
+          <label className="mb-1 block text-sm font-medium">
+            Valida la Contraseña
+          </label>
+          <input
+            type="password"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+          />
+        </div>
+
+        <div className="mb-6">
           <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Registrando..." : "Registrar"}
-        </button>
+            type="submit"
+            disabled={loading}
+            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? "Registrando..." : "Registrar"}
+          </button>
         </div>
         <div className="mb-6">
           <button
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          onClick={()=>router.push('/signin')}
-        >
-          Atras
-        </button>
+            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+            onClick={() => router.push('/signin')}
+          >
+            Atras
+          </button>
         </div>
       </form>
       <ConfirmModal
@@ -135,5 +199,5 @@ export default function Register(){
         }}
       />
     </div>
-    );
+  );
 }

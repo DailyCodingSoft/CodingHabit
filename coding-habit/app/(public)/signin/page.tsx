@@ -12,20 +12,32 @@ export default function LoginPage() {
 
   const router = useRouter();
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();   
+    e.preventDefault();
+    setError('');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Por favor ingresa un correo válido');
+      return;   
+    }
+    if (password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres');
+      return;
+    }
+    setLoading(true);
     const emailSend = email.toLowerCase();
-    const res = await fetch('/api/auth/login',{
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: emailSend, password:password }),
+      body: JSON.stringify({ email: emailSend, password: password }),
     })
     const data = await res.json()
-    if(!res.ok){
-      console.error('Error'+data.messaage)
+    setLoading(false);
+    if (!res.ok) {
+      setError(data.message || 'Error al iniciar sesión');
       return
-    }else{
+    } else {
       router.push('/user')
     }
   }
@@ -85,12 +97,12 @@ export default function LoginPage() {
         <div className="mb-5">
           <button
             className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-            onClick={() => router.push('/register') }
+            onClick={() => router.push('/register')}
           >
             Registrar
           </button>
         </div>
-      </form> 
+      </form>
     </div>
   );
 }
