@@ -3,23 +3,43 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
-export default function recoverypassword(){
+export default function recoverypassword() {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState('');
 
-    const recovery = async(e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();   
-        const res = await fetch('/api/sendMail',{
-            method: 'POST',
-            body: JSON.stringify({email: email})
-        })
-        console.log(res)
+    const recovery = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError('');
+        setSuccess('');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('Por favor ingresa un correo válido');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch('/api/sendMail', {
+                method: 'POST',
+                body: JSON.stringify({ email: email })
+            });
+
+            if (res.ok) {
+                setSuccess('Correo enviado. Revisa tu bandeja de entrada.');
+                setEmail('');
+            } else {
+                setError('Error al enviar el correo. Intenta nuevamente.');
+            }
+        } catch {
+            setError('Error de conexión. Intenta nuevamente.');
+        } finally { setLoading(false); }
     }
 
 
     const router = useRouter();
-    return(
+    return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <form
                 onSubmit={recovery}
@@ -30,40 +50,40 @@ export default function recoverypassword(){
                 </h1>
 
                 {error && (
-                <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
-                    {error}
-                </p>
+                    <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
+                        {error}
+                    </p>
                 )}
 
                 <div className="mb-4">
-                <label className="mb-1 block text-sm font-medium">
-                    Nombre de usuario 
-                </label>
-                <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-                />
+                    <label className="mb-1 block text-sm font-medium">
+                        Nombre de usuario
+                    </label>
+                    <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                    />
                 </div>
                 <div className="mb-6">
-        <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-        {loading ? "Registrando..." : "Recuperar"}
-        </button>
-        </div>
-        <div className="mb-6">
-        <button
-        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-        onClick={()=>router.push('/signin')}
-        >
-        Atras
-        </button>
-        </div>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                    >
+                        {loading ? "Registrando..." : "Recuperar"}
+                    </button>
+                </div>
+                <div className="mb-6">
+                    <button
+                        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                        onClick={() => router.push('/signin')}
+                    >
+                        Atras
+                    </button>
+                </div>
             </form>
         </div>
     );
