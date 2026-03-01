@@ -190,7 +190,7 @@ export default function HabitForm(props: {
                             required
                         />
                         {errors.initialDate && (
-                            <p className="text-sm text-red-400 mt-1">{errors.initialDate}</p>
+                            <p className="text-sm text-[var(--color-error)] mt-1">{errors.initialDate}</p>
                         )}
                     </div>
 
@@ -208,7 +208,7 @@ export default function HabitForm(props: {
                             min={getNextDayString(initialDate) || todayString}
                         />
                         {errors.endDate && (
-                            <p className="text-sm text-red-400 mt-1">{errors.endDate}</p>
+                            <p className="text-sm text-[var(--color-error)] mt-1">{errors.endDate}</p>
                         )}
                     </div>
                 </div>
@@ -229,7 +229,7 @@ export default function HabitForm(props: {
                         className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                     {errors.debtValue && (
-                        <p className="mt-1 text-sm text-red-400">{errors.debtValue}</p>
+                        <p className="mt-1 text-sm text-[var(--color-error)]">{errors.debtValue}</p>
                     )}
                 </div>
 

@@ -10,10 +10,10 @@ interface ConfirmModalProps {
 }
 
 const styles: Record<ModalType, string> = {
-  error: "border-red-500 text-red-700",
-  success: "border-green-500 text-green-700",
-  info: "border-blue-500 text-blue-700",
-  warning: "border-yellow-500 text-yellow-700",
+  error: "border-[var(--color-error-border)] text-[var(--color-error)]",
+  success: "border-[var(--color-success-border)] text-[var(--color-success)]",
+  info: "border-[var(--color-info-border)] text-[var(--color-info)]",
+  warning: "border-[var(--color-warning-border)] text-[var(--color-warning)]",
 };
 
 export default function ConfirmModal({
@@ -34,7 +34,7 @@ export default function ConfirmModal({
 
         <button
           onClick={onAccept}
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700"
+          className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-white hover:bg-[var(--color-info-border)]"
         >
           Aceptar
         </button>

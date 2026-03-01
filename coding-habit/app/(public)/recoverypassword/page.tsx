@@ -30,7 +30,7 @@ export default function recoverypassword(){
                 </h1>
 
                 {error && (
-                <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
+                <p className="mb-4 rounded bg-[var(--color-error-bg)] p-2 text-sm text-[var(--color-error)]">
                     {error}
                 </p>
                 )}
@@ -51,14 +51,14 @@ export default function recoverypassword(){
         <button
         type="submit"
         disabled={loading}
-        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+        className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-white hover:bg-[var(--color-info-border)] disabled:opacity-50"
         >
         {loading ? "Registrando..." : "Recuperar"}
         </button>
         </div>
         <div className="mb-6">
         <button
-        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+        className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-white hover:bg-[var(--color-info-border)]"
         onClick={()=>router.push('/signin')}
         >
         Atras

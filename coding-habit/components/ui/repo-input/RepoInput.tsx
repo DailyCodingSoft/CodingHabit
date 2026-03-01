@@ -72,8 +72,8 @@ export default function RepoInput({
         <div>
             <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">{label}</label>
             
-            <div className="mb-2 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-sm">
-                <p className="text-sm text-yellow-200 font-mono">
+            <div className="mb-2 p-3 bg-[var(--color-warning-bg)] border border-[var(--color-warning-border)] rounded-sm">
+                <p className="text-sm text-[var(--color-warning)] font-mono">
                     ⚠️ Solo se soportan repositorios <span className="font-semibold">públicos</span> en esta versión
                 </p>
             </div>
@@ -107,7 +107,7 @@ export default function RepoInput({
                     </div>
 
                     {(inputError || error) && (
-                        <p className="mt-1 text-sm text-red-400">{inputError || error}</p>
+                        <p className="mt-1 text-sm text-[var(--color-error)]">{inputError || error}</p>
                     )}
                 </>
             ) : (
