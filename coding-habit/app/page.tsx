@@ -6,7 +6,7 @@ import Footer from '@/components/layout/landing/Footer';
 
 export default function Home() {
   return (
-    <div className="landing-scanlines font-mono bg-[var(--landing-bg)] text-white overflow-x-hidden">
+    <div className="landing-scanlines font-mono bg-[var(--bg-primary)] text-white overflow-x-hidden">
 
       {/* Hero */}
       <section className="landing-section min-h-screen flex flex-col items-center justify-center px-5 md:px-10 py-15">
@@ -51,7 +51,7 @@ export default function Home() {
       </section>
 
       {/* Stats */}
-      <section className="landing-section px-5 md:px-10 py-20 bg-[var(--landing-bg-alt)] border-y-2 border-[var(--neon-green)]">
+      <section className="landing-section px-5 md:px-10 py-20 bg-[var(--bg-secondary)] border-y-2 border-[var(--neon-green)]">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-15 landing-container">
           {STATS.map((s) => (
             <StatItem key={s.label} value={s.value} label={s.label} />

@@ -1,21 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --primary-light-color: rgb(207, 165, 165);
-  --secondary-light-color: rgb(170, 125, 125);
-  --main-light-bg-color: rgb(138, 138, 138);
-  --darck-text-color: rgb(26, 26, 26);
-  --light-text-color: rgb(243, 243, 243);
-  --surface-color: #1f2937;
-  --surface-muted-color: rgba(55, 65, 81, 0.8);
-  --surface-border-color: #374151;
-  --input-border-color: #4b5563;
-  --primary-color: #2563eb;
-  --primary-hover-color: #1d4ed8;
-  --text-primary-color: #ffffff;
-  --text-muted-color: rgba(255, 255, 255, 0.8);
-
-  /* Landing page neon palette */
+  /* Neon Green Palette - Primary colors for the entire app */
   --neon-green: #00FF41;
   --neon-green-light: #33ff77;
   --neon-green-muted: #AAFFAA;
@@ -28,15 +14,41 @@
   --neon-glow-accent: rgba(51, 255, 119, 0.6);
   --neon-shadow-dark: rgba(26, 77, 26, 0.4);
   --neon-shadow-dark-strong: rgba(26, 77, 26, 0.6);
-  --landing-bg: #0D0D0D;
-  --landing-bg-alt: #0a0a0a;
-  --landing-card-bg: #141414;
+  
+  /* Background colors */
+  --bg-primary: #0D0D0D;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #141414;
+  
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-secondary: var(--neon-green-muted);
+  --text-dark: var(--bg-primary);
+  
+  /* Component colors */
+  --border-color: var(--neon-green-dark);
+  --input-bg: var(--bg-card);
+  --input-border: var(--neon-green-dark);
+  --input-focus: var(--neon-green);
+  
+  /* Button colors */
+  --btn-primary-bg: var(--neon-green);
+  --btn-primary-hover: var(--neon-green-light);
+  --btn-primary-text: var(--bg-primary);
+  
+  /* Error/Success states */
+  --error-bg: rgba(255, 65, 65, 0.1);
+  --error-border: #ff4141;
+  --error-text: #ff6b6b;
+  --success-bg: var(--neon-glow-faint);
+  --success-border: var(--neon-green);
+  --success-text: var(--neon-green-light);
 }
 
 /* Estilos globales base */
 html,
 body {
-  background: var(--main-light-bg-color);
+  background: var(--bg-primary);
   scrollbar-width: none;
 }
 
@@ -46,7 +58,7 @@ body::-webkit-scrollbar {
 
 /* Titulos globales */
 .page-title {
-  color: var(--light-text-color);
+  color: var(--text-primary);
   font-size: clamp(1.75rem, 2.5vw, 2.5rem);
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -115,7 +127,7 @@ body::-webkit-scrollbar {
   letter-spacing: 2px;
   text-transform: uppercase;
   background: var(--neon-green);
-  color: var(--landing-bg);
+  color: var(--bg-primary);
   border: 3px solid var(--neon-green);
   border-radius: 2px;
   box-shadow:
@@ -150,7 +162,7 @@ body::-webkit-scrollbar {
 
 /* Feature cards */
 .feature-card {
-  background: var(--landing-card-bg);
+  background: var(--bg-card);
   border: 2px solid var(--neon-green);
   border-left-width: 4px;
   border-right-width: 4px;
@@ -231,7 +243,7 @@ body::-webkit-scrollbar {
 
 /* CTA box */
 .cta-box {
-  background: var(--landing-card-bg);
+  background: var(--bg-card);
   border: 3px solid var(--neon-green);
   border-radius: 2px;
   position: relative;
@@ -246,7 +258,7 @@ body::-webkit-scrollbar {
   position: absolute;
   top: -12px;
   left: 40px;
-  background: var(--landing-bg);
+  background: var(--bg-primary);
   padding: 0 15px;
   font-size: 11px;
   color: var(--neon-green);

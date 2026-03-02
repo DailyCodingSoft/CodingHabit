@@ -51,23 +51,23 @@ export default function Register(){
       }
     };
     return(
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-primary)] font-mono">
         <form
         onSubmit={register}
-        className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
+        className="w-full max-w-md rounded border-2 border-[var(--neon-green-dark)] bg-[var(--bg-card)] p-8 shadow-[0_0_20px_var(--neon-glow-faint)]"
       >
-        <h1 className="mb-6 text-center text-2xl font-bold">
-          Registrar Usario
+        <h1 className="mb-6 text-center text-2xl font-bold text-[var(--neon-green)] uppercase tracking-wider">
+          Registrar Usuario
         </h1>
 
         {error && (
-          <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
+          <p className="mb-4 rounded border border-[var(--error-border)] bg-[var(--error-bg)] p-2 text-sm text-[var(--error-text)]">
             {error}
           </p>
         )}
 
         <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-[var(--text-secondary)]">
             Nombre de usuario 
           </label>
           <input
@@ -75,12 +75,12 @@ export default function Register(){
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full rounded border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--input-focus)] focus:shadow-[0_0_10px_var(--neon-glow-faint)]"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-[var(--text-secondary)]">
             Correo electrónico
           </label>
           <input
@@ -88,12 +88,12 @@ export default function Register(){
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full rounded border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--input-focus)] focus:shadow-[0_0_10px_var(--neon-glow-faint)]"
           />
         </div>
 
         <div className="mb-6">
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-[var(--text-secondary)]">
             Contraseña
           </label>
           <input
@@ -101,7 +101,7 @@ export default function Register(){
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full rounded border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--input-focus)] focus:shadow-[0_0_10px_var(--neon-glow-faint)]"
           />
         </div>
 
@@ -109,14 +109,15 @@ export default function Register(){
           <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          className="w-full rounded bg-[var(--btn-primary-bg)] py-2 font-semibold text-[var(--btn-primary-text)] hover:bg-[var(--btn-primary-hover)] disabled:opacity-50 transition-all"
         >
           {loading ? "Registrando..." : "Registrar"}
         </button>
         </div>
         <div className="mb-6">
           <button
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          type="button"
+          className="w-full rounded border border-[var(--neon-green-dark)] bg-transparent py-2 font-semibold text-[var(--neon-green)] hover:bg-[var(--neon-glow-faint)] transition-all"
           onClick={()=>router.push('/signin')}
         >
           Atras
