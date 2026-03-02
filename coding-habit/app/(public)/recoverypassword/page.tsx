@@ -2,12 +2,23 @@
 export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import ConfirmModal from '@/components/ui/alert/alertLoginAndRegister';
+
+type AlertState = {
+  message: string;
+  type: "error" | "success" | "info";
+};
 
 export default function recoverypassword() {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
+    const [alert, setAlert] = useState(false);
+    const [messageAlert, setMessageAlert] = useState<AlertState | null>(null)
+  
+
+
 
     const recovery = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,7 +32,7 @@ export default function recoverypassword() {
 
         setLoading(true);
         try {
-            const res = await fetch('/api/sendMail', {
+            const res = await fetch('/api/auth/sendMail', {
                 method: 'POST',
                 body: JSON.stringify({ email: email })
             });
@@ -29,12 +40,18 @@ export default function recoverypassword() {
             if (res.ok) {
                 setSuccess('Correo enviado. Revisa tu bandeja de entrada.');
                 setEmail('');
+                setMessageAlert({ message: "Correo enviado con éxito", type: "success" });
             } else {
-                setError('Error al enviar el correo. Intenta nuevamente.');
+                setError('Error al enviar el correo, valida tu coreo e intenta nuevamente.');
+                setMessageAlert({ message: "Error al enviar el correo", type: "error" });
             }
         } catch {
             setError('Error de conexión. Intenta nuevamente.');
-        } finally { setLoading(false); }
+        } finally { 
+            setLoading(false);
+            setAlert(true);
+             router.push('/signin');
+        }
     }
 
 
@@ -73,7 +90,7 @@ export default function recoverypassword() {
                         disabled={loading}
                         className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
                     >
-                        {loading ? "Registrando..." : "Recuperar"}
+                        {loading ? "Enviando Correo..." : "Recuperar"}
                     </button>
                 </div>
                 <div className="mb-6">
@@ -85,6 +102,17 @@ export default function recoverypassword() {
                     </button>
                 </div>
             </form>
+            <ConfirmModal
+                    open={alert}
+                    message={messageAlert?.message ?? ""}
+                    type={messageAlert?.type}
+                    onAccept={() => {
+                      setAlert(false);
+                      if (messageAlert?.type === "success") {
+                        router.push("/signin");
+                      }
+                    }}
+                  />
         </div>
     );
 }
