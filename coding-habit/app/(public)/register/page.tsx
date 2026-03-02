@@ -51,7 +51,7 @@ export default function Register() {
 
   useEffect(() => {
     if (password) {
-      const validationErrors = validatePassword(password);
+      setValidationErrors(validatePassword(password));
     } else {
       setValidationErrors([]);
     }
@@ -154,6 +154,25 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
           />
+          {password && (
+            <div className="mt-2 space-y-1">
+              <p className={`text-xs ${password.length >= 8 ? 'text-green-600 line-through' : 'text-red-600'}`}>
+                • Mínimo 8 caracteres
+              </p>
+              <p className={`text-xs ${/[A-Z]/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
+                • Al menos una mayúscula
+              </p>
+              <p className={`text-xs ${/[a-z]/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
+                • Al menos una minúscula
+              </p>
+              <p className={`text-xs ${/\d/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
+                • Al menos un número
+              </p>
+              <p className={`text-xs ${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
+                • Al menos un carácter especial
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mb-6">
@@ -167,6 +186,11 @@ export default function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
           />
+          {confirmPassword && (
+            <p className={`mt-2 text-xs ${password === confirmPassword ? 'text-green-600' : 'text-red-600'}`}>
+              {password === confirmPassword ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden'}
+            </p>
+          )}
         </div>
 
         <div className="mb-6">

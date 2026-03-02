@@ -17,7 +17,7 @@ export default function LoginPage() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Por favor ingresa un correo válido');
-      return;   
+      return;
     }
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres');
@@ -82,6 +82,13 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <button
+            type="button"
+            onClick={() => router.push('/recoverypassword')}
+            className="mt-2 text-sm text-blue-600 hover:underline"
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
         </div>
 
         <div className="mb-5">
