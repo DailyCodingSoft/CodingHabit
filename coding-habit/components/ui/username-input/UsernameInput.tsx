@@ -98,7 +98,7 @@ export default function UsernameInput({
             </div>
 
             {(inputError || error) && (
-                <p className="mt-1 text-sm text-red-400">{inputError || error}</p>
+                <p className="mt-1 text-sm text-[var(--color-error)]">{inputError || error}</p>
             )}
 
             <div className="mt-3 flex flex-wrap gap-2">
@@ -115,7 +115,7 @@ export default function UsernameInput({
                         <button
                             type="button"
                             onClick={() => removeUsername(username)}
-                            className="text-[var(--neon-green-muted)] hover:text-red-400 font-bold"
+                            className="text-[var(--neon-green-muted)] hover:text-[var(--color-error)] font-bold"
                             aria-label={`Remover ${username}`}
                         >
                             ×

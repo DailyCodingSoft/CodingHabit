@@ -3,6 +3,9 @@ import { formatNumberToCurrency } from "@/utils/helpers";
 import DatePicker from "@/components/ui/date-picker/DatePicker";
 import UsernameInput from "@/components/ui/username-input/UsernameInput";
 import RepoInput from "@/components/ui/repo-input/RepoInput";
+import NeonInput from "@/components/ui/NeonInput";
+import NeonFormContainer from "@/components/ui/NeonFormContainer";
+import NeonButton from "@/components/ui/NeonButton";
 
 export default function HabitForm(props: {
     onSubmit: (event:FormEvent<HTMLFormElement>) => void;
@@ -151,154 +154,127 @@ export default function HabitForm(props: {
     }
 
     return (
-        <div className="flex justify-center px-4">
-            <form
-                onSubmit={handleSubmit}
-                className="relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full max-w-2xl shadow-[0_0_40px_var(--neon-glow-soft)]"
-            >
-                <div className="absolute -top-3 left-8 bg-[var(--landing-bg)] px-3 text-[var(--neon-green)] text-xs font-mono tracking-widest">
-                    &gt; NEW HABIT PROTOCOL
-                </div>
-                
-                <h2 className="text-[var(--neon-green)] text-3xl font-bold tracking-wide text-center mb-8 font-mono uppercase">
-                    Crear Hábito
-                </h2>
+        <NeonFormContainer protocol="NEW HABIT PROTOCOL" title="Crear Hábito" onSubmit={handleSubmit} maxWidth="2xl">
+            <div className="space-y-6">
+                <NeonInput
+                    name="title"
+                    type="text"
+                    label="Título del hábito"
+                    placeholder="Mi Habito"
+                    value={title}
+                    onChange={(event) => {
+                        const value = event.target.value;
+                        setTitle(value);
+                        scheduleValidation("title", value);
+                    }}
+                    required
+                    error={errors.title}
+                />
 
-                <div className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Título del hábito</label>
-                        <input
-                            name="title"
-                            type="text"
-                            placeholder="Mi Habito"
-                            value={title}
+                        <DatePicker
+                            name="initialDate"
+                            label="Fecha inicial"
+                            placeholder="hoy"
+                            value={initialDate}
                             onChange={(event) => {
                                 const value = event.target.value;
-                                setTitle(value);
-                                scheduleValidation("title", value);
+                                setInitialDate(value);
+                                scheduleValidation("initialDate", value);
+                                if (endDate) {
+                                    scheduleValidation("endDate", endDate);
+                                }
                             }}
-                            minLength={3}
-                            maxLength={30}
-                            pattern="[A-Za-z0-9]{3,30}"
+                            min={todayString}
                             required
-                            className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600"
                         />
-                        {errors.title && (
-                            <p className="mt-1 text-sm text-red-400">{errors.title}</p>
+                        {errors.initialDate && (
+                            <p className="text-sm text-[var(--color-error)] mt-1">{errors.initialDate}</p>
                         )}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <DatePicker
-                                name="initialDate"
-                                label="Fecha inicial"
-                                placeholder="hoy"
-                                value={initialDate}
-                                onChange={(event) => {
-                                    const value = event.target.value;
-                                    setInitialDate(value);
-                                    scheduleValidation("initialDate", value);
-                                    if (endDate) {
-                                        scheduleValidation("endDate", endDate);
-                                    }
-                                }}
-                                min={todayString}
-                                required
-                            />
-                            {errors.initialDate && (
-                                <p className="text-sm text-red-400 mt-1">{errors.initialDate}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <DatePicker
-                                name="endDate"
-                                label="Fecha Final"
-                                placeholder="en 6 meses"
-                                value={endDate}
-                                onChange={(event) => {
-                                    const value = event.target.value;
-                                    setEndDate(value);
-                                    scheduleValidation("endDate", value);
-                                }}
-                                min={getNextDayString(initialDate) || todayString}
-                            />
-                            {errors.endDate && (
-                                <p className="text-sm text-red-400 mt-1">{errors.endDate}</p>
-                            )}
-                        </div>
-                    </div>
-
                     <div>
-                        <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Valor de la deuda</label>
+                        <DatePicker
+                            name="endDate"
+                            label="Fecha Final"
+                            placeholder="en 6 meses"
+                            value={endDate}
+                            onChange={(event) => {
+                                const value = event.target.value;
+                                setEndDate(value);
+                                scheduleValidation("endDate", value);
+                            }}
+                            min={getNextDayString(initialDate) || todayString}
+                        />
+                        {errors.endDate && (
+                            <p className="text-sm text-[var(--color-error)] mt-1">{errors.endDate}</p>
+                        )}
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Valor de la deuda</label>
+                    <input
+                        onChange={e => {
+                            const formatted = applyFormatToNumber(e.target.value);
+                            scheduleValidation("debtValue", formatted);
+                        }}
+                        value={debtInput}
+                        name="debtValue"
+                        type="text"
+                        placeholder="$5000"
+                        inputMode="numeric"
+                        required
+                        className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    {errors.debtValue && (
+                        <p className="mt-1 text-sm text-[var(--color-error)]">{errors.debtValue}</p>
+                    )}
+                </div>
+
+                <div>
+                    <label className="flex items-center gap-3 text-[var(--neon-green)] text-sm font-mono uppercase tracking-wider cursor-pointer">
+                        <span>Es deuda acumulativa?:</span>
                         <input
-                            onChange={e => {
-                                const formatted = applyFormatToNumber(e.target.value);
-                                scheduleValidation("debtValue", formatted);
-                            }}
-                            value={debtInput}
-                            name="debtValue"
-                            type="text"
-                            placeholder="$5000"
-                            inputMode="numeric"
-                            required
-                            className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            name="isCumulative"
+                            type="checkbox"
+                            value="yes"
+                            className="h-5 w-5 rounded-sm border-2 border-[var(--neon-green-dark)] bg-[var(--landing-card-bg)] text-[var(--neon-green)] focus:outline-none focus:ring-2 focus:ring-[var(--neon-glow-soft)] accent-[var(--neon-green)] cursor-pointer"
                         />
-                        {errors.debtValue && (
-                            <p className="mt-1 text-sm text-red-400">{errors.debtValue}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="flex items-center gap-3 text-[var(--neon-green)] text-sm font-mono uppercase tracking-wider cursor-pointer">
-                            <span>Es deuda acumulativa?:</span>
-                            <input
-                                name="isCumulative"
-                                type="checkbox"
-                                value="yes"
-                                className="h-5 w-5 rounded-sm border-2 border-[var(--neon-green-dark)] bg-[var(--landing-card-bg)] text-[var(--neon-green)] focus:outline-none focus:ring-2 focus:ring-[var(--neon-glow-soft)] accent-[var(--neon-green)] cursor-pointer"
-                            />
-                            <span className="text-xs text-[var(--neon-green-muted)] normal-case tracking-normal">
-                                Sí, acumular deuda por días no cumplidos
-                            </span>
-                        </label>
-                    </div>
-
-                    <UsernameInput
-                        usernames={participants}
-                        onUsernamesChange={setParticipants}
-                        creatorUsername={props.creatorUsername}
-                        label="Participantes del hábito"
-                        placeholder="Ingresa username de GitHub"
-                    />
-                    <input type="hidden" name="participants" value={JSON.stringify(participants)} />
-
-                    <RepoInput
-                        owner={repoOwner}
-                        repo={repoName}
-                        onRepoChange={handleRepoChange}
-                        error={errors.repo}
-                    />
-                    <input type="hidden" name="repoOwner" value={repoOwner} />
-                    <input type="hidden" name="repoName" value={repoName} />
+                        <span className="text-xs text-[var(--neon-green-muted)] normal-case tracking-normal">
+                            Sí, acumular deuda por días no cumplidos
+                        </span>
+                    </label>
                 </div>
 
-                <div className="flex flex-col sm:flex-row w-full gap-4 pt-8">
-                    <button
-                        type="submit"
-                        className="flex-1 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm shadow-[0_0_20px_var(--neon-glow-soft)] hover:shadow-[0_0_30px_var(--neon-glow-mid)]"
-                    >
-                        Guardar
-                    </button>
-                    <button
-                        type="button"
-                        className="flex-1 bg-transparent border-2 border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] font-bold py-3 px-6 rounded-sm transition-all font-mono uppercase tracking-widest text-sm hover:shadow-[0_0_15px_var(--neon-glow-subtle)]"
-                    >
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
+                <UsernameInput
+                    usernames={participants}
+                    onUsernamesChange={setParticipants}
+                    creatorUsername={props.creatorUsername}
+                    label="Participantes del hábito"
+                    placeholder="Ingresa username de GitHub"
+                />
+                <input type="hidden" name="participants" value={JSON.stringify(participants)} />
+
+                <RepoInput
+                    owner={repoOwner}
+                    repo={repoName}
+                    onRepoChange={handleRepoChange}
+                    error={errors.repo}
+                />
+                <input type="hidden" name="repoOwner" value={repoOwner} />
+                <input type="hidden" name="repoName" value={repoName} />
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full gap-4 pt-8">
+                <NeonButton type="submit">
+                    Guardar
+                </NeonButton>
+                <NeonButton variant="secondary">
+                    Cancelar
+                </NeonButton>
+            </div>
+        </NeonFormContainer>
     )
 }
