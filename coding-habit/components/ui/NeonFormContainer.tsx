@@ -13,7 +13,7 @@ export default function NeonFormContainer({ protocol, title, children, onSubmit,
     <div className="flex justify-center px-4">
       <form
         onSubmit={onSubmit}
-        className={`relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full ${widthClass} shadow-[0_0_40px_var(--neon-glow-soft)]`}
+        className={`relative bg-[var(--landing-bg)] border-2 border-[var(--neon-green)] rounded-sm p-8 w-full ${widthClass} shadow-[var(--shadow-neon-2xl)]`}
       >
         <div className="absolute -top-3 left-8 bg-[var(--landing-bg)] px-3 text-[var(--neon-green)] text-xs font-mono tracking-widest">
           &gt; {protocol}
