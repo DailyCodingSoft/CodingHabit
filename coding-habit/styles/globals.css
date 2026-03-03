@@ -46,6 +46,10 @@
   --color-info-bg: #eff6ff;
   --color-info-border: #3b82f6;
 
+  /* Transition duration variables */
+  --transition-fast: 200ms;
+  --transition-normal: 300ms;
+
   /* Shadow variables */
   /* Neon glow shadows */
   --shadow-neon-sm: 0 0 10px var(--neon-glow-soft);
@@ -164,7 +168,7 @@ body::-webkit-scrollbar {
   border: 3px solid var(--neon-green);
   border-radius: 2px;
   box-shadow: var(--shadow-btn-hero);
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal) ease;
 }
 
 .btn-hero:hover {
@@ -197,7 +201,7 @@ body::-webkit-scrollbar {
   border-right-color: var(--neon-green-light);
   border-radius: 2px;
   position: relative;
-  transition: all 0.4s ease;
+  transition: all var(--transition-normal) ease;
   box-shadow: var(--shadow-feature-card);
 }
 
@@ -286,7 +290,7 @@ body::-webkit-scrollbar {
 .neon-link {
   color: var(--neon-green-light);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal) ease;
   border-bottom: 1px solid transparent;
 }
 
