@@ -45,6 +45,41 @@
   --color-info: #60a5fa;
   --color-info-bg: #eff6ff;
   --color-info-border: #3b82f6;
+
+  /* Transition duration variables */
+  --transition-fast: 200ms;
+  --transition-normal: 300ms;
+
+  /* Shadow variables */
+  /* Neon glow shadows */
+  --shadow-neon-sm: 0 0 10px var(--neon-glow-soft);
+  --shadow-neon-md: 0 0 15px var(--neon-glow-soft);
+  --shadow-neon-lg: 0 0 20px var(--neon-glow-soft);
+  --shadow-neon-xl: 0 0 30px var(--neon-glow-mid);
+  --shadow-neon-2xl: 0 0 40px var(--neon-glow-soft);
+  --shadow-neon-subtle: 0 0 15px var(--neon-glow-subtle);
+
+  /* Standard elevation shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Feature card shadows */
+  --shadow-feature-card: 0 0 20px var(--neon-glow-subtle), 0 8px 0 var(--neon-green-dark), 0 8px 40px var(--neon-shadow-dark);
+  --shadow-feature-card-hover: 0 0 40px var(--neon-glow-soft), 0 18px 0 var(--neon-green-dark), 0 18px 60px var(--neon-shadow-dark-strong);
+
+  /* Button depth shadows */
+  --shadow-btn-hero: 0 8px 0 var(--neon-green-dark), 0 8px 40px var(--neon-glow-mid);
+  --shadow-btn-hero-hover: 0 4px 0 var(--neon-green-light), 0 0 50px var(--neon-glow-strong);
+  --shadow-btn-hero-active: 0 0 0 var(--neon-green-dark), 0 0 40px var(--neon-glow-mid);
+
+  /* Stat item shadow */
+  --shadow-stat-item: 0 0 20px var(--neon-glow-faint), inset 0 0 30px rgba(0, 255, 65, 0.05);
+
+  /* CTA box shadow */
+  --shadow-cta-box: 0 0 40px var(--neon-glow-soft), 0 12px 0 var(--neon-green-dark), 0 12px 50px rgba(26, 77, 26, 0.5);
 }
 
 /* Estilos globales base */
@@ -132,26 +167,20 @@ body::-webkit-scrollbar {
   color: var(--landing-bg);
   border: 3px solid var(--neon-green);
   border-radius: 2px;
-  box-shadow:
-    0 8px 0 var(--neon-green-dark),
-    0 8px 40px var(--neon-glow-mid);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-btn-hero);
+  transition: all var(--transition-normal) ease;
 }
 
 .btn-hero:hover {
   background: var(--neon-green-dark);
   color: var(--neon-green);
   transform: translateY(4px);
-  box-shadow:
-    0 4px 0 var(--neon-green-light),
-    0 0 50px var(--neon-glow-strong);
+  box-shadow: var(--shadow-btn-hero-hover);
 }
 
 .btn-hero:active {
   transform: translateY(8px);
-  box-shadow:
-    0 0 0 var(--neon-green-dark),
-    0 0 40px var(--neon-glow-mid);
+  box-shadow: var(--shadow-btn-hero-active);
 }
 
 /* Section heading glow */
@@ -172,19 +201,13 @@ body::-webkit-scrollbar {
   border-right-color: var(--neon-green-light);
   border-radius: 2px;
   position: relative;
-  transition: all 0.4s ease;
-  box-shadow:
-    0 0 20px var(--neon-glow-subtle),
-    0 8px 0 var(--neon-green-dark),
-    0 8px 40px var(--neon-shadow-dark);
+  transition: all var(--transition-normal) ease;
+  box-shadow: var(--shadow-feature-card);
 }
 
 .feature-card:hover {
   transform: translateY(-10px);
-  box-shadow:
-    0 0 40px var(--neon-glow-soft),
-    0 18px 0 var(--neon-green-dark),
-    0 18px 60px var(--neon-shadow-dark-strong);
+  box-shadow: var(--shadow-feature-card-hover);
   border-color: var(--neon-green-light);
 }
 
@@ -196,7 +219,7 @@ body::-webkit-scrollbar {
   right: 0;
   height: 4px;
   background: var(--neon-green);
-  box-shadow: 0 0 15px var(--neon-glow-mid);
+  box-shadow: var(--shadow-neon-md);
 }
 
 .feature-card::after {
@@ -224,9 +247,7 @@ body::-webkit-scrollbar {
   background: rgba(0, 255, 65, 0.05);
   border: 1px solid var(--neon-green-dark);
   border-left: 3px solid var(--neon-green);
-  box-shadow:
-    0 0 20px var(--neon-glow-faint),
-    inset 0 0 30px rgba(0, 255, 65, 0.05);
+  box-shadow: var(--shadow-stat-item);
 }
 
 .stat-number {
@@ -249,10 +270,7 @@ body::-webkit-scrollbar {
   border: 3px solid var(--neon-green);
   border-radius: 2px;
   position: relative;
-  box-shadow:
-    0 0 40px var(--neon-glow-soft),
-    0 12px 0 var(--neon-green-dark),
-    0 12px 50px rgba(26, 77, 26, 0.5);
+  box-shadow: var(--shadow-cta-box);
 }
 
 .cta-box::before {
@@ -272,7 +290,7 @@ body::-webkit-scrollbar {
 .neon-link {
   color: var(--neon-green-light);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal) ease;
   border-bottom: 1px solid transparent;
 }
 
@@ -291,5 +309,5 @@ body::-webkit-scrollbar {
   right: 30%;
   height: 1px;
   background: var(--neon-green-light);
-  box-shadow: 0 0 10px var(--neon-glow-accent);
+  box-shadow: var(--shadow-neon-sm);
 }

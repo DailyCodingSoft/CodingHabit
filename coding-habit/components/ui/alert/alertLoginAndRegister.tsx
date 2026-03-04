@@ -28,7 +28,7 @@ export default function ConfirmModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <h1>Sapoperrr</h1>
       <div
-        className={`w-full max-w-sm rounded-lg border bg-white p-6 shadow-lg ${styles[type]}`}
+        className={`w-full max-w-sm rounded-lg border bg-white p-6 shadow-[var(--shadow-lg)] ${styles[type]}`}
       >
         <p className="mb-6 text-center text-sm">{message}</p>
 

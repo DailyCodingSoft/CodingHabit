@@ -85,13 +85,13 @@ export default function UsernameInput({
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
                     disabled={!canAddMore}
-                    className="flex-1 p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[0_0_10px_var(--neon-glow-soft)] font-mono placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button
                     type="button"
                     onClick={addUsername}
                     disabled={!canAddMore}
-                    className="px-4 py-2 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] rounded-sm transition-all font-mono font-bold uppercase text-sm shadow-[0_0_15px_var(--neon-glow-soft)] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] rounded-sm transition-all font-mono font-bold uppercase text-sm shadow-[var(--shadow-neon-md)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Agregar
                 </button>

@@ -92,7 +92,8 @@ export default function JoinPage() {
                     <button
                         type="submit"
                         disabled={isValidating || accessCode.length < 9}
-                        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition duration-200"
+                        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition"
+                        style={{ transitionDuration: 'var(--transition-fast)' }}
                     >
                         {isValidating ? 'Validating...' : 'Join Habit'}
                     </button>
