@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import NeonInput from '@/components/ui/NeonInput';
+import NeonFormContainer from '@/components/ui/NeonFormContainer';
+import NeonButton from '@/components/ui/NeonButton';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -43,44 +46,27 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form
-        onSubmit={login}
-        className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
-      >
-        <h1 className="mb-6 text-center text-2xl font-bold">
-          Iniciar sesión
-        </h1>
+    <div className="flex min-h-screen items-center justify-center bg-[var(--landing-bg)]">
+      <NeonFormContainer protocol="LOGIN PROTOCOL" title="Iniciar sesión" onSubmit={login}>
+        {error && <ErrorMessage message={error} />}
 
-        {error && (
-          <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
-            {error}
-          </p>
-        )}
-
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">
-            Correo electrónico
-          </label>
-          <input
+        <div className="space-y-6">
+          <NeonInput
+            name="email"
             type="email"
-            required
+            label="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="mb-1 block text-sm font-medium">
-            Contraseña
-          </label>
-          <input
-            type="password"
             required
+          />
+
+          <NeonInput
+            name="password"
+            type="password"
+            label="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            required
           />
           <button
             type="button"
@@ -91,25 +77,16 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="mb-5">
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          >
+        <div className="flex flex-col gap-4 pt-8">
+          <NeonButton type="submit" disabled={loading}>
             {loading ? "Ingresando..." : "Entrar"}
-          </button>
-        </div>
+          </NeonButton>
 
-        <div className="mb-5">
-          <button
-            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-            onClick={() => router.push('/register')}
-          >
+          <NeonButton variant="secondary" onClick={() => router.push('/register')}>
             Registrar
-          </button>
+          </NeonButton>
         </div>
-      </form>
+      </NeonFormContainer>
     </div>
   );
 }

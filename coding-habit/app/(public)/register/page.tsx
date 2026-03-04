@@ -2,7 +2,11 @@
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import ConfirmModal from '@/components/ui/alert/alertLoginAndRegister';
+import  ConfirmModal  from '@/components/ui/alert/alertLoginAndRegister';
+import NeonInput from '@/components/ui/NeonInput';
+import NeonFormContainer from '@/components/ui/NeonFormContainer';
+import NeonButton from '@/components/ui/NeonButton';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
 type AlertState = {
   message: string;
@@ -103,125 +107,63 @@ export default function Register() {
   };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form
-        onSubmit={register}
-        className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
-      >
+      <NeonFormContainer protocol="REGISTER PROTOCOL" title="Registrar Usuario" onSubmit={register}>
+          {error && <ErrorMessage message={error} />}
+          
         <h1 className="mb-6 text-center text-2xl font-bold">
           Registrar Usario
         </h1>
 
-        {error && (
-          <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
-            {error}
-          </p>
-        )}
+          <div className="space-y-6">
+            <NeonInput
+              name="username"
+              type="text"
+              label="Nombre de usuario"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
 
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">
-            Nombre de usuario
-          </label>
-          <input
-            type="username"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
+            <NeonInput
+              name="email"
+              type="email"
+              label="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">
-            Correo electrónico
-          </label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
+            <NeonInput
+              name="password"
+              type="password"
+              label="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="mb-6">
-          <label className="mb-1 block text-sm font-medium">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-          {password && (
-            <div className="mt-2 space-y-1">
-              <p className={`text-xs ${password.length >= 8 ? 'text-green-600 line-through' : 'text-red-600'}`}>
-                • Mínimo 8 caracteres
-              </p>
-              <p className={`text-xs ${/[A-Z]/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
-                • Al menos una mayúscula
-              </p>
-              <p className={`text-xs ${/[a-z]/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
-                • Al menos una minúscula
-              </p>
-              <p className={`text-xs ${/\d/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
-                • Al menos un número
-              </p>
-              <p className={`text-xs ${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-600 line-through' : 'text-red-600'}`}>
-                • Al menos un carácter especial
-              </p>
-            </div>
-          )}
-        </div>
+          <div className="flex flex-col gap-4 pt-8">
+            <NeonButton type="submit" disabled={loading}>
+              {loading ? "Registrando..." : "Registrar"}
+            </NeonButton>
 
-        <div className="mb-6">
-          <label className="mb-1 block text-sm font-medium">
-            Valida la Contraseña
-          </label>
-          <input
-            type="password"
-            required
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-          {confirmPassword && (
-            <p className={`mt-2 text-xs ${password === confirmPassword ? 'text-green-600' : 'text-red-600'}`}>
-              {password === confirmPassword ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden'}
-            </p>
-          )}
-        </div>
-
-        <div className="mb-6">
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? "Registrando..." : "Registrar"}
-          </button>
-        </div>
-        <div className="mb-6">
-          <button
-            className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-            onClick={() => router.push('/signin')}
-          >
-            Atras
-          </button>
-        </div>
-      </form>
-      <ConfirmModal
-        open={alert}
-        message={messageAlert?.message ?? ""}
-        type={messageAlert?.type}
-        onAccept={() => {
-          setAlert(false);
-          if (messageAlert?.type === "success") {
-            router.push("/signin");
-          }
-        }}
-      />
-    </div>
-  );
+            <NeonButton variant="secondary" onClick={()=>router.push('/signin')}>
+              Atrás
+            </NeonButton>
+          </div>
+        </NeonFormContainer>
+        <ConfirmModal
+          open={alert}
+          message={messageAlert?.message ?? ""}
+          type={messageAlert?.type}
+          onAccept={() => {
+            setAlert(false);
+            if (messageAlert?.type === "success") {
+              router.push("/signin");
+            }
+          }}
+        />
+      </div>
+    );
 }

@@ -60,16 +60,16 @@ export default function recoverypassword() {
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <form
                 onSubmit={recovery}
-                className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
+                className="w-full max-w-md rounded-lg bg-white p-8 shadow-[var(--shadow-md)]"
             >
                 <h1 className="mb-6 text-center text-2xl font-bold">
                     Recuperar Contraseña
                 </h1>
 
                 {error && (
-                    <p className="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
-                        {error}
-                    </p>
+                <p className="mb-4 rounded bg-[var(--color-error-bg)] p-2 text-sm text-[var(--color-error)]">
+                    {error}
+                </p>
                 )}
 
                 <div className="mb-4">
@@ -85,22 +85,22 @@ export default function recoverypassword() {
                     />
                 </div>
                 <div className="mb-6">
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-                    >
-                        {loading ? "Enviando Correo..." : "Recuperar"}
-                    </button>
-                </div>
-                <div className="mb-6">
-                    <button
-                        className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-                        onClick={() => router.push('/signin')}
-                    >
-                        Atras
-                    </button>
-                </div>
+        <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-white hover:bg-[var(--color-info-border)] disabled:opacity-50"
+        >
+        {loading ? "Registrando..." : "Recuperar"}
+        </button>
+        </div>
+        <div className="mb-6">
+        <button
+        className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-white hover:bg-[var(--color-info-border)]"
+        onClick={()=>router.push('/signin')}
+        >
+        Atras
+        </button>
+        </div>
             </form>
             <ConfirmModal
                     open={alert}

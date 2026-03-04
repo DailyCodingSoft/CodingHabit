@@ -3,6 +3,9 @@ import { formatNumberToCurrency } from "@/utils/helpers";
 import DatePicker from "@/components/ui/date-picker/DatePicker";
 import UsernameInput from "@/components/ui/username-input/UsernameInput";
 import RepoInput from "@/components/ui/repo-input/RepoInput";
+import NeonInput from "@/components/ui/NeonInput";
+import NeonFormContainer from "@/components/ui/NeonFormContainer";
+import NeonButton from "@/components/ui/NeonButton";
 
 export default function HabitForm(props: {
     onSubmit: (event:FormEvent<HTMLFormElement>) => void;
@@ -151,40 +154,25 @@ export default function HabitForm(props: {
     }
 
     return (
-        <div className="flex justify-center">
-            <form
-                onSubmit={handleSubmit}
-                className="bg-[var(--surface-color)] border border-[var(--surface-border-color)] rounded-xl p-6 w-full max-w-xl shadow-2xl"
-            >
-                <h2 className="text-[var(--text-primary-color)] text-2xl font-semibold tracking-tight text-center mb-6">
-                    Crear hábito
-                </h2>
+        <NeonFormContainer protocol="NEW HABIT PROTOCOL" title="Crear Hábito" onSubmit={handleSubmit} maxWidth="2xl">
+            <div className="space-y-6">
+                <NeonInput
+                    name="title"
+                    type="text"
+                    label="Título del hábito"
+                    placeholder="Mi Habito"
+                    value={title}
+                    onChange={(event) => {
+                        const value = event.target.value;
+                        setTitle(value);
+                        scheduleValidation("title", value);
+                    }}
+                    required
+                    error={errors.title}
+                />
 
-                <div className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Titulo del habito</label>
-                        <input
-                            name="title"
-                            type="text"
-                            placeholder="Mi Habito"
-                            value={title}
-                            onChange={(event) => {
-                                const value = event.target.value;
-                                setTitle(value);
-                                scheduleValidation("title", value);
-                            }}
-                            minLength={3}
-                            maxLength={30}
-                            pattern="[A-Za-z0-9]{3,30}"
-                            required
-                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
-                        />
-                        {errors.title && (
-                            <p className="mt-1 text-sm text-red-400">{errors.title}</p>
-                        )}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <DatePicker
                             name="initialDate"
                             label="Fecha inicial"
@@ -202,9 +190,11 @@ export default function HabitForm(props: {
                             required
                         />
                         {errors.initialDate && (
-                            <p className="text-sm text-red-400 md:col-span-2">{errors.initialDate}</p>
+                            <p className="text-sm text-[var(--color-error)] mt-1">{errors.initialDate}</p>
                         )}
+                    </div>
 
+                    <div>
                         <DatePicker
                             name="endDate"
                             label="Fecha Final"
@@ -218,74 +208,73 @@ export default function HabitForm(props: {
                             min={getNextDayString(initialDate) || todayString}
                         />
                         {errors.endDate && (
-                            <p className="text-sm text-red-400 md:col-span-2">{errors.endDate}</p>
+                            <p className="text-sm text-[var(--color-error)] mt-1">{errors.endDate}</p>
                         )}
                     </div>
+                </div>
 
-                    <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Valor de la deuda</label>
-                        <input
-                            onChange={e => {
-                                const formatted = applyFormatToNumber(e.target.value);
-                                scheduleValidation("debtValue", formatted);
-                            }}
-                            value={debtInput}
-                            name="debtValue"
-                            type="text"
-                            placeholder="$5000"
-                            inputMode="numeric"
-                            required
-                            className="w-full p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        />
-                        {errors.debtValue && (
-                            <p className="mt-1 text-sm text-red-400">{errors.debtValue}</p>
-                        )}
-                    </div>
+                <div>
+                    <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">Valor de la deuda</label>
+                    <input
+                        onChange={e => {
+                            const formatted = applyFormatToNumber(e.target.value);
+                            scheduleValidation("debtValue", formatted);
+                        }}
+                        value={debtInput}
+                        name="debtValue"
+                        type="text"
+                        placeholder="$5000"
+                        inputMode="numeric"
+                        required
+                        className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    {errors.debtValue && (
+                        <p className="mt-1 text-sm text-[var(--color-error)]">{errors.debtValue}</p>
+                    )}
+                </div>
 
-                    <div>
-                        <label className="block text-[var(--text-muted-color)] mb-2">Es deuda acumulativa?:</label>
+                <div>
+                    <label className="flex items-center gap-3 text-[var(--neon-green)] text-sm font-mono uppercase tracking-wider cursor-pointer">
+                        <span>Es deuda acumulativa?:</span>
                         <input
                             name="isCumulative"
                             type="checkbox"
                             value="yes"
-                            className="h-5 w-5 rounded border border-[var(--input-border-color)] bg-[var(--surface-muted-color)] text-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            className="h-5 w-5 rounded-sm border-2 border-[var(--neon-green-dark)] bg-[var(--landing-card-bg)] text-[var(--neon-green)] focus:outline-none focus:ring-2 focus:ring-[var(--neon-glow-soft)] accent-[var(--neon-green)] cursor-pointer"
                         />
-                    </div>
-
-                    <UsernameInput
-                        usernames={participants}
-                        onUsernamesChange={setParticipants}
-                        creatorUsername={props.creatorUsername}
-                        label="Participantes del hábito"
-                        placeholder="Ingresa username de GitHub"
-                    />
-                    <input type="hidden" name="participants" value={JSON.stringify(participants)} />
-
-                    <RepoInput
-                        owner={repoOwner}
-                        repo={repoName}
-                        onRepoChange={handleRepoChange}
-                        error={errors.repo}
-                    />
-                    <input type="hidden" name="repoOwner" value={repoOwner} />
-                    <input type="hidden" name="repoName" value={repoName} />
+                        <span className="text-xs text-[var(--neon-green-muted)] normal-case tracking-normal">
+                            Sí, acumular deuda por días no cumplidos
+                        </span>
+                    </label>
                 </div>
 
-                <div className="flex w-full gap-3 pt-6">
-                    <button
-                        type="submit"
-                        className="flex-1 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] font-semibold py-2.5 px-4 rounded-lg transition-colors"
-                    >
-                        Guardar
-                    </button>
-                    <button
-                        type="button"
-                        className="flex-1 bg-[var(--surface-border-color)] hover:bg-[var(--input-border-color)] text-[var(--text-primary-color)] font-semibold py-2.5 px-4 rounded-lg transition-colors"
-                    >
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
+                <UsernameInput
+                    usernames={participants}
+                    onUsernamesChange={setParticipants}
+                    creatorUsername={props.creatorUsername}
+                    label="Participantes del hábito"
+                    placeholder="Ingresa username de GitHub"
+                />
+                <input type="hidden" name="participants" value={JSON.stringify(participants)} />
+
+                <RepoInput
+                    owner={repoOwner}
+                    repo={repoName}
+                    onRepoChange={handleRepoChange}
+                    error={errors.repo}
+                />
+                <input type="hidden" name="repoOwner" value={repoOwner} />
+                <input type="hidden" name="repoName" value={repoName} />
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full gap-4 pt-8">
+                <NeonButton type="submit">
+                    Guardar
+                </NeonButton>
+                <NeonButton variant="secondary">
+                    Cancelar
+                </NeonButton>
+            </div>
+        </NeonFormContainer>
     )
 }

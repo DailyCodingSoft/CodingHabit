@@ -1,0 +1,32 @@
+{
+    "_id": "ObjectId",
+    "name": "30 días de código limpio",
+    "createdBy": "userId_postgres",
+    "repoUrl": "https://github.com/org/repo",
+    "repoOwner": "org",
+    "repoName": "repo",
+    "startDate": "2026-03-01T00:00:00Z",
+    "endDate": "2026-03-30T00:00:00Z",
+    "debtConfig": {
+        "baseAmount": 5000,
+        "type": "cumulative"
+    },
+    "participants": [
+        {
+            "userId": "userId_postgres",
+            "githubUsername": "sebasdev",
+            "joinedAt": "2026-02-01T10:00:00Z",
+            "verifiedAt": "2026-02-01T10:05:00Z",
+            "currentStreak": 14,
+            "longestStreak": 14,
+            "totalDebt": 0,
+            "consecutiveFailures": 0,
+            "lastCommitAt": "2026-02-23T18:32:00Z",
+            "lastCommitSha": "a3f9c12",
+            "lastCommitMessage": "fix: validate edge cases in parser"
+        }
+    ],
+    "status": "active",
+    "createdAt": "2026-02-01T09:00:00Z",
+    "updatedAt": "2026-02-01T09:00:00Z"
+}

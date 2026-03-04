@@ -70,10 +70,10 @@ export default function RepoInput({
 
     return (
         <div>
-            <label className="block text-[var(--text-muted-color)] mb-2">{label}</label>
+            <label className="block text-[var(--neon-green)] mb-2 text-sm font-mono uppercase tracking-wider">{label}</label>
             
-            <div className="mb-2 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                <p className="text-sm text-yellow-200">
+            <div className="mb-2 p-3 bg-[var(--color-warning-bg)] border border-[var(--color-warning-border)] rounded-sm">
+                <p className="text-sm text-[var(--color-warning)] font-mono">
                     ⚠️ Solo se soportan repositorios <span className="font-semibold">públicos</span> en esta versión
                 </p>
             </div>
@@ -95,36 +95,36 @@ export default function RepoInput({
                                 }
                             }}
                             placeholder={placeholder}
-                            className="flex-1 p-3 rounded-lg bg-[var(--surface-muted-color)] text-[var(--text-primary-color)] border border-[var(--input-border-color)] focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[color:var(--primary-color)/.3]"
+                            className="flex-1 p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-gray-600"
                         />
                         <button
                             type="button"
                             onClick={handleParse}
-                            className="px-4 py-2 bg-[var(--primary-color)] hover:bg-[var(--primary-hover-color)] text-[var(--text-primary-color)] rounded-lg transition-colors font-semibold"
+                            className="px-4 py-2 bg-[var(--neon-green)] hover:bg-[var(--neon-green-light)] text-[var(--landing-bg)] rounded-sm transition-all font-mono font-bold uppercase text-sm shadow-[var(--shadow-neon-md)]"
                         >
                             Validar
                         </button>
                     </div>
 
                     {(inputError || error) && (
-                        <p className="mt-1 text-sm text-red-400">{inputError || error}</p>
+                        <p className="mt-1 text-sm text-[var(--color-error)]">{inputError || error}</p>
                     )}
                 </>
             ) : (
-                <div className="p-4 bg-[var(--surface-border-color)] rounded-lg border border-[var(--input-border-color)]">
+                <div className="p-4 bg-[var(--landing-card-bg)] rounded-sm border border-[var(--neon-green-dark)]">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-[var(--text-muted-color)] mb-1">Repositorio seleccionado:</p>
-                            <p className="text-lg text-[var(--text-primary-color)] font-mono">
-                                <span className="text-[var(--primary-color)]">{owner}</span>
-                                <span className="text-[var(--text-muted-color)]">/</span>
+                            <p className="text-sm text-[var(--neon-green-muted)] mb-1 font-mono">Repositorio seleccionado:</p>
+                            <p className="text-lg text-[var(--neon-green)] font-mono">
+                                <span className="text-[var(--neon-green-light)]">{owner}</span>
+                                <span className="text-[var(--neon-green-muted)]">/</span>
                                 <span className="font-semibold">{repo}</span>
                             </p>
                             <a 
                                 href={`https://github.com/${owner}/${repo}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-[var(--primary-color)] hover:underline mt-1 inline-block"
+                                className="text-sm text-[var(--neon-green-light)] hover:text-[var(--neon-green)] hover:underline mt-1 inline-block font-mono"
                             >
                                 Ver en GitHub →
                             </a>
@@ -132,7 +132,7 @@ export default function RepoInput({
                         <button
                             type="button"
                             onClick={handleClear}
-                            className="px-3 py-1.5 text-sm bg-[var(--surface-muted-color)] hover:bg-[var(--input-border-color)] text-[var(--text-primary-color)] rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-sm bg-transparent border border-[var(--neon-green-dark)] hover:border-[var(--neon-green)] text-[var(--neon-green)] rounded-sm transition-all font-mono"
                         >
                             Cambiar
                         </button>
