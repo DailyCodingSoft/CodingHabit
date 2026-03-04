@@ -1,8 +1,7 @@
 "use client"
 import { Habit, User } from "@/types";
 import HabitForm from "@/components/layout/habit/HabitForm";
-import SuccessModal from "@/components/ui/success-modal/SuccessModal";
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { mapFormDataToHabit } from "@/utils/mappers/habitMapper";
 import { generateAccessCode } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
@@ -21,8 +20,6 @@ async function saveHabit(habit: Habit): Promise<boolean> {
 }
 
 export default function HabitPage(){
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
-    const [createdAccessCode, setCreatedAccessCode] = useState<string>("");
     const router = useRouter();
 
     const userCreator: User = {
@@ -64,22 +61,15 @@ export default function HabitPage(){
         const success = await saveHabit(submitedHabit);
         
         if (success) {
-            setCreatedAccessCode(accessCode);
             sessionStorage.setItem('createdHabit', JSON.stringify(submitedHabit));
-            setShowSuccessModal(true);
-            // TODO: Update habit status in database
+            router.push(`/habit/${accessCode}/share`);
         }
-    }
-
-    function handleGoToShare() {
-        router.push(`/habit/${createdAccessCode}/share`);
     }
 
     return (
         <div>
             <h1 className="page-title">{title}</h1>
             <HabitForm onSubmit={onSubmitForm} creatorUsername={userCreator.username}/>
-            {showSuccessModal && <SuccessModal onGoToShare={handleGoToShare} />}
         </div>
     )
 }

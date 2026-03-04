@@ -1,0 +1,41 @@
+name: Delete branch on pr closed
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types: [closed]
+
+jobs:
+  delete-branch:
+    name: Delete branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get branch name
+        id: branch
+        run: |
+          echo "branch=${{ github.head_ref }}" >> $GITHUB_OUTPUT
+
+      - name: Validate branch
+        run: |
+          if [[ "${{ steps.branch.outputs.branch }}" == "main" || "${{ steps.branch.outputs.branch }}" == "dev" ]]; then
+            echo "❌ Cannot delete main branch"
+            exit 1
+          fi
+
+      - name: Delete branch
+        run: |
+          git push origin --delete ${{ steps.branch.outputs.branch }}
+
+
+
+
+
+          
+
