@@ -22,7 +22,7 @@ export default function DebtUpdatePopup({ isOpen, onClose, user, onUpdateDebt }:
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <div className="bg-[var(--surface-color)] rounded-xl p-6 w-[22rem] shadow-2xl border border-[var(--surface-border-color)] relative z-[60]">
+            <div className="bg-[var(--surface-color)] rounded-xl p-6 w-[22rem] shadow-[var(--shadow-2xl)] border border-[var(--surface-border-color)] relative z-[60]">
                 <div className="flex flex-col items-center text-center gap-4">
                     <h2 className="text-[var(--text-primary-color)] text-2xl font-semibold tracking-tight">
                         Update {user.username} debt

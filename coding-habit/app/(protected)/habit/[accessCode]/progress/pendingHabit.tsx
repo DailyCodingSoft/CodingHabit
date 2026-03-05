@@ -154,8 +154,8 @@ export default function PendingHabitPage({ habit, currentUser, onHabitActivated 
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                     <div 
-                        className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${(validatedCount / totalParticipants) * 100}%` }}
+                        className="bg-green-500 h-2 rounded-full transition-all"
+                        style={{ width: `${(validatedCount / totalParticipants) * 100}%`, transitionDuration: 'var(--transition-normal)' }}
                     />
                 </div>
             </div>

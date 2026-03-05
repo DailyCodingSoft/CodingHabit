@@ -44,7 +44,7 @@ export default function SharePage({ params }: SharePageProps) {
 
     return (
         <div className="max-w-2xl mx-auto p-8">
-            <div className="bg-white rounded-lg shadow-lg p-8">
+            <div className="bg-white rounded-lg shadow-[var(--shadow-lg)] p-8">
                 <div className="text-center mb-8">
                     <div className="mb-4">
                         <svg className="w-20 h-20 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
