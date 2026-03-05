@@ -1,21 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --primary-light-color: rgb(207, 165, 165);
-  --secondary-light-color: rgb(170, 125, 125);
-  --main-light-bg-color: rgb(138, 138, 138);
-  --darck-text-color: rgb(26, 26, 26);
-  --light-text-color: rgb(243, 243, 243);
-  --surface-color: #1f2937;
-  --surface-muted-color: rgba(55, 65, 81, 0.8);
-  --surface-border-color: #374151;
-  --input-border-color: #4b5563;
-  --primary-color: #2563eb;
-  --primary-hover-color: #1d4ed8;
-  --text-primary-color: #ffffff;
-  --text-muted-color: rgba(255, 255, 255, 0.8);
-
-  /* Landing page neon palette */
+  /* Neon Green Palette - Primary colors for the entire app */
   --neon-green: #00FF41;
   --neon-green-light: #33ff77;
   --neon-green-muted: #AAFFAA;
@@ -28,23 +14,42 @@
   --neon-glow-accent: rgba(51, 255, 119, 0.6);
   --neon-shadow-dark: rgba(26, 77, 26, 0.4);
   --neon-shadow-dark-strong: rgba(26, 77, 26, 0.6);
+  
+  /* Background colors */
   --landing-bg: #0D0D0D;
   --landing-bg-alt: #0a0a0a;
   --landing-card-bg: #141414;
+  
+  /* Semantic aliases for consistency */
+  --primary-color: var(--neon-green);
+  --primary-hover-color: var(--neon-green-light);
+  --primary-light-color: var(--neon-green-muted);
+  --secondary-light-color: var(--neon-green-dark);
+  --main-light-bg-color: var(--landing-bg);
+  --light-text-color: #ffffff;
+  --darck-text-color: var(--landing-bg);
+  --text-primary-color: #ffffff;
+  --text-muted-color: var(--neon-green-muted);
+  
+  /* Surface/Component colors */
+  --surface-color: var(--landing-card-bg);
+  --surface-muted-color: rgba(20, 20, 20, 0.8);
+  --surface-border-color: var(--neon-green-dark);
+  --input-border-color: var(--neon-green-dark);
 
-  /* Status colors */
-  --color-error: #f87171;
-  --color-error-bg: #fef2f2;
-  --color-error-border: #ef4444;
-  --color-success: #4ade80;
-  --color-success-bg: #f0fdf4;
-  --color-success-border: #22c55e;
-  --color-warning: #fbbf24;
-  --color-warning-bg: #fffbeb;
-  --color-warning-border: #f59e0b;
-  --color-info: #60a5fa;
-  --color-info-bg: #eff6ff;
-  --color-info-border: #3b82f6;
+  /* Status colors using neon palette */
+  --color-error: #ff6b6b;
+  --color-error-bg: rgba(255, 107, 107, 0.1);
+  --color-error-border: #ff4141;
+  --color-success: var(--neon-green);
+  --color-success-bg: var(--neon-glow-faint);
+  --color-success-border: var(--neon-green);
+  --color-warning: #ffb84d;
+  --color-warning-bg: rgba(255, 184, 77, 0.1);
+  --color-warning-border: #ff9500;
+  --color-info: var(--neon-green-light);
+  --color-info-bg: var(--neon-glow-faint);
+  --color-info-border: var(--neon-green);
 
   /* Transition duration variables */
   --transition-fast: 200ms;
@@ -85,7 +90,7 @@
 /* Estilos globales base */
 html,
 body {
-  background: var(--main-light-bg-color);
+  background: var(--landing-bg);
   scrollbar-width: none;
 }
 
