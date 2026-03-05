@@ -32,8 +32,8 @@ export class userRepository {
         }
     }
     async createRecoveryToken(user_id: string, token: string) {
+        console.log(user_id, token)
         try {
-            const dateExpires = new Date(Date.now() + 1000 * 60 * 15); // 15 minutos
         const result = await neonDB`INSERT INTO password_resets
             (user_id, token_hash, expires_at, used, created_at)
             VALUES (
@@ -43,22 +43,56 @@ export class userRepository {
                 false,
                 NOW()
             );`
+        console.log(result)
         return result ?? null
         }catch(e) {
             console.log(e)
             return null
         }
     }
-    async validateTokenRecovery(token: string) {
+    async validateTokenRecovery(id: string) {
         try {
-            const result = await neonDB`SELECT * FROM password_resets
-            WHERE token_hash = ${token}
+            const userId = parseInt(id, 10);
+            if (isNaN(userId)) {
+            return null;
+            }
+            const result = await neonDB`SELECT token_hash FROM password_resets
+            WHERE user_id = ${userId}
             AND expires_at > NOW()
             AND used = false;`
-        return result[0] ?? null
+            return result[0]?.token_hash ?? null
         } catch(e) {
             console.log(e)
             return null
+        }
+    }
+
+    async updatePassword(userId: string, hashedPassword: string) {
+        try {
+            const result = await neonDB`
+                UPDATE users 
+                SET user_password = ${hashedPassword}
+                WHERE user_id = ${userId}
+            `;
+            return result;
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    async deleteRecoveryToken(userId: string) {
+        try {
+            const result = await neonDB`
+                UPDATE password_resets 
+                SET used = true
+                WHERE user_id = ${userId}
+                AND used = false
+            `;
+            return result;
+        } catch (e) {
+            console.log(e);
+            return null;
         }
     }
 }

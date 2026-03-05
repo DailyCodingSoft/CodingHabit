@@ -2,24 +2,61 @@
 export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import ConfirmModal from '@/components/ui/alert/alertLoginAndRegister';
 
-export default function recoverypassword(){
+type AlertState = {
+  message: string;
+  type: "error" | "success" | "info";
+};
+
+export default function recoverypassword() {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState('');
+    const [alert, setAlert] = useState(false);
+    const [messageAlert, setMessageAlert] = useState<AlertState | null>(null)
+  
 
-    const recovery = async(e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();   
-        const res = await fetch('/api/sendMail',{
-            method: 'POST',
-            body: JSON.stringify({email: email})
-        })
-        console.log(res)
+
+
+    const recovery = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError('');
+        setSuccess('');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('Por favor ingresa un correo válido');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch('/api/auth/sendMail', {
+                method: 'POST',
+                body: JSON.stringify({ email: email })
+            });
+
+            if (res.ok) {
+                setSuccess('Correo enviado. Revisa tu bandeja de entrada.');
+                setEmail('');
+                setMessageAlert({ message: "Correo enviado con éxito", type: "success" });
+            } else {
+                setError('Error al enviar el correo, valida tu coreo e intenta nuevamente.');
+                setMessageAlert({ message: "Error al enviar el correo", type: "error" });
+            }
+        } catch {
+            setError('Error de conexión. Intenta nuevamente.');
+        } finally { 
+            setLoading(false);
+            setAlert(true);
+             router.push('/signin');
+        }
     }
 
 
     const router = useRouter();
-    return(
+    return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <form
                 onSubmit={recovery}
@@ -36,16 +73,16 @@ export default function recoverypassword(){
                 )}
 
                 <div className="mb-4">
-                <label className="mb-1 block text-sm font-medium">
-                    Nombre de usuario 
-                </label>
-                <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-                />
+                    <label className="mb-1 block text-sm font-medium">
+                        Nombre de usuario
+                    </label>
+                    <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full rounded border px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                    />
                 </div>
                 <div className="mb-6">
         <button
@@ -65,6 +102,17 @@ export default function recoverypassword(){
         </button>
         </div>
             </form>
+            <ConfirmModal
+                    open={alert}
+                    message={messageAlert?.message ?? ""}
+                    type={messageAlert?.type}
+                    onAccept={() => {
+                      setAlert(false);
+                      if (messageAlert?.type === "success") {
+                        router.push("/signin");
+                      }
+                    }}
+                  />
         </div>
     );
 }

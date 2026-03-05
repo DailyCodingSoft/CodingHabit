@@ -8,7 +8,6 @@ export class AuthService {
     async login(email: string, password: string) {
         const service = new userService();
         const user:any = await service.login(email);
-         console.log(password,user.user_password)
         if (!user) throw new Error("Credenciales inválidas");
         const valid = await comparePassword(password, user.user_password);
         if (!valid) throw new Error("Credenciales inválidas");
@@ -45,9 +44,8 @@ export class AuthService {
         const token = crypto.randomBytes(32).toString("hex");
         const tokenBash = await hashPassword(token);
         const createToken = await service.createRecoveryToken(user.user_id, tokenBash);
-        console.log(createToken)
         if (!createToken) return ("Error al crear token de recuperación");
-        const url = `${process.env.BASE_URL}/ResetPassword/${token}`;
+        const url = `${process.env.BASE_URL}/ResetPassword/${user.user_id}/${token}`;
         try {
             await sendEmail({
                 to: email,
@@ -66,9 +64,23 @@ export class AuthService {
         return "Correo de recuperación enviado";
     }
 
-    async validateTokenRecovery(token: string) {
+    async validateTokenRecovery(token: string, id: string) {
         const service = new userService();
-        const result = await service.validateTokenRecovery(token);
-        return result;
+        const result = await service.validateTokenRecovery(id);
+        if (!result) return false;
+        const resultValid = await comparePassword(token, result);
+        return resultValid;
     }
+    async resetPassword(userId: string, newPassword: string) {
+    const service = new userService();
+    const hashedPassword = await hashPassword(newPassword);
+    const result = await service.updatePassword(userId, hashedPassword);
+    return result;
+}
+
+async invalidateRecoveryToken(token: string, userId: string) {
+    const service = new userService();
+    const result = await service.deleteRecoveryToken(userId);
+    return result;
+}
 }
