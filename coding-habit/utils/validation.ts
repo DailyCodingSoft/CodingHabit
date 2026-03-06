@@ -33,3 +33,21 @@ export function isValidEmail(email: string): boolean {
   
   return true;
 }
+
+/**
+ * Validates password strength
+ * @param password - Password string to validate
+ * @returns true if valid, false otherwise
+ */
+export function isValidPassword(password: string): boolean {
+  if (!password || typeof password !== 'string') return false;
+  
+  if (password.length < 12) return false;
+  
+  if (!/[A-Z]/.test(password)) return false;
+  if (!/[a-z]/.test(password)) return false;
+  if (!/\d/.test(password)) return false;
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
+  
+  return true;
+}
