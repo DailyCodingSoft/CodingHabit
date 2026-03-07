@@ -51,3 +51,82 @@ export function isValidPassword(password: string): boolean {
   
   return true;
 }
+
+/**
+ * Validates habit title format
+ * @param title - Title string to validate
+ * @returns Error message if invalid, undefined if valid
+ */
+export function validateHabitTitle(title: string): string | undefined {
+  const titlePattern = /^[A-Za-z0-9]{3,30}$/;
+  if (!titlePattern.test(title)) {
+    return "El título debe tener entre 3 y 30 caracteres, sin espacios ni caracteres especiales.";
+  }
+  return undefined;
+}
+
+/**
+ * Validates initial date
+ * @param initialDate - Date string in YYYY-MM-DD format
+ * @returns Error message if invalid, undefined if valid
+ */
+export function validateInitialDate(initialDate: string): string | undefined {
+  if (!initialDate) {
+    return "La fecha inicial es obligatoria.";
+  }
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const initial = new Date(`${initialDate}T00:00:00`);
+  
+  if (initial < today) {
+    return "La fecha inicial no puede ser anterior a hoy.";
+  }
+  
+  return undefined;
+}
+
+/**
+ * Validates end date relative to initial date
+ * @param endDate - End date string in YYYY-MM-DD format
+ * @param initialDate - Initial date string in YYYY-MM-DD format
+ * @returns Error message if invalid, undefined if valid
+ */
+export function validateEndDate(endDate: string, initialDate: string): string | undefined {
+  if (!endDate || !initialDate) return undefined;
+  
+  const initial = new Date(`${initialDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+  
+  if (end <= initial) {
+    return "La fecha final debe ser posterior a la fecha inicial.";
+  }
+  
+  return undefined;
+}
+
+/**
+ * Validates debt value
+ * @param debtValue - Formatted debt value string (e.g., "$5.000")
+ * @returns Error message if invalid, undefined if valid
+ */
+export function validateDebtValue(debtValue: string): string | undefined {
+  const numericDebt = Number(debtValue.replaceAll('$', '').replaceAll('.', '').replaceAll(',', ''));
+  if (!numericDebt || numericDebt <= 0) {
+    return "El valor de la deuda debe ser mayor a 0.";
+  }
+  return undefined;
+}
+
+/**
+ * Validates repository selection
+ * @param repoOwner - Repository owner username
+ * @param repoName - Repository name
+ * @returns Error message if invalid, undefined if valid
+ */
+export function validateRepository(repoOwner: string, repoName: string): string | undefined {
+  if (!repoOwner || !repoName) {
+    return "Debe seleccionar un repositorio.";
+  }
+  return undefined;
+}
