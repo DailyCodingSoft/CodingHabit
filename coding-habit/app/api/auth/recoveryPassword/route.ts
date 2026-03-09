@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { AuthService } from "@/domain/services/authService";
+import { isValidPassword } from "@/utils/validation";
 
 export async function POST(req: Request) {
   try {
@@ -22,8 +23,8 @@ export async function POST(req: Request) {
     }
 
     // Validar requisitos de contraseña
-    if (password.length < 8) {
-      return NextResponse.json({ error: "La contraseña debe tener al menos 8 caracteres" }, { status: 400 });
+    if (!isValidPassword(password)) {
+      return NextResponse.json({ error: "La contraseña debe tener al menos 12 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales" }, { status: 400 });
     }
 
     // Actualizar la contraseña
