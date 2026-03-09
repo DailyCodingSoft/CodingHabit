@@ -1,5 +1,6 @@
 import { FormEvent, useRef, useState } from "react";
 import { formatNumberToCurrency } from "@/utils/helpers";
+import { validateHabitTitle, validateInitialDate, validateEndDate, validateDebtValue, validateRepository } from "@/utils/validation";
 import DatePicker from "@/components/ui/date-picker/DatePicker";
 import UsernameInput from "@/components/ui/username-input/UsernameInput";
 import RepoInput from "@/components/ui/repo-input/RepoInput";
@@ -46,49 +47,31 @@ export default function HabitForm(props: {
 
     function validateField(field: "title" | "initialDate" | "endDate" | "debtValue", valueOverride?: string) {
         const nextErrors: typeof errors = {};
-        const titlePattern = /^[A-Za-z0-9]{3,30}$/;
 
         if (field === "title") {
             const nextTitle = valueOverride ?? title;
-            if (!titlePattern.test(nextTitle)) {
-                nextErrors.title = "El título debe tener entre 3 y 30 caracteres, sin espacios ni caracteres especiales.";
-            }
+            nextErrors.title = validateHabitTitle(nextTitle);
         }
 
         if (field === "initialDate") {
             const nextInitial = valueOverride ?? initialDate;
-            if (!nextInitial) {
-                nextErrors.initialDate = "La fecha inicial es obligatoria.";
-            } else if (new Date(`${nextInitial}T00:00:00`) < today) {
-                nextErrors.initialDate = "La fecha inicial no puede ser anterior a hoy.";
-            }
+            nextErrors.initialDate = validateInitialDate(nextInitial);
 
             if (endDate && nextInitial) {
-                const initial = new Date(`${nextInitial}T00:00:00`);
-                const end = new Date(`${endDate}T00:00:00`);
-                if (end <= initial) {
-                    nextErrors.endDate = "La fecha final debe ser posterior a la fecha inicial.";
-                }
+                nextErrors.endDate = validateEndDate(endDate, nextInitial);
             }
         }
 
         if (field === "endDate") {
             const nextEnd = valueOverride ?? endDate;
             if (nextEnd && initialDate) {
-                const initial = new Date(`${initialDate}T00:00:00`);
-                const end = new Date(`${nextEnd}T00:00:00`);
-                if (end <= initial) {
-                    nextErrors.endDate = "La fecha final debe ser posterior a la fecha inicial.";
-                }
+                nextErrors.endDate = validateEndDate(nextEnd, initialDate);
             }
         }
 
         if (field === "debtValue") {
             const nextDebt = valueOverride ?? debtInput;
-            const numericDebt = Number(nextDebt.replaceAll('$', '').replaceAll('.', '').replaceAll(',', ''));
-            if (!numericDebt || numericDebt <= 0) {
-                nextErrors.debtValue = "El valor de la deuda debe ser mayor a 0.";
-            }
+            nextErrors.debtValue = validateDebtValue(nextDebt);
         }
 
         return nextErrors;
@@ -115,37 +98,23 @@ export default function HabitForm(props: {
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         const validationErrors: typeof errors = {};
-        const titlePattern = /^[A-Za-z0-9]{3,30}$/;
 
-        if (!titlePattern.test(title)) {
-            validationErrors.title = "El título debe tener entre 3 y 30 caracteres, sin espacios ni caracteres especiales.";
-        }
-
-        if (!initialDate) {
-            validationErrors.initialDate = "La fecha inicial es obligatoria.";
-        } else if (new Date(`${initialDate}T00:00:00`) < today) {
-            validationErrors.initialDate = "La fecha inicial no puede ser anterior a hoy.";
-        }
-
+        validationErrors.title = validateHabitTitle(title);
+        validationErrors.initialDate = validateInitialDate(initialDate);
+        
         if (endDate && initialDate) {
-            const initial = new Date(`${initialDate}T00:00:00`);
-            const end = new Date(`${endDate}T00:00:00`);
-            if (end <= initial) {
-                validationErrors.endDate = "La fecha final debe ser posterior a la fecha inicial.";
-            }
+            validationErrors.endDate = validateEndDate(endDate, initialDate);
         }
 
-        const numericDebt = Number(debtInput.replaceAll('$', '').replaceAll('.', '').replaceAll(',', ''));
-        if (!numericDebt || numericDebt <= 0) {
-            validationErrors.debtValue = "El valor de la deuda debe ser mayor a 0.";
-        }
+        validationErrors.debtValue = validateDebtValue(debtInput);
+        validationErrors.repo = validateRepository(repoOwner, repoName);
 
-        if (!repoOwner || !repoName) {
-            validationErrors.repo = "Debe seleccionar un repositorio.";
-        }
+        const filteredErrors = Object.fromEntries(
+            Object.entries(validationErrors).filter(([_, v]) => v !== undefined)
+        ) as typeof errors;
 
-        setErrors(validationErrors);
-        if (Object.keys(validationErrors).length > 0) {
+        setErrors(filteredErrors);
+        if (Object.keys(filteredErrors).length > 0) {
             event.preventDefault();
             return;
         }
