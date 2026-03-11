@@ -71,7 +71,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => router.push('/recoverypassword')}
-            className="mt-2 text-sm text-blue-600 hover:underline"
+            className="mt-2 text-sm text-[var(--color-blue-600)] hover:underline"
           >
             ¿Olvidaste tu contraseña?
           </button>

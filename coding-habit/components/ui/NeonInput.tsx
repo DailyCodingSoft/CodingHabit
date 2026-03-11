@@ -22,7 +22,7 @@ export default function NeonInput({ name, type, label, placeholder, value, onCha
         value={value}
         onChange={onChange}
         required={required}
-        className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-gray-600"
+        className="w-full p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-[var(--color-gray-600)]"
       />
       {error && (
         <p className="mt-1 text-sm text-[var(--color-error)]">{error}</p>
