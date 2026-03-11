@@ -9,7 +9,7 @@ export default function Home() {
   const randomPhrase = curiousPhrases[Math.floor(Math.random() * curiousPhrases.length)];
   
   return (
-    <div className="landing-scanlines font-mono bg-[var(--landing-bg)] text-white overflow-x-hidden">
+    <div className="landing-scanlines font-mono bg-[var(--landing-bg)] text-[var(--color-white)] overflow-x-hidden">
 
       {/* Hero */}
       <section className="landing-section min-h-screen flex flex-col items-center justify-center px-5 md:px-10 py-15">

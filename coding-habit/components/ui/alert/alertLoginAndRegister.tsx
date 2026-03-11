@@ -25,16 +25,15 @@ export default function ConfirmModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <h1>Sapoperrr</h1>
-      <div
-        className={`w-full max-w-sm rounded-lg border bg-white p-6 shadow-[var(--shadow-lg)] ${styles[type]}`}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-black)]/50">
+              <div
+        className={`w-full max-w-sm rounded-lg border bg-[var(--color-white)] p-6 shadow-[var(--shadow-lg)] ${styles[type]}`}
       >
         <p className="mb-6 text-center text-sm">{message}</p>
 
         <button
           onClick={onAccept}
-          className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-white hover:bg-[var(--color-info-border)]"
+          className="w-full rounded bg-[var(--color-info)] py-2 font-semibold text-[var(--color-white)] hover:bg-[var(--color-info-border)]"
         >
           Aceptar
         </button>

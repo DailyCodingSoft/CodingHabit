@@ -85,7 +85,7 @@ export default function UsernameInput({
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
                     disabled={!canAddMore}
-                    className="flex-1 p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 p-3 rounded-sm bg-[var(--landing-card-bg)] text-[var(--neon-green-muted)] border border-[var(--neon-green-dark)] focus:outline-none focus:border-[var(--neon-green)] focus:shadow-[var(--shadow-neon-sm)] font-mono placeholder:text-[var(--color-gray-600)] disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button
                     type="button"
