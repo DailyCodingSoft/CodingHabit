@@ -2,3 +2,5 @@
 todo.md
 agentcontext.md
 copilot-instructions.md
+.vercel
+.env*.local
