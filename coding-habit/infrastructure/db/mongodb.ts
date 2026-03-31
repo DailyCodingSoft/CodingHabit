@@ -1,42 +1,14 @@
-import { MongoClient, Db } from "mongodb";
+import { MongoClient, MongoClientOptions } from 'mongodb';
+import { attachDatabasePool } from '@vercel/functions';
 
-const uri = process.env.MONGODB_URI!;
+const options: MongoClientOptions = {
+  appName: "devrel.vercel.integration",
+  maxIdleTimeMS: 5000
+};
+const client = new MongoClient(process.env.MONGODB_URI!, options);
+   
+// Attach the client to ensure proper cleanup on function suspension
+attachDatabasePool(client);
 
-if (!uri) {
-  throw new Error("❌ MONGODB_URI no está definida en variables de entorno");
-}
-
-// Evita múltiples conexiones en dev (Next.js hot reload)
-declare global {
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
-}
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-if (!global._mongoClientPromise) {
-  client = new MongoClient(uri);
-  global._mongoClientPromise = client.connect()
-    .then(async (client) => {
-      console.log("✅ Mongo conectado");
-
-      // 🔥 TEST DE CONEXIÓN REAL
-      const db = client.db();
-      await db.command({ ping: 1 });
-
-      console.log("🏓 Ping a Mongo OK");
-
-      return client;
-    })
-    .catch((error) => {
-      console.error("❌ Error conectando a Mongo:", error);
-      throw error;
-    });
-}
-
-clientPromise = global._mongoClientPromise;
-
-export async function getDb(): Promise<Db> {
-  const client = await clientPromise;
-  return client.db("miDB"); // cambia si necesitas dinámico
-}
+// Export a module-scoped MongoClient to ensure the client can be shared across functions.
+export default client; 
