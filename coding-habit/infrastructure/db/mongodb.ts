@@ -13,4 +13,4 @@ attachDatabasePool(client);
 // Export a module-scoped MongoClient to ensure the client can be shared across functions.
 export default client; 
 
-//Comit jueves santo que mi Dios los proteja
+//Comit jueves santo que mi Dios los proteja comir xd
